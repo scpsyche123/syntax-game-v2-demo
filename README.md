@@ -1,5 +1,9 @@
 # Syntax Game v2 · Bare Grammar demo
 
+**Play the public demo:** https://scpsyche123.github.io/syntax-game-v2-demo/
+
+The five-level interactive demo is published from `main/docs` with GitHub Pages. It is a browser-based JavaScript simulation of the Lean 4 implementation; the full game is still in development.
+
 Playable page: `docs/index.html` (self-contained). It runs a JavaScript transcription of
 `BareSyntax/`, checked against Lean's output case by case; see `docs/page/README.md`.
 
