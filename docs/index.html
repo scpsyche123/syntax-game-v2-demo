@@ -13,11 +13,12 @@
    PICTURE the derivation (or the workspace) drawn as trees that grow as you apply rules; selected and new nodes marked
    COLOUR white paper, ink, one deep Lean-blue for structure and the header band, vermilion for selection, change and failure
    TYPE Source Serif 4 for prose and titles, IBM Plex Sans for controls, IBM Plex Mono for rules and the goal
-   LAYOUT blue band with title and five levels as tabs; one board: trees left, rules right, goal strip under it; phone stacks rules under trees */
+   LAYOUT blue band with title and five levels as tabs; left: one box with trees and the rules under them, goal strip with the automatic check; right: level text and messages */
 :root{color-scheme:light dark;
 --bg:light-dark(#ffffff,#14161b);--ink:light-dark(#1a1c22,#e6e7eb);--muted:light-dark(#5b6070,#9ba1ae);
 --blue:light-dark(#1d3f8f,#93b2ff);--band:#1d3f8f;--panel:light-dark(#f2f4f9,#1c1f26);--line:light-dark(#d8dce6,#2e323c);
---acc:light-dark(#cf3f22,#ff7b5e);--accbg:light-dark(#fdeee9,#3a211b);--okbg:light-dark(#eaf1ff,#1c2a45);--selbg:light-dark(#fff3d6,#3b3220);--sel:light-dark(#b07600,#f0b84a)}
+--acc:light-dark(#cf3f22,#ff7b5e);--accbg:light-dark(#fdeee9,#3a211b);--okbg:light-dark(#eaf1ff,#1c2a45);--selbg:light-dark(#fff3d6,#3b3220);--sel:light-dark(#b07600,#f0b84a);--hover:light-dark(#e2e7f2,#272b34);
+--green:light-dark(#1b7a3c,#7ed69a);--greenbg:light-dark(#e5f5eb,#16301f);--gray:light-dark(#686d7a,#9aa0ad);--graybg:light-dark(#eef0f3,#22252c)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0}
@@ -34,25 +35,31 @@ header p{max-width:66ch;margin:0 0 20px;color:#dfe6f7}
 .tab[aria-selected=true]{background:#fff;color:#14234d;border-color:#fff}
 .tab[aria-selected=true] small{color:#4a5675}
 .tab .tick{color:#9fe0b0;margin-left:4px}
-.tab[aria-selected=true] .tick{color:#1f7a3a}
+.tab[aria-selected=true] .tick{color:#1b7a3c}
+.tab.gray{color:#b9c2d8;border-style:dashed}
+.tab.gray small{color:#9eaacb}
+.tab.gray[aria-selected=true]{background:#d7dbe4;border-color:#d7dbe4;color:#3d4250}
+.tab.gray[aria-selected=true] small{color:#5b6070}
 button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-.lead{max-width:72ch;margin:0 0 16px}
+/* the stage: board (trees + rules in one box, goal strip under it) left; level text and messages right */
+.stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);grid-template-areas:"play lead" "play msgs";grid-template-rows:auto 1fr;column-gap:28px;align-items:start}
+.play{grid-area:play}.lead{grid-area:lead}.msgs{grid-area:msgs}
+@media(max-width:1000px){.stage{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "play" "msgs";grid-template-rows:auto}}
+.lead{max-width:72ch;margin:0 0 14px}
 .lead h2{font-size:clamp(26px,3vw,34px);line-height:1.1;margin:0 0 8px;font-weight:600}
 .lead p{margin:0 0 8px}
-
-/* the board: trees and rules in one area, goal strip directly under it */
-.board{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px);border:1px solid var(--line);border-radius:8px 8px 0 0}
-.pic{min-height:260px}
-.tools{border-left:1px solid var(--line);background:var(--panel);padding:12px 12px 14px;border-top-right-radius:8px}
-.goal{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:10px 14px;font:15px/1.45 "IBM Plex Mono",monospace;overflow-wrap:anywhere}
+.board{border:1px solid var(--line);border-radius:8px 8px 0 0}
+.goal{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:10px 14px;font:15px/1.45 "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 .goal b{font:600 14px "IBM Plex Sans",sans-serif;color:var(--muted)}
-.goal.done{background:var(--okbg);color:var(--blue)}
-.goal.done b{color:var(--blue)}
-@media(max-width:760px){.board{grid-template-columns:minmax(0,1fr)}.tools{border-left:0;border-top:1px solid var(--line);border-top-right-radius:0}}
+.goal .st{font:500 14px "IBM Plex Sans",sans-serif;color:var(--muted);text-align:right}
+@media(max-width:560px){.goal{grid-template-columns:auto minmax(0,1fr)}.goal .st{grid-column:1/-1}}
+.goal.done{background:var(--greenbg);color:var(--green);border-color:var(--green);border-top:1px solid var(--green);margin-top:-1px}
+.goal.done b,.goal.done .st{color:var(--green);font-weight:600}
+.goal.gray{background:var(--graybg);color:var(--gray)}
+.goal.gray b,.goal.gray .st{color:var(--gray)}
 
-.cap{font:500 14px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);padding:12px 14px 0}
-.tools .cap{padding:0 2px 8px}
-.treebox{overflow-x:auto;padding:6px 8px 14px}
+.cap{font:500 14px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);padding:10px 12px 0}
+.treebox{overflow-x:auto;padding:4px 8px 10px}
 .treebox svg{display:block;margin:0 auto}
 svg text{font-family:"IBM Plex Sans",sans-serif;font-size:14px;fill:var(--ink)}
 svg .cat{font-weight:600;fill:var(--blue)}
@@ -69,28 +76,28 @@ svg .new{fill:var(--accbg);stroke:var(--acc);stroke-width:1.4}
 svg .sel .hit,svg .sel:hover .hit{fill:var(--selbg);stroke:var(--sel);stroke-width:2}
 svg .badge{font:600 11px "IBM Plex Sans",sans-serif;fill:var(--sel)}
 svg .bracket{stroke:var(--ink);stroke-width:1.6;fill:none}
-.empty{padding:20px 14px 26px;color:var(--muted);font-style:italic}
+.empty{padding:10px 12px 16px;color:var(--muted);font-style:italic}
 
-.chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 4px}
-.tools .chips{padding:0 0 10px}
-.chip{display:inline-flex;gap:6px;align-items:baseline;font:14px "IBM Plex Mono",monospace;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink);cursor:pointer}
-.chip .c{color:var(--blue)}
-.chip .n{font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
-.chip:hover{border-color:var(--blue)}
-.chip[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
-.chip:disabled{opacity:.45;cursor:default}
-.rule{display:block;width:100%;min-height:40px;padding:8px 10px;margin:0 0 6px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink);font:14px/1.4 "IBM Plex Mono",monospace;text-align:left;cursor:pointer}
-.rule:hover{border-color:var(--blue)}
-.rule b{font:500 13px "IBM Plex Sans",sans-serif;color:var(--muted);margin-right:6px}
-.rule small{display:block;font:13px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);margin-top:2px}
-.rule:disabled{cursor:default;opacity:.55}
-.rule:disabled:hover{border-color:var(--line)}
+/* clickable items inside the board: rules, lexicon, Select, MERGE */
+.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px 4px}
+.tools .lab{font:500 13px "IBM Plex Sans",sans-serif;color:var(--muted);margin-right:2px}
+.tools .brk{flex-basis:100%;height:0}
+.item{display:inline-flex;align-items:baseline;gap:6px;min-height:36px;padding:7px 10px;border:1px solid transparent;border-radius:5px;background:var(--panel);color:var(--ink);font:14px/1.3 "IBM Plex Mono",monospace;cursor:pointer;text-align:left}
+.item:hover{background:var(--hover)}
+.item .rn{font:600 13px "IBM Plex Sans",sans-serif;color:var(--blue)}
+.item small{font:12.5px "IBM Plex Sans",sans-serif;color:var(--muted)}
+.item .c{color:var(--blue)}
+.item .n{font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
+.item[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
+.item:disabled{opacity:.5;cursor:default}
+.item:disabled:hover{background:var(--panel)}
 
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
 .btn{font:500 15px/1 "IBM Plex Sans",sans-serif;min-height:44px;padding:0 14px;border-radius:6px;border:1px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer}
 .btn.solid{background:var(--blue);color:var(--bg)}
 .btn:disabled{opacity:.4;cursor:default}
-.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:12px;max-width:820px}
+.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+@media(max-width:1000px){.msgs{margin-top:14px}}
 .msg{font:13.5px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:9px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .msg.i{background:var(--okbg);border-left:3px solid var(--blue)}
 .msg.e{background:var(--accbg);border-left:3px solid var(--acc)}
@@ -113,18 +120,17 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <div class="tabs" role="tablist" id="tabs"></div>
 </div></header>
 
-<main class="band"><div class="wrap">
+<main class="band"><div class="wrap stage">
+<div class="play">
+  <div class="board" id="pic"></div>
+  <div class="goal" id="goal" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn" id="undo" type="button">Undo</button>
+    <button class="btn" id="reset" type="button">Start over</button>
+    <button class="btn" id="solve" type="button">Solution</button>
+  </div>
+</div>
 <div class="lead" id="lead"></div>
-<div class="board">
-  <div class="pic" id="pic"></div>
-  <div class="tools" id="tools"></div>
-</div>
-<div class="goal" id="goal" aria-live="polite"></div>
-<div class="row">
-  <button class="btn" id="undo" type="button">Undo</button>
-  <button class="btn" id="reset" type="button">Start over</button>
-  <button class="btn" id="solve" type="button">Solution</button>
-</div>
 <div class="msgs" id="msgs" aria-live="polite"></div>
 </div></main>
 
@@ -309,16 +315,16 @@ const LEVELS = [
    lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence, then click a rule. The rule decides whether it applies and computes the result.</p>',
    solution: [[0, ['very', 'good']], [1, ['very good', 'day']], [2, ['a', 'very good day']]],
    done: 'Three rule applications. Nothing about linear grammar is built into the language: the next levels change only the data.' },
- { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Try it',
+ { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Cannot be cleared', impossible: true,
    words: [['a', 'D'], ['very', 'Adv'], ['day', 'N']], goal: 'D',
-   lead: '<h2>Not in the language</h2><p>Same grammar. Try to build <i>a very day</i> as a D. Every grouping of neighbours, with every rule, is rejected.</p>',
+   lead: '<h2>Not in the language</h2><p>Same grammar. Try to build <i>a very day</i> as a D. This level cannot be cleared: every grouping of neighbours, with every rule, is rejected.</p>',
    why: 'very is an Adv. The only rule that takes an Adv is Rule 1, A → Adv A, and it needs an A right after it; here very is followed by day, an N. No rule takes D and Adv either. So very can never join anything, and a very day is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
    done: '' },
- { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration',
+ { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration', rules: [2, 3],
    words: [['a', 'D'], ['a', 'D'], ['the', 'D'], ['this', 'D'], ['dog', 'N']], goal: 'D',
    lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: N → D N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as a D.</p>',
    solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [2, ['a', 'a the this dog']]],
-   done: 'Derived, and that is the problem: a a the this dog is not English, but linear₂ generates it. Rule 4 feeds itself, so determiners stack without limit. The error is in the grammar, and deriving the string shows it.' },
+   done: 'Cleared, and that is the problem: a a the this dog is not English, but linear₂ generates it. Rule 4 feeds itself, so determiners stack without limit. The error is in the grammar, and deriving the string shows it.' },
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
    lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'TP' },
    lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rule table is produced by a function, the X-bar schema, from GB data: c-selection decides which complements exist; only Case positions take a DP, so the Case Filter is a property of the table; there is no TP → T′ (EPP). T′ → T⁰ VP does not concatenate: it lowers the affix onto the verb. Lexical items are never used up. Click inputs in order (words in the lexicon or nodes in the trees), then a rule.</p>',
@@ -362,10 +368,7 @@ function applySentence(ri) {
   const node = { str: r.out.str, cat: r.out.cat, tree: { cat: r.out.cat, kids: idx.map(i => st.pieces[i].tree), isNew: true } };
   st.pieces.splice(idx[0], idx.length, node);
   st.sel = []; st.msgs = [];
-  if (st.pieces.length === 1) {
-    if (node.cat === lv.goal) finish();
-    else st.msgs = [{ t: `Built ${node.str.join(' ')} : ${node.cat}, but the goal is a ${lv.goal}.`, k: 'p' }];
-  }
+  if (st.pieces.length === 1 && node.cat === lv.goal) finish();
   draw();
 }
 const keyOf = e => e.str.join(' ') + '|' + e.cat;
@@ -432,7 +435,7 @@ function solve() {
 }
 
 /* ---------- trees ---------- */
-const ROW = 60; let GAP = 84;
+const ROW = 54; let GAP = 80;
 const leaves = t => t.kids.length ? t.kids.reduce((a, c) => a + leaves(c), 0) : 1;
 function layout(t, x0, depth, out) {
   if (!t.kids.length) { t.x = x0 + GAP / 2; t.y = depth; out.d = Math.max(out.d, depth); return x0 + GAP; }
@@ -443,10 +446,10 @@ function sink(t, max) { if (!t.kids.length) { t.y = max; return; } t.kids.forEac
 function drawForest(trees, o) {
   const out = { d: 0 }; let x = o.pad;
   const nl = trees.reduce((a, t) => a + leaves(t), 0), room = o.avail - 2 * o.pad - (trees.length - 1) * o.sep;
-  GAP = Math.max(52, Math.min(86, room / Math.max(nl, 1)));
+  GAP = Math.max(52, Math.min(80, room / Math.max(nl, 1)));
   trees.forEach(t => { x = layout(t, x, 0, out) + o.sep; });
   if (o.baseline) trees.forEach(t => sink(t, out.d));
-  const W = Math.max(x - o.sep + o.pad, 160), H = (out.d + 1) * ROW + 30;
+  const W = Math.max(x - o.sep + o.pad, 160), H = out.d * ROW + 36;
   let g = '';
   const edges = t => t.kids.forEach(c => { g += `<path class="edge" d="M${t.x} ${t.y * ROW + 28} L${c.x} ${c.y * ROW + 10}"/>`; edges(c); });
   trees.forEach(edges);
@@ -476,14 +479,22 @@ function mpTree(R, s, d, path) {
   if (E.lowerCopy(R, s, d)) return { word: `copy(${E.labText(E.labelAt(R, s, d))})`, copy: true, kids: [] };
   return { ...base, cat: E.labText(E.labelAt(R, s, d)), kids: [mpTree(R, s.set[0], d + 1, [...path, 0]), mpTree(R, s.set[1], d + 1, [...path, 1])] };
 }
+
+/* ---------- the board: trees, then the clickable rules in the same box ---------- */
+function rulesRow(lv, dis) {
+  const rs = E.grammars[lv.g].rules, show = lv.rules || rs.map((_, i) => i);
+  return '<div class="tools"><span class="lab">Rules</span>' + show.map(i => {
+    const [main, note] = rs[i].name.split('  [');
+    return `<button class="item" type="button" data-r="${i}"${dis}><span class="rn">Rule ${i + 1}</span>${esc(main)}${note ? ` <small>[${esc(note)}</small>` : ''}</button>`; }).join('') + '</div>';
+}
 function drawPic() {
-  const lv = L(), box = document.getElementById('pic'), avail = Math.max(260, box.clientWidth - 20);
+  const lv = L(), box = document.getElementById('pic'), avail = Math.max(260, box.clientWidth - 20), dis = off() ? ' disabled' : '';
   let h = '';
   if (lv.kind === 'sentence') {
     const trees = st.pieces.map((p, i) => {
       const t = clone(p.tree); markPiece(t, 'p' + i, `${p.str.join(' ')}, ${p.cat}`); t.sel = st.sel.includes(i); return t;
     });
-    h = `<div class="cap">The sentence. Click neighbouring pieces to select them.</div><div class="treebox">${drawForest(trees, { pad: 6, sep: 18, avail, baseline: true, aria: 'Sentence pieces' })}</div>`;
+    h = `<div class="cap">The sentence. Click neighbouring pieces to select them, then a rule.</div>` + rulesRow(lv, dis) + `<div class="treebox">${drawForest(trees, { pad: 6, sep: 18, avail, baseline: true, aria: 'Sentence pieces' })}</div>`;
   } else if (lv.kind === 'free') {
     const pool = allExprs(), used = new Set(st.derived.flatMap(d => d.ins));
     const build = e => {
@@ -495,42 +506,46 @@ function drawPic() {
         extra: e.str.join(' ') !== concat ? '“' + e.str.join(' ') + '”' : '' };
     };
     const roots = st.derived.filter(d => !used.has(keyOf(d))).map(build);
-    h = `<div class="cap">Lexicon. Items are never used up.</div><div class="chips">` +
-      L().lexicon.map(([w, c]) => { const k = w + '|' + c, n = st.sel.indexOf(k);
-        return `<button class="chip" type="button" data-e="${esc(k)}" aria-pressed="${n >= 0}"${off() ? ' disabled' : ''}>${esc(w)} <span class="c">${esc(c)}</span>${n >= 0 ? `<span class="n">${n + 1}</span>` : ''}</button>`; }).join('') + '</div>' +
-      (roots.length ? `<div class="cap">Built so far</div><div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees' })}</div>`
+    h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
+      lv.lexicon.map(([w, c]) => { const k = w + '|' + c, n = st.sel.indexOf(k);
+        return `<button class="item" type="button" data-e="${esc(k)}" aria-pressed="${n >= 0}"${dis}>${esc(w)} <span class="c">${esc(c)}</span>${n >= 0 ? `<span class="n">${n + 1}</span>` : ''}</button>`; }).join('') +
+      `<small class="lab" style="margin-left:4px">never used up</small></div>` + rulesRow(lv, dis) +
+      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees' })}</div>`
         : `<div class="empty">Nothing built yet. Click an item in the lexicon, then a rule.</div>`);
   } else {
     const items = st.ws.map((R, i) => { const t = mpTree(R, R, 0, [i]); if (E.key(R) === st.fresh) t.isNew = true; return t; });
+    const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
     h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
+      '<div class="tools"><span class="lab">Select</span>' +
+      ['the', 'n', 'cat', 'will', 'v', 'sleep'].map(x => `<button class="item" type="button" data-li="${x}"${dis}>${esc(E.liText(x))}</button>`).join('') +
+      `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS) <small>replaces P and Q by {P, Q}</small></button></div>` +
       (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
   }
   box.innerHTML = h;
 }
 
-/* ---------- rules, goal, messages ---------- */
-function drawTools() {
-  const lv = L(), dis = off() ? ' disabled' : '';
-  let h = '';
-  if (lv.kind === 'mp') {
-    h += '<div class="cap">Select draws an item into WS</div><div class="chips">' +
-      ['the', 'n', 'cat', 'will', 'v', 'sleep'].map(x => `<button class="chip" type="button" data-li="${x}"${dis}>${esc(E.liText(x))}</button>`).join('') + '</div>';
-    const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
-    h += `<div class="cap">Rule</div><button class="rule" type="button" id="mergeBtn"${dis}><b>MERGE</b>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS)<small>replaces P and Q by {P, Q}</small></button>`;
-  } else {
-    h += '<div class="cap">Rules</div>' + E.grammars[lv.g].rules.map((r, i) => {
-      const [main, note] = r.name.split('  [');
-      return `<button class="rule" type="button" data-r="${i}"${dis}><b>Rule ${i + 1}</b>${esc(main)}${note ? `<small>[${esc(note)}</small>` : ''}</button>`; }).join('');
+/* ---------- goal strip with the automatic check ---------- */
+function check() {
+  const lv = L();
+  if (lv.impossible) return { cls: 'gray', st: 'Cannot be cleared' };
+  if (st.closed) return { cls: 'done', st: '✓ Cleared' };
+  if (lv.kind === 'sentence') {
+    const n = st.pieces.length, p = st.pieces[0];
+    return { st: n > 1 ? `Not yet: ${n} pieces` : `Not yet: this is ${p.str.join(' ')} : ${p.cat}` };
   }
-  document.getElementById('tools').innerHTML = h;
+  if (lv.kind === 'free') return { st: 'Not yet' };
+  const n = st.ws.length;
+  if (!n) return { st: 'Not yet: WS is empty' };
+  if (n > 1) return { st: `Not yet: ${n} objects in WS` };
+  return { st: E.allLabeled(st.ws[0], st.ws[0], 0) ? 'Not yet: wrong word order' : 'Not yet: a node has no label' };
 }
 function drawGoal() {
-  const lv = L(), el = document.getElementById('goal');
+  const lv = L(), el = document.getElementById('goal'), c = check();
   const text = lv.kind === 'sentence' ? `${lv.words.map(w => w[0]).join(' ')} : ${lv.goal}`
     : lv.kind === 'free' ? `${lv.goal.str.join(' ')} : ${lv.goal.cat}`
-    : `one object in WS, every node labeled (pronounced “${lv.target.join(' ')}”; checked automatically)`;
-  el.className = 'goal' + (st.closed ? ' done' : '');
-  el.innerHTML = `<b>${st.closed ? 'Goal reached' : 'Goal'}</b><span>${esc(text)}</span>`;
+    : `one object in WS, every node labeled, pronounced “${lv.target.join(' ')}”`;
+  el.className = 'goal' + (c.cls ? ' ' + c.cls : '');
+  el.innerHTML = `<b>Goal</b><span>${esc(text)}</span><span class="st">${esc(c.st)}</span>`;
 }
 function drawMsgs() {
   const lv = L();
@@ -543,7 +558,7 @@ function drawMsgs() {
   const sb = document.getElementById('solve'); sb.hidden = !lv.solution; sb.disabled = playing;
   document.querySelectorAll('.tab').forEach((b, i) => { b.setAttribute('aria-selected', i === cur); b.querySelector('.tick').textContent = solved.has(i) ? '✓' : ''; });
 }
-function draw() { drawPic(); drawTools(); drawGoal(); drawMsgs(); }
+function draw() { drawPic(); drawGoal(); drawMsgs(); }
 function showLevel(i) {
   cur = i; st = initState(L());
   document.getElementById('lead').innerHTML = L().lead;
@@ -552,7 +567,7 @@ function showLevel(i) {
 }
 
 /* ---------- events ---------- */
-document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab" role="tab" type="button" data-i="${i}">${esc(lv.name)}<span class="tick"></span><small>${esc(lv.era)}</small></button>`).join('');
+document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab${lv.impossible ? ' gray' : ''}" role="tab" type="button" data-i="${i}">${esc(lv.name)}<span class="tick"></span><small>${esc(lv.era)}</small></button>`).join('');
 document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b && !playing) showLevel(+b.dataset.i); });
 function toggleSel(k, max) {
   if (off()) return;
@@ -561,7 +576,15 @@ function toggleSel(k, max) {
   st.msgs = []; draw();
 }
 document.getElementById('pic').addEventListener('click', e => {
-  const chip = e.target.closest('[data-e]'); if (chip) return toggleSel(chip.dataset.e);
+  const b = e.target.closest('button');
+  if (b) {
+    if (off()) return;
+    if (b.dataset.e !== undefined) toggleSel(b.dataset.e);
+    else if (b.dataset.r !== undefined) (L().kind === 'sentence' ? applySentence : applyFree)(+b.dataset.r);
+    else if (b.dataset.li !== undefined) selectLI(b.dataset.li);
+    else if (b.id === 'mergeBtn') doMerge();
+    return;
+  }
   const g = e.target.closest('[data-k]'); if (!g) return;
   const k = g.dataset.k, kind = L().kind;
   if (kind === 'sentence') toggleSel(+k.slice(1)); else if (kind === 'free') toggleSel(k); else toggleSel(k, 2);
@@ -569,12 +592,6 @@ document.getElementById('pic').addEventListener('click', e => {
 document.getElementById('pic').addEventListener('keydown', e => {
   const g = e.target.closest && e.target.closest('[data-k]');
   if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); g.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
-});
-document.getElementById('tools').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b || off()) return;
-  if (b.dataset.r !== undefined) (L().kind === 'sentence' ? applySentence : applyFree)(+b.dataset.r);
-  else if (b.dataset.li !== undefined) selectLI(b.dataset.li);
-  else if (b.id === 'mergeBtn') doMerge();
 });
 document.getElementById('msgs').addEventListener('click', e => {
   if (e.target.id === 'whyBtn') { st.showWhy = true; drawMsgs(); }
