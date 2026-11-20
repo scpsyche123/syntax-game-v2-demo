@@ -8,17 +8,13 @@ msgstr "Project-Id-Version: Game v4.23.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit"
 
-#: Game.Levels.Demo.L01_Linear
-msgid "Build ⟨a good day, N⟩ in the linear grammar."
-msgstr ""
-
 #: GameServer.RpcHandlers
 msgid "level completed! 🎉"
 msgstr ""
 
 #. §0: `rule \"N' -> N0\" cat`
 #. §1: `rule \"NP -> N'\" cat_N'`
-#: Game.Levels.Demo.L02_XBarGB
+#: Game.Levels.Demo.L03_XBarGB
 msgid "Start with a noun: §0, then §1."
 msgstr ""
 
@@ -33,7 +29,7 @@ msgstr ""
 #. §8: `rule \"N' -> N0\" cat`
 #. §9: `cat_N'`
 #. §10: `cat_NP`
-#: Game.Levels.Demo.L02_XBarGB
+#: Game.Levels.Demo.L03_XBarGB
 msgid "Same language, a different grammar.\n"
 "\n"
 "Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
@@ -62,11 +58,11 @@ msgid "Same language, a different grammar.\n"
 msgstr ""
 
 #. §0: `select the n cat will v sleep`
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "Begin by drawing the lexical items into the workspace: §0."
 msgstr ""
 
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "Narrow syntax for *the cat will sleep*."
 msgstr ""
 
@@ -89,7 +85,7 @@ msgid "§0 applies the rule NAME to the expressions x, y, … in\n"
 "Add §4 at the end to choose the name of the result yourself."
 msgstr ""
 
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "Look at the last step. Before Internal MERGE, {DP, vP} had no label: neither D nor v\n"
 "shares a feature with the other. After it, the lower DP is a copy, the labeling algorithm\n"
 "sees only vP, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ.\n"
@@ -111,7 +107,7 @@ msgid "This demo shows one formal language expressing grammars from three eras o
 "a derivation of it. Every step you take is checked by Lean's kernel."
 msgstr ""
 
-#: Game.Levels.Demo.L02_XBarGB
+#: Game.Levels.Demo.L03_XBarGB
 msgid "Build ⟨the cat sees the dog, TP⟩ in X-bar theory with GB modules."
 msgstr ""
 
@@ -125,7 +121,7 @@ msgstr ""
 #. §7: `vP`
 #. §8: `TP`
 #. §9: `{DP, vP}`
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "Same language, a grammar from a later era. Here **an expression is a workspace**.\n"
 "Following Chomsky (2020, *UCLA Lectures*):\n"
 "\n"
@@ -161,18 +157,23 @@ msgid "Same language, a grammar from a later era. Here **an expression is a work
 "Agree is not modeled (T's φ counts as valued); no phases."
 msgstr ""
 
-#: Game.Levels.Demo.L02_XBarGB
-msgid "Twelve rule applications, all with the command from level 1.\n"
-"\n"
-"GB's modules entered as data — what the schema generates, which positions accept a DP,\n"
-"which rule lowers the affix — not as new machinery in the language."
+#: Game.Levels.Demo.L01_Linear
+msgid "Three rule applications. The same command — choose a rule, give it its inputs — runs every level.\n"
+"What changes from level to level is only the grammar: its categories, its lexicon, its rules."
+msgstr ""
+
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "A grammar that says too much"
 msgstr ""
 
 #. §0: `linear₁`
-#. §1: `N → D N`
-#. §2: `N → D A N`
-#. §3: `rule \"N → D A N\" a good day`
-#. §4: `rule \"N -> D A N\" a good day`
+#. §1: `A → Adv A`
+#. §2: `N → A N`
+#. §3: `D → D N`
+#. §4: `rule \"A -> Adv A\" very good`
+#. §5: `very`
+#. §6: `good`
+#. §7: `very_good_A`
 #: Game.Levels.Demo.L01_Linear
 msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
 "\n"
@@ -184,35 +185,48 @@ msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
 "\n"
 "The grammar of this level is §0:\n"
 "\n"
-"- Lexicon: ⟨a, D⟩, ⟨very, Adv⟩, ⟨good, A⟩, ⟨day, N⟩\n"
-"- Rules: §1, §2\n"
+"- Lexicon: a : D, very : Adv, good : A, day : N\n"
+"- Rule 1: §1\n"
+"- Rule 2: §2\n"
+"- Rule 3: §3\n"
 "\n"
-"**Goal:** show that ⟨a good day, N⟩ ∈ L(linear₁).\n"
+"**Goal:** show that ⟨a very good day, D⟩ ∈ L(linear₁).\n"
 "\n"
-"**Command:** §3 applies a rule to expressions in your hypotheses.\n"
-"The rule computes the result; you only choose the rule and its inputs.\n"
-"ASCII works too: §4."
+"**Command:** §4 applies Rule 1 to the expressions §5 and §6.\n"
+"The rule computes the result and names it (§7); you only choose the rule and its inputs."
+msgstr ""
+
+#. §0: `linear₂`
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "The proof went through, and that is the problem: *a a the this dog* is not English, but\n"
+"§0 generates it. Rule 4 feeds itself, so determiners stack without limit.\n"
+"The error is in the grammar, and Lean finds it by deriving the string."
 msgstr ""
 
 #: Game
 msgid "Syntax Game v2 · Bare Grammar demo"
 msgstr ""
 
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "One object is left, but {DP, vP} has no label. What can MERGE do that makes the DP inside invisible there?"
 msgstr ""
 
-#: Game.Levels.Demo.L02_XBarGB
+#: Game.Levels.Demo.L03_XBarGB
 msgid "X-bar theory with GB"
 msgstr ""
 
 #. §0: `merge n cat`
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "Build the noun first: §0."
 msgstr ""
 
 #: GameServer.RpcHandlers
 msgid "level completed with warnings… 🎭"
+msgstr ""
+
+#. §0: `rule \"N -> D N\" this dog`
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "Start from the right: §0."
 msgstr ""
 
 #. §0: `merge P Q`
@@ -239,32 +253,54 @@ msgid "§0 performs MERGE(P, Q, WS): it replaces P and Q by {P, Q}.\n"
 "of the other. Anything else is rejected."
 msgstr ""
 
-#: Game.Levels.Demo
-msgid "Three levels, three grammars from three eras of generative syntax, written in one formal\n"
-"language. Each grammar is data: categories, a lexicon, rules. The same derivation relation,\n"
-"checked by Lean, decides what each grammar generates."
+#: Game.Levels.Demo.L01_Linear
+msgid "Build ⟨a very good day, D⟩ in the linear grammar."
+msgstr ""
+
+#. §0: `very`
+#. §1: `good`
+#. §2: `rule \"A -> Adv A\" very good`
+#: Game.Levels.Demo.L01_Linear
+msgid "Start inside: which rule can take §0 and §1? Try §2."
 msgstr ""
 
 #: Game.Levels.Demo.L01_Linear
 msgid "A linear grammar"
 msgstr ""
 
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "Build ⟨a a the this dog, D⟩ with the extra rule."
+msgstr ""
+
 #. §0: `rule \"T' -> T0 VP\" s see_the_dog_VP`
-#: Game.Levels.Demo.L02_XBarGB
+#: Game.Levels.Demo.L03_XBarGB
 msgid "Now T: §0. Watch what happens to *see*."
 msgstr ""
 
-#: Game.Levels.Demo.L01_Linear
-msgid "One rule, one step.\n"
+#. §0: `linear₂`
+#. §1: `linear₁`
+#. §2: `A → Adv A`
+#. §3: `N → A N`
+#. §4: `D → D N`
+#. §5: `N → D N`
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "§0 is §1 with three more words (the : D, this : D, dog : N) and one more rule:\n"
 "\n"
-"The same command — choose a rule, give it its inputs — runs every level of this demo.\n"
-"What changes from level to level is only the grammar: its categories, its lexicon, its rules.\n"
-"Nothing about linear grammar is built into the language."
+"- Rule 1: §2\n"
+"- Rule 2: §3\n"
+"- Rule 3: §4\n"
+"- Rule 4: §5\n"
+"\n"
+"Rule 4 looks harmless. But its output is an N, and Rule 4 also takes an N.\n"
+"\n"
+"**Goal:** show that ⟨a a the this dog, D⟩ ∈ L(linear₂)."
 msgstr ""
 
-#. §0: `rule \"N -> D A N\" a good day`
-#: Game.Levels.Demo.L01_Linear
-msgid "Which rule has three inputs: a D, an A and an N? Try §0."
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Twelve rule applications, all with the command from levels 1 and 2.\n"
+"\n"
+"GB's modules entered as data — what the schema generates, which positions accept a DP,\n"
+"which rule lowers the affix — not as new machinery in the language."
 msgstr ""
 
 #. §0: `select x y …`
@@ -281,6 +317,12 @@ msgstr ""
 
 #: Game.Levels.Demo
 msgid "One language, three theories"
+msgstr ""
+
+#: Game.Levels.Demo
+msgid "Four levels, grammars from three eras of generative syntax, written in one formal\n"
+"language. Each grammar is data: categories, a lexicon, rules. The same derivation relation,\n"
+"checked by Lean, decides what each grammar generates."
 msgstr ""
 
 #. §0: `BareSyntax/Basic.lean`
@@ -306,6 +348,6 @@ msgid "**The language.** §0: expressions ⟨string, category⟩, rules as parti
 "*Build: §3*"
 msgstr ""
 
-#: Game.Levels.Demo.L03_MP
+#: Game.Levels.Demo.L04_MP
 msgid "The Minimalist Program: MERGE on workspaces"
 msgstr ""

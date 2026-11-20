@@ -3,7 +3,7 @@ import Game.Metadata
 open BareSyntax
 
 World "Demo"
-Level 3
+Level 4
 
 Title "The Minimalist Program: MERGE on workspaces"
 

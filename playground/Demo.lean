@@ -15,13 +15,43 @@ open BareSyntax
 
 /-! ## Level 1 — a linear grammar
 
-`linear₁`: lexicon ⟨a, D⟩ ⟨very, Adv⟩ ⟨good, A⟩ ⟨day, N⟩; rules N → D N, N → D A N. -/
+`linear₁`: lexicon a : D, very : Adv, good : A, day : N;
+Rule 1: A → Adv A, Rule 2: N → A N, Rule 3: D → D N. -/
 example (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
     (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
     (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon)
     (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
-    CanYield linear₁ ["a", "good", "day"] .N := by
-  rule "N -> D A N" a good day
+    CanYield linear₁ ["a", "very", "good", "day"] .D := by
+  rule "A -> Adv A" very good
+  rule "N -> A N" very_good_A day
+  rule "D -> D N" a very_good_day_N
+
+/-! ## Not in the language: ⟨a very day, D⟩
+
+`very` is an Adv, and the only rule that takes an Adv is Rule 1, which needs an A
+after it. Every attempt fails; uncomment a line to see one. (No proof of
+impossibility here — this is a place to try.) -/
+example (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
+    (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
+    (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
+    CanYield linear₁ ["a", "very", "day"] .D := by
+  -- rule "A -> Adv A" very day
+  -- rule "N -> A N" very day
+  -- rule "D -> D N" a very
+  sorry
+
+/-! ## Overgeneration — `linear₂` adds Rule 4: N → D N
+
+It now derives a string no speaker accepts. -/
+example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
+    (the : (["the"], Linear1Cat.D) ∈ linear₂.lexicon)
+    (this : (["this"], Linear1Cat.D) ∈ linear₂.lexicon)
+    (dog : (["dog"], Linear1Cat.N) ∈ linear₂.lexicon) :
+    CanYield linear₂ ["a", "a", "the", "this", "dog"] .D := by
+  rule "N -> D N" this dog
+  rule "N -> D N" the this_dog_N
+  rule "N -> D N" a the_this_dog_N
+  rule "D -> D N" a a_the_this_dog_N
 
 /-! ## Level 2 — X-bar theory with GB
 
@@ -62,10 +92,9 @@ example : MP.Converges ["the", "cat", "will", "sleep"] := by
 
 /-! ## Rejections
 
-Uncomment one line at a time to see how the grammar rejects a step. -/
-example (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
-    (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon)
-    (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
-    CanYield linear₁ ["a", "good", "day"] .N := by
-  -- rule "N -> D N" a good day        -- the rule's domain is D, N
-  rule "N -> D A N" a good day
+Uncomment the first line to see how the grammar rejects a step. -/
+example (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
+    (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon) :
+    CanYield linear₁ ["very", "good"] .A := by
+  -- rule "N -> A N" very good        -- Rule 2 needs an A and an N
+  rule "A -> Adv A" very good

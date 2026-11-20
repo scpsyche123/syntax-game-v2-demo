@@ -1,0 +1,2347 @@
+{
+ "lin1": {
+  "steps": [
+   {
+    "cmd": "rule \"A -> Adv A\" very good",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very_good_A",
+      "⟨very good, A⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"N -> A N\" very_good_A day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very_good_A",
+      "⟨very good, A⟩"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very_good_A",
+      "⟨very good, A⟩"
+     ],
+     [
+      "very_good_day_N",
+      "⟨very good day, N⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"D -> D N\" a very_good_day_N",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very_good_A",
+      "⟨very good, A⟩"
+     ],
+     [
+      "very_good_day_N",
+      "⟨very good day, N⟩"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very_good_A",
+      "⟨very good, A⟩"
+     ],
+     [
+      "very_good_day_N",
+      "⟨very good day, N⟩"
+     ],
+     [
+      "a_very_good_day_D",
+      "⟨a very good day, D⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   }
+  ],
+  "wrong": [
+   {
+    "cmd": "rule \"N -> A N\" very good",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"N → A N\" is not defined on inputs of category Adv, A. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 0
+   },
+   {
+    "cmd": "rule \"D -> D N\" a very",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D → D N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 0
+   },
+   {
+    "cmd": "rule \"D -> D N\" a very_good_A",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "good",
+      "⟨good, A⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very_good_A",
+      "⟨very good, A⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D → D N\" is not defined on inputs of category D, A. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 1
+   }
+  ]
+ },
+ "over": {
+  "steps": [
+   {
+    "cmd": "rule \"N -> D N\" this dog",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"N -> D N\" the this_dog_N",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ],
+     [
+      "the_this_dog_N",
+      "⟨the this dog, N⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"N -> D N\" a the_this_dog_N",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ],
+     [
+      "the_this_dog_N",
+      "⟨the this dog, N⟩"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ],
+     [
+      "the_this_dog_N",
+      "⟨the this dog, N⟩"
+     ],
+     [
+      "a_the_this_dog_N",
+      "⟨a the this dog, N⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"D -> D N\" a a_the_this_dog_N",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ],
+     [
+      "the_this_dog_N",
+      "⟨the this dog, N⟩"
+     ],
+     [
+      "a_the_this_dog_N",
+      "⟨a the this dog, N⟩"
+     ]
+    ],
+    "after": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this_dog_N",
+      "⟨this dog, N⟩"
+     ],
+     [
+      "the_this_dog_N",
+      "⟨the this dog, N⟩"
+     ],
+     [
+      "a_the_this_dog_N",
+      "⟨a the this dog, N⟩"
+     ],
+     [
+      "a_a_the_this_dog_D",
+      "⟨a a the this dog, D⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   }
+  ],
+  "wrong": [
+   {
+    "cmd": "rule \"A -> Adv A\" the dog",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"A → Adv A\" is not defined on inputs of category D, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 0
+   },
+   {
+    "cmd": "rule \"D -> D N\" this the",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "the",
+      "⟨the, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "this",
+      "⟨this, D⟩ ∈ Lex(linear₂)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⟩ ∈ Lex(linear₂)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D → D N\" is not defined on inputs of category D, D. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 0
+   }
+  ]
+ },
+ "xbar": {
+  "steps": [
+   {
+    "cmd": "rule \"N' -> N0\" cat",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"NP -> N'\" cat_N'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"D' -> D0 NP\" the cat_NP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"DP -> D'\" the_cat_D'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"N' -> N0\" dog",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"NP -> N'\" dog_N'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"D' -> D0 NP\" the dog_NP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"DP -> D'\" the_dog_D'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"V' -> V0 DP\" see the_dog_DP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"VP -> V'\" see_the_dog_V'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP",
+      "⟨see the dog, VP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"T' -> T0 VP\" s see_the_dog_VP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP",
+      "⟨see the dog, VP⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP",
+      "⟨see the dog, VP⟩"
+     ],
+     [
+      "sees_the_dog_T'",
+      "⟨sees the dog, T′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"TP -> DP T'\" the_cat_DP sees_the_dog_T'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP",
+      "⟨see the dog, VP⟩"
+     ],
+     [
+      "sees_the_dog_T'",
+      "⟨sees the dog, T′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP",
+      "⟨see the dog, VP⟩"
+     ],
+     [
+      "sees_the_dog_T'",
+      "⟨sees the dog, T′⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_TP",
+      "⟨the cat sees the dog, TP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   }
+  ],
+  "wrong": [
+   {
+    "cmd": "rule \"D' -> D0 NP\" the cat_N'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D′ → D⁰ NP\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 2
+   },
+   {
+    "cmd": "rule \"TP -> T'\" sees_the_dog_T'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP",
+      "⟨see the dog, VP⟩"
+     ],
+     [
+      "sees_the_dog_T'",
+      "⟨sees the dog, T′⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "xbarGB has no rule \"TP -> T'\". Its rules are:\n  N′ → N⁰\n  D′ → D⁰ NP\n  V′ → V⁰ DP  [V assigns accusative]\n  T′ → T⁰ VP  [Infl lowering: T's affix attaches to V]\n  NP → N′\n  DP → D′\n  VP → V′\n  TP → DP T′  [finite T assigns nominative]"
+     }
+    ],
+    "ok": false,
+    "after_step": 11
+   },
+   {
+    "cmd": "rule \"V' -> V0 DP\" see dog_NP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"V′ → V⁰ DP  [V assigns accusative]\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false,
+    "after_step": 8
+   }
+  ]
+ },
+ "mp": {
+  "steps": [
+   {
+    "cmd": "select the n cat will v sleep",
+    "before": [],
+    "after": [
+     [
+      "WS",
+      "[the, n, √cat, will, v, √sleep]"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "merge n cat",
+    "before": [
+     [
+      "WS",
+      "[the, n, √cat, will, v, √sleep]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[n:{n, √cat}, the, will, v, √sleep]"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "merge the nP",
+    "before": [
+     [
+      "WS",
+      "[n:{n, √cat}, the, will, v, √sleep]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[D:{the, n:{n, √cat}}, will, v, √sleep]"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "merge v sleep",
+    "before": [
+     [
+      "WS",
+      "[D:{the, n:{n, √cat}}, will, v, √sleep]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[v:{v, √sleep}, D:{the, n:{n, √cat}}, will]"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "merge DP vP",
+    "before": [
+     [
+      "WS",
+      "[v:{v, √sleep}, D:{the, n:{n, √cat}}, will]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}, will]"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "merge will {DP, vP}",
+    "before": [
+     [
+      "WS",
+      "[?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}, will]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[T:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}]"
+     ]
+    ],
+    "messages": [
+     {
+      "severity": "information",
+      "text": "The workspace holds one object, but some node is still unlabeled (shown as ?)."
+     }
+    ],
+    "ok": true
+   },
+   {
+    "cmd": "merge DP TP",
+    "before": [
+     [
+      "WS",
+      "[T:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[⟨φ,φ⟩:{D:{the, n:{n, √cat}}, T:{will, v:{copy(D), v:{v, √sleep}}}}]"
+     ]
+    ],
+    "messages": [
+     {
+      "severity": "information",
+      "text": "Converged. Externalization: “the cat will sleep”."
+     }
+    ],
+    "ok": true
+   }
+  ],
+  "wrong": [
+   {
+    "cmd": "merge will vP",
+    "before": [
+     [
+      "WS",
+      "[?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}, will]"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "MERGE(will, vP, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE)."
+     }
+    ],
+    "ok": false,
+    "after_step": 5
+   },
+   {
+    "cmd": "merge DP vP",
+    "before": [
+     [
+      "WS",
+      "[T:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}]"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "MERGE(DP, vP, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE)."
+     }
+    ],
+    "ok": false,
+    "after_step": 6
+   },
+   {
+    "cmd": "merge cat sleep",
+    "before": [
+     [
+      "WS",
+      "[the, n, √cat, will, v, √sleep]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[?:{√cat, √sleep}, the, n, will, v]"
+     ]
+    ],
+    "messages": [],
+    "ok": true,
+    "after_step": 1
+   }
+  ]
+ },
+ "impossible": {
+  "cases": [
+   {
+    "cmd": "rule \"A -> Adv A\" a very",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"A → Adv A\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"N -> A N\" a very",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"N → A N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"D -> D N\" a very",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D → D N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"A -> Adv A\" a very day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"A → Adv A\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"N -> A N\" a very day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"N → A N\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"D -> D N\" a very day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D → D N\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"A -> Adv A\" very day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"A → Adv A\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"N -> A N\" very day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"N → A N\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   },
+   {
+    "cmd": "rule \"D -> D N\" very day",
+    "before": [
+     [
+      "a",
+      "⟨a, D⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "very",
+      "⟨very, Adv⟩ ∈ Lex(linear₁)"
+     ],
+     [
+      "day",
+      "⟨day, N⟩ ∈ Lex(linear₁)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"D → D N\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its right-hand side."
+     }
+    ],
+    "ok": false
+   }
+  ]
+ },
+ "rules": {
+  "linear₁": [
+   "A → Adv A",
+   "N → A N",
+   "D → D N"
+  ],
+  "linear₂": [
+   "A → Adv A",
+   "N → A N",
+   "D → D N",
+   "N → D N"
+  ],
+  "xbarGB": [
+   "N′ → N⁰",
+   "D′ → D⁰ NP",
+   "V′ → V⁰ DP  [V assigns accusative]",
+   "T′ → T⁰ VP  [Infl lowering: T's affix attaches to V]",
+   "NP → N′",
+   "DP → D′",
+   "VP → V′",
+   "TP → DP T′  [finite T assigns nominative]"
+  ]
+ }
+}

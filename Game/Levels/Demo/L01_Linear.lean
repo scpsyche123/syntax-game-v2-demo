@@ -18,31 +18,31 @@ The language L(G) is everything that can be built from the lexicon with the rule
 
 The grammar of this level is `linear₁`:
 
-- Lexicon: ⟨a, D⟩, ⟨very, Adv⟩, ⟨good, A⟩, ⟨day, N⟩
-- Rules: `N → D N`, `N → D A N`
+- Lexicon: a : D, very : Adv, good : A, day : N
+- Rule 1: `A → Adv A`
+- Rule 2: `N → A N`
+- Rule 3: `D → D N`
 
-**Goal:** show that ⟨a good day, N⟩ ∈ L(linear₁).
+**Goal:** show that ⟨a very good day, D⟩ ∈ L(linear₁).
 
-**Command:** `rule \"N → D A N\" a good day` applies a rule to expressions in your hypotheses.
-The rule computes the result; you only choose the rule and its inputs.
-ASCII works too: `rule \"N -> D A N\" a good day`.
+**Command:** `rule \"A -> Adv A\" very good` applies Rule 1 to the expressions `very` and `good`.
+The rule computes the result and names it (`very_good_A`); you only choose the rule and its inputs.
 "
 
-/-- Build ⟨a good day, N⟩ in the linear grammar. -/
+/-- Build ⟨a very good day, D⟩ in the linear grammar. -/
 Statement (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
     (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
     (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon)
     (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
-    CanYield linear₁ ["a", "good", "day"] .N := by
-  Hint "Which rule has three inputs: a D, an A and an N? Try `rule \"N -> D A N\" a good day`."
-  rule "N -> D A N" a good day
+    CanYield linear₁ ["a", "very", "good", "day"] .D := by
+  Hint "Start inside: which rule can take `very` and `good`? Try `rule \"A -> Adv A\" very good`."
+  rule "A -> Adv A" very good
+  rule "N -> A N" very_good_A day
+  rule "D -> D N" a very_good_day_N
 
 Conclusion "
-One rule, one step.
-
-The same command — choose a rule, give it its inputs — runs every level of this demo.
+Three rule applications. The same command — choose a rule, give it its inputs — runs every level.
 What changes from level to level is only the grammar: its categories, its lexicon, its rules.
-Nothing about linear grammar is built into the language.
 "
 
 NewTactic rule

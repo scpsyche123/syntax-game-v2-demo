@@ -3,7 +3,7 @@ import Game.Metadata
 open BareSyntax
 
 World "Demo"
-Level 2
+Level 3
 
 Title "X-bar theory with GB"
 
@@ -58,7 +58,7 @@ Statement (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
   rule "TP -> DP T'" the_cat_DP sees_the_dog_T'
 
 Conclusion "
-Twelve rule applications, all with the command from level 1.
+Twelve rule applications, all with the command from levels 1 and 2.
 
 GB's modules entered as data — what the schema generates, which positions accept a DP,
 which rule lowers the affix — not as new machinery in the language.
