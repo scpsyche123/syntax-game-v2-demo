@@ -57,6 +57,7 @@ LEVELS = {
                       (11, "rule \"Move α: YP X' -> XP\" the_dog_DP sees_the_dog_T'_DP"),
                       (9, "rule \"Move α: YP X' -> XP\" the_cat_DP see_the_dog_V'"),
                       (12, "rule \"X0 YP -> X'\" c sees_the_dog_T'_DP"),
+                      (9, "rule \"X' -> XP\" see_the_dog_V'"),
                       (0, "rule \"N' -> N0\" cat")]),
   'mp': dict(G=None, lex=[], goal='MP.Converges ["the", "cat", "will", "sleep"]',
              steps=['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep',

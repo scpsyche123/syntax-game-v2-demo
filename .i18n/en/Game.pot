@@ -81,6 +81,51 @@ msgid "This demo shows one formal language expressing grammars from three eras o
 "a derivation of it. Every step you take is checked by Lean's kernel."
 msgstr ""
 
+#. §0: `X⁰ → X′`
+#. §1: `X′ → XP`
+#. §2: `YP X′ → XP`
+#. §3: `X⁰ YP → X′`
+#. §4: `X′ YP → X′`
+#. §5: `Move α: YP X′ → XP`
+#. §6: `rule \"X0 -> X'\" cat`
+#. §7: `cat_N'`
+#. §8: `cat_NP`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Same language, a different grammar.\n"
+"\n"
+"Categories are now head and bar level: N⁰, N′, NP, and so on. A category can also carry a\n"
+"phrase that waits inside it to move: VP/DP is a VP with a waiting DP.\n"
+"\n"
+"The rules are the X-bar schema, five rules with variables X and Y over head categories,\n"
+"plus Move α:\n"
+"\n"
+"- Rule 1: §0\n"
+"- Rule 2: §1\n"
+"- Rule 3: §2\n"
+"- Rule 4: §3\n"
+"- Rule 5: §4\n"
+"- Rule 6: §5\n"
+"\n"
+"GB enters as conditions on their domains:\n"
+"\n"
+"- **c-selection:** C selects TP, T selects VP, V selects DP, D selects NP.\n"
+"- **VP-internal subject:** the subject is merged in Spec-VP (Rule 3). V assigns it no Case,\n"
+"  so it leaves a trace there and waits: the result is VP/DP.\n"
+"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
+"  specifier. **Move α** puts the waiting DP into Spec-TP.\n"
+"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′; only Move α makes TP.\n"
+"- **θ:** V assigns an external θ-role, so Rule 2 does not apply to V′ either: VP needs its\n"
+"  subject.\n"
+"- **Suffix lowering:** when X is T, Rule 4 attaches the suffix in T⁰ to the verb:\n"
+"  see + -s = sees.\n"
+"- **C** is empty. **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
+"\n"
+"**Goal:** ⟨the cat sees the dog, CP⟩ ∈ L(xbarGB).\n"
+"\n"
+"Build from the bottom up, for example §6. Each result gets a name you can\n"
+"use in the next step (§7, then §8, …). The lexicon is not used up."
+msgstr ""
+
 #. §0: `?`
 #. §1: `copy(…)`
 #. §2: `select the n cat will v sleep`
@@ -282,49 +327,6 @@ msgstr ""
 #: Game.Metadata
 msgid "§0 draws lexical items into the workspace WS (rule Select).\n"
 "The lexicon of this grammar: §1, §2, §3, §4, §5, §6."
-msgstr ""
-
-#. §0: `X⁰ → X′`
-#. §1: `X′ → XP`
-#. §2: `YP X′ → XP`
-#. §3: `X⁰ YP → X′`
-#. §4: `X′ YP → X′`
-#. §5: `Move α: YP X′ → XP`
-#. §6: `rule \"X0 -> X'\" cat`
-#. §7: `cat_N'`
-#. §8: `cat_NP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Same language, a different grammar.\n"
-"\n"
-"Categories are now head and bar level: N⁰, N′, NP, and so on. A category can also carry a\n"
-"phrase that waits inside it to move: VP/DP is a VP with a waiting DP.\n"
-"\n"
-"The rules are the X-bar schema, five rules with variables X and Y over head categories,\n"
-"plus Move α:\n"
-"\n"
-"- Rule 1: §0\n"
-"- Rule 2: §1\n"
-"- Rule 3: §2\n"
-"- Rule 4: §3\n"
-"- Rule 5: §4\n"
-"- Rule 6: §5\n"
-"\n"
-"GB enters as conditions on their domains:\n"
-"\n"
-"- **c-selection:** C selects TP, T selects VP, V selects DP, D selects NP.\n"
-"- **VP-internal subject:** the subject is merged in Spec-VP (Rule 3). V assigns it no Case,\n"
-"  so it leaves a trace there and waits: the result is VP/DP.\n"
-"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
-"  specifier. **Move α** puts the waiting DP into Spec-TP.\n"
-"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′; only Move α makes TP.\n"
-"- **Suffix lowering:** when X is T, Rule 4 attaches the suffix in T⁰ to the verb:\n"
-"  see + -s = sees.\n"
-"- **C** is empty. **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
-"\n"
-"**Goal:** ⟨the cat sees the dog, CP⟩ ∈ L(xbarGB).\n"
-"\n"
-"Build from the bottom up, for example §6. Each result gets a name you can\n"
-"use in the next step (§7, then §8, …). The lexicon is not used up."
 msgstr ""
 
 #: Game.Levels.Demo.L03_XBarGB

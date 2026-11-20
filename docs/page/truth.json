@@ -2266,7 +2266,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP)."
+      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP: T needs one; θ: V needs its external argument)."
      }
     ],
     "ok": false,
@@ -2877,6 +2877,81 @@
     "extra": []
    },
    {
+    "cmd": "rule \"X' -> XP\" see_the_dog_V'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"X′ → XP\" is not defined on inputs of category V′. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP: T needs one; θ: V needs its external argument)."
+     }
+    ],
+    "ok": false,
+    "after_step": 9,
+    "extra": []
+   },
+   {
     "cmd": "rule \"N' -> N0\" cat",
     "before": [
      [
@@ -2908,7 +2983,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP)]\n  YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]\n  X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]\n  X′ YP → X′  [YP is an adjunct of X]\n  Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]"
+      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]\n  YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]\n  X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]\n  X′ YP → X′  [YP is an adjunct of X]\n  Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]"
      }
     ],
     "ok": false,
@@ -3427,7 +3502,7 @@
   ],
   "xbarGB": [
    "X⁰ → X′  [X takes no complement]",
-   "X′ → XP  [X needs no specifier (EPP)]",
+   "X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]",
    "YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]",
    "X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]",
    "X′ YP → X′  [YP is an adjunct of X]",

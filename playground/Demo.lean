@@ -56,7 +56,7 @@ example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
 /-! ## Level 3 — X-bar theory with GB
 
 The rules are the X-bar schema with variables X and Y, plus Move α; GB's data
-(c-selection, Case, EPP) are conditions on their domains. The subject is merged
+(c-selection, Case, EPP, θ) are conditions on their domains. The subject is merged
 in Spec-VP, gets no Case there, waits (VP/DP), and Move α puts it in Spec-TP.
 With X = T, X⁰ YP → X′ lowers the suffix: see + -s = sees. C is empty. -/
 example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)

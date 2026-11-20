@@ -8,7 +8,8 @@ rule (`FRule`): its domain is fixed by the pattern on its left-hand side and by 
 condition stated with GB's lexical information.
 
 * X⁰ → X′              X takes no complement.
-* X′ → XP              X needs no specifier (EPP: T needs one).
+* X′ → XP              X needs no specifier (EPP: T needs one; θ: V needs its
+                       external argument).
 * YP X′ → XP           YP is the specifier of X. A DP that gets no Case there
                        (the subject in Spec-VP) leaves a trace: its string is
                        held in the category, waiting to move.
@@ -21,9 +22,10 @@ condition stated with GB's lexical information.
 GB data: c-selection (C selects TP, T selects VP, V selects DP, D selects NP);
 the subject is merged in Spec-VP (VP-internal subject, Koopman & Sportiche
 1991); Case (V assigns accusative to its complement, finite T nominative to its
-specifier); EPP (T needs a specifier, filled here only by Move α). C is empty.
+specifier); EPP (T needs a specifier, filled here only by Move α); θ (V assigns
+an external θ-role, so VP needs its subject). C is empty.
 
-What is out: theta theory, binding, chains beyond one waiting phrase.
+What is out: the rest of theta theory, binding, chains beyond one waiting phrase.
 -/
 import BareSyntax.Basic
 
@@ -71,6 +73,10 @@ def landingSites : List (Pos × Pos) := [(.T, .D)]
 /-- EPP: heads whose phrase must have a specifier. -/
 def epp : List Pos := [.T]
 
+/-- θ: heads that assign an external θ-role, so their specifier must be filled
+    (see takes a subject). -/
+def externalTheta : List Pos := [.V]
+
 /-- Case: heads that assign Case to their complement (V: accusative) and to
     their specifier (finite T: nominative). -/
 def caseToComplement : List Pos := [.V]
@@ -111,9 +117,9 @@ def barRule : FRule XCat Unit where
     | _ => none
 
 def projRule : FRule XCat Unit where
-  name := "X′ → XP  [X needs no specifier (EPP)]"
+  name := "X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]"
   apply := fun _ ins => match ins with
-    | [(s, ⟨x, .one, m⟩)] => if epp.contains x then none else some (s, ⟨x, .two, m⟩)
+    | [(s, ⟨x, .one, m⟩)] => if epp.contains x || externalTheta.contains x then none else some (s, ⟨x, .two, m⟩)
     | _ => none
 
 def specRule : FRule XCat Unit where

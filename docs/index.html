@@ -171,7 +171,7 @@ const Engine = (() => {
   /* X-bar schema (variables X, Y over head categories) plus Move α; GB data as conditions.
      A category may carry a waiting phrase: VP/DP is a VP with a DP waiting to move. */
   const cSel = [['C', 'T'], ['T', 'V'], ['V', 'D'], ['D', 'N']], specs = [['V', 'D']], landing = [['T', 'D']],
-    epp = ['T'], caseC = ['V'], caseS = ['T'], adjuncts = [];
+    epp = ['T'], extTheta = ['V'], caseC = ['V'], caseS = ['T'], adjuncts = [];
   const has2 = (xs, x, y) => xs.some(([a, b]) => a === x && b === y);
   const caseOK = (as, x, y) => y !== 'D' || as.includes(x);
   const P = e => { const m = /^([A-Z])(⁰|′|P)/.exec(e.cat); return { x: m[1], b: m[2], m: e.mover || null }; };
@@ -182,9 +182,9 @@ const Engine = (() => {
     S('X⁰ → X′  [X takes no complement]', ins => {
       if (ins.length !== 1) return null; const a = P(ins[0]);
       return a.b === '⁰' && !cSel.some(([h]) => h === a.x) ? out(ins[0].str, a.x, '′', a.m) : null; }, 1),
-    S('X′ → XP  [X needs no specifier (EPP)]', ins => {
+    S('X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]', ins => {
       if (ins.length !== 1) return null; const a = P(ins[0]);
-      return a.b === '′' && !epp.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
+      return a.b === '′' && !epp.includes(a.x) && !extTheta.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
     S('YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]', ins => {
       if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
       if (y.b !== 'P' || x.b !== '′' || y.m || x.m || !has2(specs, x.x, y.x)) return null;
@@ -410,7 +410,7 @@ const LEVELS = [
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
    lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰'], ['', 'C⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'CP' },
    arrow: { from: 'T⁰', to: 'V⁰', label: 'suffix lowering' },
-   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. GB enters as conditions on their domains: c-selection (C selects TP, T selects VP, V selects DP, D selects NP); Case (V assigns accusative to its complement, finite T nominative to its specifier); EPP (T needs a specifier). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
+   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. GB enters as conditions on their domains: c-selection (C selects TP, T selects VP, V selects DP, D selects NP); Case (V assigns accusative to its complement, finite T nominative to its specifier); EPP (T needs a specifier); θ (V assigns an external θ-role, so VP needs its subject). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
    solution: [[0, ['cat|N⁰']], [1, ['cat|N′']], [3, ['the|D⁰', 'cat|NP']], [1, ['the cat|D′']],
      [0, ['dog|N⁰']], [1, ['dog|N′']], [3, ['the|D⁰', 'dog|NP']], [1, ['the dog|D′']],
      [3, ['see|V⁰', 'the dog|DP']], [2, ['the cat|DP', 'see the dog|V′']], [3, ['-s|T⁰', 'see the dog|VP/DP|the cat']],

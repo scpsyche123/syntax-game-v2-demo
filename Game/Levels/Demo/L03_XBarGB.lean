@@ -31,6 +31,8 @@ GB enters as conditions on their domains:
 - **Case:** V assigns accusative to its complement; finite T assigns nominative to its
   specifier. **Move α** puts the waiting DP into Spec-TP.
 - **EPP:** T needs a specifier, so Rule 2 does not apply to T′; only Move α makes TP.
+- **θ:** V assigns an external θ-role, so Rule 2 does not apply to V′ either: VP needs its
+  subject.
 - **Suffix lowering:** when X is T, Rule 4 attaches the suffix in T⁰ to the verb:
   see + -s = sees.
 - **C** is empty. **Adjuncts:** none in this fragment, so Rule 5 never applies here.
