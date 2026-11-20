@@ -551,7 +551,7 @@ function drawMsgs() {
   const lv = L();
   let m = st.msgs.map(x => `<div class="msg ${x.k}">${esc(x.t)}</div>`).join('');
   if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${esc(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
-  if (st.closed && !playing && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level: ${esc(LEVELS[cur + 1].name)}</button>`;
+  if ((st.closed || lv.impossible) && !playing && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level: ${esc(LEVELS[cur + 1].name)}</button>`;
   document.getElementById('msgs').innerHTML = m;
   document.getElementById('undo').disabled = !st.hist.length || playing;
   document.getElementById('reset').disabled = playing;
