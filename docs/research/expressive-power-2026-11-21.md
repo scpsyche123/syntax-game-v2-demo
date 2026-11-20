@@ -1,7 +1,7 @@
 # Comparing syntactic models' expressive power — initial investigation
 
 **Date:** 2026-11-21  
-**Status:** exploratory; four small claims checked by Lean 4.23.0, not a result about the expressive power of whole GB, MP, or Bare Grammar theory.  
+**Status:** exploratory; several small claims checked by Lean 4.23.0, not a result about the expressive power of whole GB, MP, or Bare Grammar theory.  
 **Proofs:** [`playground/Expressivity.lean`](../../playground/Expressivity.lean).
 
 ## Research priority
@@ -27,9 +27,16 @@ Theorems below are all in `ExpressivityPilot`. Ran `lake build BareSyntax` and `
 - `merge_rule_accepts_both_orders`: both orders are actual outputs of `mergeWS` from the same workspace.
 - `merge_yields_different_order`: `ext (set a b) = ["toto","lala"]` and `ext (set b a) = ["lala","toto"]`.
 
-**Scope:** both of these two-root objects lack the labeling required by the actual Swahili interface conditions; this is a difference in the *underlying representation and externalization operation*, **not** an established difference between grammatical sentences accepted by `MP.Converges`. The broader no-go claim must be retested on convergent objects.
+The preceding `√toto/√lala` structures are *not* valid whole sentences under the Swahili interface conditions. But the next four checked facts strengthen the finding:
 
-**Next question:** if `q` identifies `set a b` with `set b a`, does the existing `ext` factor through `q`? On *all* objects, the pair above is already a counterexample; on convergent objects, it is presently unproved.
+- `distinct_narrow_syntax_objects`: let `nP₁ = set m toto` and `nP₂ = set toto m`, and consistently use the selected `nP` as both the lower and higher occurrence inside the full Swahili object; the resulting roots `r₁ ≠ r₂`.
+- `both_satisfy_interface`: **both** objects satisfy `allLabeled = true` and `ciOK = true`.
+- `same_surface_string`: both externally realize `["mtoto","atalala"]`.
+- `standard_subject_order_converges` and `reversed_subject_order_converges`: the original and reversed `merge m toto` / `merge toto m` scripts **both compile** as complete Lean proofs of `MP.Converges ["mtoto","atalala"]`. These scripts exhibit the distinct daughter order in reachable derivations. The two results have the same proposition, not a claim of two logically different truth values.
+
+**Consequences:** the README's historical finite-search statement of \"exactly one object converges\" should *not* be interpreted as uniqueness under raw Lean `SO` equality; the current representation distinguishes multiple orders of the same intended set. Uniqueness *modulo unordered-MERGE equivalence* is a different, unproved claim.
+
+**Next question:** if `q` identifies `set a b` with `set b a`, does the existing `ext` factor through `q`? On *all* objects, the `√toto/√lala` pair is already a counterexample. On the **subset of convergent objects**, the two known `r₁,r₂` share the same output, so the factorization question remains open.
 
 ### B. Unrestricted `FRule` can trivialize weak yield comparison
 
@@ -77,4 +84,4 @@ lake build BareSyntax
 lake env lean Expressivity.lean
 ```
 
-Both commands were run successfully against the pinned toolchain in a temporary checkout. The proof file has no `sorry` or `admit`. This experiment does **not** repair `MP.SO` or make the present syntax demo an honest unordered-MERGE model. Changes to the model and interface are future research work, not part of the current checked claims.
+Both commands were run successfully against the pinned toolchain in a temporary checkout. The proof file has no `sorry` or `admit`. Two distinct ordered representatives can satisfy the Swahili interface conditions and both have successful Converges scripts; this has not yet been reformulated as uniqueness/equivalence classes under true unordered Merge. This experiment does **not** repair `MP.SO` or make the present syntax demo an honest unordered-MERGE model. Changes to the model and interface are future research work, not part of the current checked claims.
