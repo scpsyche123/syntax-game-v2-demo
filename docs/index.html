@@ -600,13 +600,17 @@ function drawForest(trees, o) {
     });
     g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker><marker id="mh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="mhead" d="M0 0 L10 5 L0 10z"/></marker></defs>`;
     o.arrows.forEach(spec => {
-      const A = pick(spec, 'from'), B = pick(spec, 'to');
+      const A = spec.fromNode || pick(spec, 'from'), B = spec.toNode || pick(spec, 'to');
       if (!A || !B) return;
       const dir = B.x >= A.x ? 1 : -1;
       if (spec.kind === 'move') {
-        const x1 = A.x + 10 * dir, y1 = A.y * ROW + 12, x2 = B.x - 10 * dir, y2 = B.y * ROW + 2;
-        const cx1 = x1 + 26 * dir, cy1 = y1 - 34, cx2 = x2 - 26 * dir, cy2 = y2 + 26;
-        const lx = (x1 + x2) / 2, ly = Math.min(y1, y2) - 14;
+        /* Connect the original trace to the landing NP, not just nearby category text.
+           Both endpoints sit beside their labels, within the same derivation tree. */
+        const x1 = A.x + 16 * dir, y1 = A.y * ROW + 16;
+        const x2 = B.x - 22 * dir, y2 = B.y * ROW + 16;
+        const cx1 = x1 + 20 * dir, cy1 = y1 - 28;
+        const cx2 = x2 - 20 * dir, cy2 = y2 + 28;
+        const lx = (x1 + x2) / 2 - 20 * dir, ly = (y1 + y2) / 2 - 16;
         g += `<path class="move" d="M${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}" marker-end="url(#mh)"/>` +
           `<text class="movelab" x="${lx}" y="${ly}" text-anchor="middle">${esc(spec.label)}</text>`;
       } else {
@@ -652,16 +656,20 @@ function drawPic() {
     /* moved: key of the phrase that Move α took out of this subtree; it is drawn there as tᵢ */
     const build = (e, id, moved, mark) => {
       const k = keyOf(e), base = { k: id + '#' + k, sel: st.sel.includes(id + '#' + k), aria: `${e.str.join(' ') || '∅'}, ${shown(e.cat)}` };
-      if (e.lex) return { ...base, cat: e.cat + (mark || ''), kids: [{ word: e.str[0] || '∅', kids: [] }] };
+      if (e.lex) return { ...base, cat: e.cat + (mark || ''), moveTo: !!mark, kids: [{ word: e.str[0] || '∅', kids: [] }] };
       if (e.ri === 5) return { ...base, cat: shown(e.cat), kids: [build(find(e.ins[0]), id + '.0', null, 'ᵢ'), build(find(e.ins[1]), id + '.1', e.ins[0])] };
-      return { ...base, cat: shown(e.cat) + (mark || ''), kids: e.ins.map((x, j) =>
-        (moved && x === moved && e.mover && j === 0 && e.ri === 2) ? { word: 'tᵢ', kids: [] } : build(find(x), id + '.' + j, moved)) };
+      return { ...base, cat: shown(e.cat) + (mark || ''), moveTo: !!mark, kids: e.ins.map((x, j) =>
+        (moved && x === moved && e.mover && j === 0 && e.ri === 2) ? { word: 'tᵢ', moveFrom: true, kids: [] } : build(find(x), id + '.' + j, moved)) };
     };
     const roots = rootsOf().map((d, i) => build(d, 'T' + i));
     const treeHas = (t, pred) => pred(t) || t.kids.some(c => treeHas(c, pred));
     const arrows = [];
     if (roots.some(t => treeHas(t, n => n.cat === 'T⁰') && treeHas(t, n => n.cat === 'V⁰'))) arrows.push({ kind: 'lower', fromCat: 'T⁰', toCat: 'V⁰', label: 'suffix lowering' });
-    if (roots.some(t => treeHas(t, n => n.word === 'tᵢ') && treeHas(t, n => n.cat && n.cat.endsWith('ᵢ')))) arrows.push({ kind: 'move', fromWord: 'tᵢ', toCatSuffix: 'ᵢ', label: 'Move α' });
+    const findNode = (t, pred) => pred(t) ? t : t.kids.map(c => findNode(c, pred)).find(Boolean);
+    roots.forEach(t => {
+      const fromNode = findNode(t, n => n.moveFrom), toNode = findNode(t, n => n.moveTo);
+      if (fromNode && toNode) arrows.push({ kind: 'move', fromNode, toNode, label: 'Move α' });
+    });
     h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
       lv.lexicon.map(([w, c, gloss]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
         return `<button class="item lexeme" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}><span class="lex-main">${esc(w || '∅')} <span class="c">${esc(c)}</span></span><span class="lex-gloss">${esc(gloss)}</span></button>`; }).join('') +
