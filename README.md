@@ -35,6 +35,12 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 - Stated simplifications in level 3: copies are identified by identity (no Form Copy);
   Agree is not modeled; no phases, Transfer or Minimal Search.
 
+## Step through it in VS Code (no game server needed)
+
+`playground/` is a separate Lake package with no dependencies: it compiles the language with
+Lean core only. Open `playground/` in VS Code (Lean 4 extension installed), open `Demo.lean`,
+and move the cursor through each proof; the infoview shows every step.
+
 ## Build
 
 ```
