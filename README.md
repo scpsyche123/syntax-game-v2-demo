@@ -43,11 +43,14 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 - MERGE is free; the finished object is filtered at CI by selection (T takes vP, n and v
   take a root), the θ-criterion (the subject nP first merges with vP) and a chain condition
   (only the subject moves, once, to the specifier of T). These are checked automatically with
-  externalization. Without them, a search of all derivations with at most two Internal
-  MERGEs (for the earlier English version of this level) found 1784 objects pronounced
-  "the cat will sleep" with every node labeled; with them, exactly one. The same holds for
-  the Swahili fragment: exactly one object converges, and none from a subset of the lexicon
-  or with a repeated n or v.
+  externalization. A previous bounded search for an earlier English fragment found
+  1784 labeled objects pronounced "the cat will sleep" before these checks; its
+  constrained uniqueness count depends on the chosen representation. The Swahili
+  fragment also has a representation caveat: the current `SO.set a b` is a
+  two-argument constructor rather than a commutative set. Two distinct raw
+  objects (`merge m toto` vs `merge toto m`) pass all current interface
+  checks and yield "mtoto atalala". Thus uniqueness under raw `SO` equality
+  is **not** claimed; see [the Lean-checked comparison](docs/research/expressive-power-2026-11-21.md).
 - MERGE follows Chomsky (2020, *UCLA Lectures*) as quoted in V. J. Pan, *Lecture 10: The
   Minimalist Program*, §9: MERGE replaces P and Q by {P, Q}. Pan & Du's rendering
   [{P, Q}, P, Q, …] is not used.
