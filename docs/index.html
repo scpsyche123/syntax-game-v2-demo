@@ -9,11 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <style>
 /* VOICE everyday-scholarly: a worked example for linguists, exact and calm
-   IDEA a syntax handout you can play: the sentence on the left, a proof assistant's infoview on the right
+   IDEA a syntax handout you can play: the sentence and its trees, with the rules beside them
    PICTURE the derivation (or the workspace) drawn as trees that grow as you apply rules; selected and new nodes marked
    COLOUR white paper, ink, one deep Lean-blue for structure and the header band, vermilion for selection, change and failure
-   TYPE Source Serif 4 for prose and titles, IBM Plex Sans for controls, IBM Plex Mono for the infoview
-   LAYOUT blue band with title and five levels as tabs; trees left, infoview with rules right; phone stacks trees, infoview */
+   TYPE Source Serif 4 for prose and titles, IBM Plex Sans for controls, IBM Plex Mono for rules and the goal
+   LAYOUT blue band with title and five levels as tabs; one board: trees left, rules right, goal strip under it; phone stacks rules under trees */
 :root{color-scheme:light dark;
 --bg:light-dark(#ffffff,#14161b);--ink:light-dark(#1a1c22,#e6e7eb);--muted:light-dark(#5b6070,#9ba1ae);
 --blue:light-dark(#1d3f8f,#93b2ff);--band:#1d3f8f;--panel:light-dark(#f2f4f9,#1c1f26);--line:light-dark(#d8dce6,#2e323c);
@@ -35,13 +35,23 @@ header p{max-width:66ch;margin:0 0 20px;color:#dfe6f7}
 .tab[aria-selected=true] small{color:#4a5675}
 .tab .tick{color:#9fe0b0;margin-left:4px}
 .tab[aria-selected=true] .tick{color:#1f7a3a}
-button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .lead{max-width:72ch;margin:0 0 16px}
 .lead h2{font-size:clamp(26px,3vw,34px);line-height:1.1;margin:0 0 8px;font-weight:600}
 .lead p{margin:0 0 8px}
-.stage{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:20px;align-items:start}
-.pic{border:1px solid var(--line);border-radius:8px;background:var(--bg);min-height:220px}
+
+/* the board: trees and rules in one area, goal strip directly under it */
+.board{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px);border:1px solid var(--line);border-radius:8px 8px 0 0}
+.pic{min-height:260px}
+.tools{border-left:1px solid var(--line);background:var(--panel);padding:12px 12px 14px;border-top-right-radius:8px}
+.goal{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:10px 14px;font:15px/1.45 "IBM Plex Mono",monospace;overflow-wrap:anywhere}
+.goal b{font:600 14px "IBM Plex Sans",sans-serif;color:var(--muted)}
+.goal.done{background:var(--okbg);color:var(--blue)}
+.goal.done b{color:var(--blue)}
+@media(max-width:760px){.board{grid-template-columns:minmax(0,1fr)}.tools{border-left:0;border-top:1px solid var(--line);border-top-right-radius:0}}
+
 .cap{font:500 14px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);padding:12px 14px 0}
+.tools .cap{padding:0 2px 8px}
 .treebox{overflow-x:auto;padding:6px 8px 14px}
 .treebox svg{display:block;margin:0 auto}
 svg text{font-family:"IBM Plex Sans",sans-serif;font-size:14px;fill:var(--ink)}
@@ -52,49 +62,46 @@ svg .strbg{fill:var(--bg)}
 svg .edge{stroke:var(--muted);stroke-width:1.2;fill:none}
 svg .q{fill:var(--acc);font-weight:600}
 svg .copy{fill:var(--muted)}
-svg .hit{fill:transparent;stroke:transparent;rx:5}
+svg .hit{fill:transparent;stroke:transparent}
 svg [data-k]{cursor:pointer}
 svg [data-k]:hover .hit{fill:var(--panel);stroke:var(--line)}
 svg .new{fill:var(--accbg);stroke:var(--acc);stroke-width:1.4}
 svg .sel .hit,svg .sel:hover .hit{fill:var(--selbg);stroke:var(--sel);stroke-width:2}
 svg .badge{font:600 11px "IBM Plex Sans",sans-serif;fill:var(--sel)}
 svg .bracket{stroke:var(--ink);stroke-width:1.6;fill:none}
-.empty{padding:26px 14px;color:var(--muted);font-style:italic}
-.side{display:flex;flex-direction:column;gap:10px}
-.info{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;font:14px/1.45 "IBM Plex Mono",monospace}
-.info h4{font:500 13px "IBM Plex Sans",sans-serif;color:var(--muted);margin:2px 4px 6px}
-.hyp,.rule{display:flex;gap:8px;align-items:baseline;width:100%;min-height:36px;padding:6px 8px;margin:0 0 3px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--ink);font:14px/1.4 "IBM Plex Mono",monospace;text-align:left;cursor:pointer}
-.hyp:hover,.rule:hover{border-color:var(--line);background:var(--bg)}
-.hyp .c{color:var(--blue)}
-.hyp[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
-.hyp .n{margin-left:auto;font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
-.hyp.fresh{box-shadow:inset 3px 0 0 var(--acc)}
-.rule{border-color:var(--line);background:var(--bg)}
-.rule b{font-weight:500;color:var(--muted);white-space:nowrap}
-.rule small{display:block;font:13px "IBM Plex Sans",sans-serif;color:var(--muted)}
+.empty{padding:20px 14px 26px;color:var(--muted);font-style:italic}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 4px}
+.tools .chips{padding:0 0 10px}
+.chip{display:inline-flex;gap:6px;align-items:baseline;font:14px "IBM Plex Mono",monospace;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink);cursor:pointer}
+.chip .c{color:var(--blue)}
+.chip .n{font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
+.chip:hover{border-color:var(--blue)}
+.chip[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
+.chip:disabled{opacity:.45;cursor:default}
+.rule{display:block;width:100%;min-height:40px;padding:8px 10px;margin:0 0 6px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink);font:14px/1.4 "IBM Plex Mono",monospace;text-align:left;cursor:pointer}
+.rule:hover{border-color:var(--blue)}
+.rule b{font:500 13px "IBM Plex Sans",sans-serif;color:var(--muted);margin-right:6px}
+.rule small{display:block;font:13px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);margin-top:2px}
 .rule:disabled{cursor:default;opacity:.55}
-.goal{border-top:1px solid var(--line);margin-top:8px;padding:8px 8px 2px;overflow-wrap:anywhere}
-.goal.done{color:var(--blue);font-weight:500}
-.lexbtns{display:flex;flex-wrap:wrap;gap:6px;margin:0 4px 6px}
-.lexbtn{font:14px "IBM Plex Mono",monospace;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink);cursor:pointer}
-.lexbtn:hover{border-color:var(--blue)}
-.lexbtn:disabled{opacity:.45;cursor:default}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rule:disabled:hover{border-color:var(--line)}
+
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
 .btn{font:500 15px/1 "IBM Plex Sans",sans-serif;min-height:44px;padding:0 14px;border-radius:6px;border:1px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer}
 .btn.solid{background:var(--blue);color:var(--bg)}
 .btn:disabled{opacity:.4;cursor:default}
+.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:12px;max-width:820px}
 .msg{font:13.5px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:9px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .msg.i{background:var(--okbg);border-left:3px solid var(--blue)}
 .msg.e{background:var(--accbg);border-left:3px solid var(--acc)}
-.msg.p{font-family:"Source Serif 4",serif;font-size:15.5px;white-space:normal}
-.msg .src{display:block;font:12.5px "IBM Plex Sans",sans-serif;color:var(--muted);margin-bottom:2px}
-.hint{font:14px/1.45 "IBM Plex Sans",sans-serif;color:var(--muted)}
+.msg.p{font-family:"Source Serif 4",serif;font-size:16px;white-space:normal;padding-left:0}
+
 footer{border-top:1px solid var(--line);font-size:15.5px}
 footer .cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px}
 footer h3{font-size:21px;line-height:1.2;margin:0 0 10px;font-weight:600}
 footer p{margin:0 0 10px}
 code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
-@media(max-width:900px){.stage,footer .cols{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:900px){footer .cols{grid-template-columns:minmax(0,1fr)}}
 @media(prefers-reduced-motion:no-preference){svg .new{animation:pulse 1.2s ease-out 1}}
 @keyframes pulse{from{stroke-width:5}to{stroke-width:1.4}}
 </style>
@@ -108,32 +115,30 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 
 <main class="band"><div class="wrap">
 <div class="lead" id="lead"></div>
-<div class="stage">
+<div class="board">
   <div class="pic" id="pic"></div>
-  <div class="side">
-    <div class="info" id="info"></div>
-    <div class="row">
-      <button class="btn" id="undo" type="button">Undo</button>
-      <button class="btn" id="reset" type="button">Start over</button>
-      <button class="btn" id="solve" type="button">Show the solution</button>
-    </div>
-    <div id="msgs" class="side"></div>
-  </div>
+  <div class="tools" id="tools"></div>
 </div>
+<div class="goal" id="goal" aria-live="polite"></div>
+<div class="row">
+  <button class="btn" id="undo" type="button">Undo</button>
+  <button class="btn" id="reset" type="button">Start over</button>
+  <button class="btn" id="solve" type="button">Solution</button>
+</div>
+<div class="msgs" id="msgs" aria-live="polite"></div>
 </div></main>
 
 <footer class="band"><div class="wrap cols">
 <div>
 <h3>What is running</h3>
 <p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (levels 1–4), and with a domain given as a decidable condition (level 5, where a category is a whole workspace).</p>
-<p>The page cannot run Lean in your browser. It runs a JavaScript transcription of the same definitions, and that transcription was checked against Lean 4.23.0: on <span id="ncases">46</span> recorded cases (every solution step, the wrong moves listed in the repository, and every attempt at <i>a very day</i>) it gives Lean's result and Lean's message, word for word. One rule is the page's own: in levels 1–3 a rule joins pieces that are next to each other in the sentence. Since every rule there concatenates, no other choice could help build the sentence.</p>
+<p>Your browser cannot run Lean, so this page runs a JavaScript simulation of it.</p>
 </div>
 <div>
 <h3>Sources</h3>
 <p>Keenan, E. &amp; Stabler, E. (2003). <i>Bare Grammar: Lectures on Linguistic Invariants.</i> CSLI.</p>
 <p>Chomsky, N. (2013). Problems of projection. <i>Lingua</i> 130.</p>
 <p>Chomsky, N. (2020). <i>The UCLA Lectures.</i> MERGE as quoted in V. J. Pan, <i>Lecture 10: The Minimalist Program</i>, §9.</p>
-<p>To step through the Lean proofs themselves, open <code>playground/</code> of the repository in VS Code.</p>
 </div>
 </div></footer>
 
@@ -296,12 +301,12 @@ if (typeof module !== 'undefined') module.exports = Engine;
 <script>
 {
 const E = Engine;
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const LEVELS = [
  { id: 'linear', kind: 'sentence', g: 'linear₁', name: 'A linear grammar', era: 'Build it',
    words: [['a', 'D'], ['very', 'Adv'], ['good', 'A'], ['day', 'N']], goal: 'D',
-   lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence (in the tree or in the list), then click a rule. The rule decides whether it applies and computes the result.</p>',
+   lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence, then click a rule. The rule decides whether it applies and computes the result.</p>',
    solution: [[0, ['very', 'good']], [1, ['very good', 'day']], [2, ['a', 'very good day']]],
    done: 'Three rule applications. Nothing about linear grammar is built into the language: the next levels change only the data.' },
  { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Try it',
@@ -316,11 +321,11 @@ const LEVELS = [
    done: 'Derived, and that is the problem: a a the this dog is not English, but linear₂ generates it. Rule 4 feeds itself, so determiners stack without limit. The error is in the grammar, and deriving the string shows it.' },
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
    lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'TP' },
-   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rule table is produced by a function, the X-bar schema, from GB data: c-selection decides which complements exist; only Case positions take a DP, so the Case Filter is a property of the table; there is no TP → T′ (EPP). T′ → T⁰ VP does not concatenate: it lowers the affix onto the verb. Lexical items are never used up. Click inputs in order, then a rule.</p>',
+   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rule table is produced by a function, the X-bar schema, from GB data: c-selection decides which complements exist; only Case positions take a DP, so the Case Filter is a property of the table; there is no TP → T′ (EPP). T′ → T⁰ VP does not concatenate: it lowers the affix onto the verb. Lexical items are never used up. Click inputs in order (words in the lexicon or nodes in the trees), then a rule.</p>',
    solution: [[0, [['cat', 'N⁰']]], [4, [['cat', 'N′']]], [1, [['the', 'D⁰'], ['cat', 'NP']]], [5, [['the cat', 'D′']]],
      [0, [['dog', 'N⁰']]], [4, [['dog', 'N′']]], [1, [['the', 'D⁰'], ['dog', 'NP']]], [5, [['the dog', 'D′']]],
      [2, [['see', 'V⁰'], ['the dog', 'DP']]], [6, [['see the dog', 'V′']]], [3, [['-s', 'T⁰'], ['see the dog', 'VP']]], [7, [['the cat', 'DP'], ['sees the dog', 'T′']]]],
-   done: 'Twelve rule applications. GB entered as data — what the schema generates, which positions accept a DP, which rule lowers the affix — not as new machinery in the language.' },
+   done: 'Twelve rule applications. GB entered as data (what the schema generates, which positions accept a DP, which rule lowers the affix), not as new machinery in the language.' },
  { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['the', 'cat', 'will', 'sleep'],
    lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
    solution: ['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep', 'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
@@ -330,56 +335,55 @@ const LEVELS = [
 let cur = 0, st = null, playing = false;
 const solved = new Set();
 const L = () => LEVELS[cur];
+const off = () => st.closed || playing;
 
 function initState(lv) {
-  if (lv.kind === 'sentence') return { pieces: lv.words.map(([w, c]) => ({ str: [w], cat: c, tree: { cat: c, kids: [{ word: w, kids: [] }] } })), sel: [], hist: [], msgs: [], fresh: -1, closed: false, tries: 0 };
+  if (lv.kind === 'sentence') return { pieces: lv.words.map(([w, c]) => ({ str: [w], cat: c, tree: { cat: c, kids: [{ word: w, kids: [] }] } })), sel: [], hist: [], msgs: [], closed: false, tries: 0 };
   if (lv.kind === 'free') return { derived: [], sel: [], hist: [], msgs: [], fresh: null, closed: false };
   return { ws: [], sel: [], hist: [], msgs: [], fresh: null, closed: false };
 }
 const snapshot = () => JSON.stringify({ ...st, hist: [], msgs: [] });
 function push() { st.hist.push(snapshot()); }
+function finish() { st.closed = true; solved.add(cur); if (L().done) st.msgs.push({ t: L().done, k: 'p' }); }
 
 /* ---------- actions ---------- */
 function applySentence(ri) {
   const lv = L(), rule = E.grammars[lv.g].rules[ri];
   const idx = [...st.sel].sort((a, b) => a - b);
-  if (!idx.length) return say('Select the pieces to combine first: click them in the tree or in the list.', 'p');
+  if (!idx.length) return say('Select the pieces to combine first: click them in the tree.', 'p');
   if (idx.some((x, i) => i && x !== idx[i - 1] + 1)) {
     st.tries++;
     return say(`“${idx.map(i => st.pieces[i].str.join(' ')).join('” and “')}” are not next to each other in the sentence, so a rule that joins them cannot help build it.`, 'p');
   }
   const r = E.applyRule(rule, idx.map(i => st.pieces[i]));
-  if (!r.ok) { st.tries++; return say(r.msg, 'e', true); }
+  if (!r.ok) { st.tries++; return say(r.msg, 'e'); }
   push();
+  st.pieces.forEach(p => { p.tree.isNew = false; });
   const node = { str: r.out.str, cat: r.out.cat, tree: { cat: r.out.cat, kids: idx.map(i => st.pieces[i].tree), isNew: true } };
-  st.pieces.forEach(p => { if (p.tree) p.tree.isNew = false; });
   st.pieces.splice(idx[0], idx.length, node);
-  st.sel = []; st.fresh = idx[0]; st.msgs = [];
+  st.sel = []; st.msgs = [];
   if (st.pieces.length === 1) {
-    if (node.cat === lv.goal) { st.closed = true; solved.add(cur); st.msgs = [{ t: lv.done, k: 'p' }]; }
-    else st.msgs = [{ t: `Built ⟨${node.str.join(' ')}, ${node.cat}⟩, but the goal is a ${lv.goal}.`, k: 'p' }];
+    if (node.cat === lv.goal) finish();
+    else st.msgs = [{ t: `Built ${node.str.join(' ')} : ${node.cat}, but the goal is a ${lv.goal}.`, k: 'p' }];
   }
-  draw();
-}
-function applyFree(ri) {
-  const lv = L(), rule = E.grammars[lv.g].rules[ri];
-  if (!st.sel.length) return say('Select the inputs first, in order: click lines under Hypotheses.', 'p');
-  const pool = allExprs();
-  const r = E.applyRule(rule, st.sel.map(k => pool.find(e => keyOf(e) === k)));
-  if (!r.ok) return say(r.msg, 'e', true);
-  if (pool.some(e => keyOf(e) === keyOf(r.out))) { st.sel = []; return say(`You already have ${E.exprText(r.out)}.`, 'p'); }
-  push();
-  const ins = st.sel.map(k => pool.find(e => keyOf(e) === k));
-  st.derived.push({ ...r.out, ins: ins.map(keyOf) });
-  st.sel = []; st.fresh = keyOf(r.out); st.msgs = [];
-  if (keyOf(r.out) === keyOf(lv.goal)) { st.closed = true; solved.add(cur); st.msgs = [{ t: lv.done, k: 'p' }]; }
   draw();
 }
 const keyOf = e => e.str.join(' ') + '|' + e.cat;
 const allExprs = () => [...L().lexicon.map(([w, c]) => ({ str: [w], cat: c, lex: true })), ...st.derived];
-function selectLI(x) {
-  push(); st.ws = [...st.ws, E.li(x)]; st.sel = []; st.msgs = []; st.fresh = null; draw();
+function applyFree(ri) {
+  const lv = L(), rule = E.grammars[lv.g].rules[ri];
+  if (!st.sel.length) return say('Select the inputs first, in order: click words in the lexicon or nodes in the trees.', 'p');
+  const pool = allExprs(), ins = st.sel.map(k => pool.find(e => keyOf(e) === k));
+  const r = E.applyRule(rule, ins);
+  if (!r.ok) return say(r.msg, 'e');
+  if (pool.some(e => keyOf(e) === keyOf(r.out))) { st.sel = []; draw(); return say(`You already have ${r.out.str.join(' ')} : ${r.out.cat}.`, 'p'); }
+  push();
+  st.derived.push({ ...r.out, ins: ins.map(keyOf) });
+  st.sel = []; st.fresh = keyOf(r.out); st.msgs = [];
+  if (keyOf(r.out) === keyOf(lv.goal)) finish();
+  draw();
 }
+function selectLI(x) { push(); st.ws = [...st.ws, E.li(x)]; st.sel = []; st.msgs = []; st.fresh = null; draw(); }
 function soAt(path) { let s = st.ws[path[0]]; for (const i of path.slice(1)) s = s.set[i]; return s; }
 function nameOf(path) {
   const R = st.ws[path[0]], s = soAt(path);
@@ -388,20 +392,22 @@ function nameOf(path) {
   if (l && l.lab !== '⟨φ,φ⟩') return E.labText(l) + 'P';
   return `{${nameOf([...path, 0])}, ${nameOf([...path, 1])}}`;
 }
+function setWS(ws2, msgs, closed) {
+  st.ws = ws2; st.sel = []; st.fresh = E.key(ws2[0]);
+  st.msgs = msgs.map(t => ({ t, k: 'i' }));
+  if (closed) finish();
+}
 function doMerge() {
   if (st.sel.length !== 2) return say('Click two objects in the workspace first.', 'p');
   const [p, q] = st.sel.map(k => k.split('.').map(Number));
-  const P = soAt(p), Q = soAt(q);
-  const ws2 = E.mergeWS(P, Q, st.ws);
-  if (!ws2) return say(E.undefinedMsg(nameOf(p), nameOf(q)), 'e', true);
+  const ws2 = E.mergeWS(soAt(p), soAt(q), st.ws);
+  if (!ws2) return say(E.undefinedMsg(nameOf(p), nameOf(q)), 'e');
   push();
-  st.ws = ws2; st.sel = []; st.fresh = E.key(ws2[0]);
   const a = E.afterMerge(ws2, L().target);
-  st.msgs = a.msgs.map(t => ({ t, k: 'i', lean: true }));
-  if (a.closed) { st.closed = true; solved.add(cur); st.msgs.push({ t: L().done, k: 'p' }); }
+  setWS(ws2, a.msgs, a.closed);
   draw();
 }
-function say(t, k, lean) { st.msgs = [{ t, k, lean }]; drawSide(); }
+function say(t, k) { st.msgs = [{ t, k }]; drawMsgs(); }
 
 /* ---------- solution replay ---------- */
 function solve() {
@@ -409,7 +415,7 @@ function solve() {
   st = initState(lv); playing = true; draw();
   let i = 0;
   const tick = () => {
-    if (i >= lv.solution.length) { playing = false; drawSide(); return; }
+    if (i >= lv.solution.length) { playing = false; draw(); return; }
     const s = lv.solution[i++];
     if (lv.kind === 'sentence') {
       const [ri, strs] = s, start = st.pieces.findIndex((p, j) => strs.every((w, k) => st.pieces[j + k] && st.pieces[j + k].str.join(' ') === w));
@@ -418,9 +424,7 @@ function solve() {
       const [ri, ins] = s; st.sel = ins.map(([w, c]) => w + '|' + c); applyFree(ri);
     } else {
       const r = E.mpCommand(st.ws, s, lv.target);
-      push(); st.ws = r.ws; st.fresh = E.key(r.ws[0]); st.msgs = (r.msgs || []).map(t => ({ t, k: 'i', lean: true }));
-      if (r.closed) { st.closed = true; solved.add(cur); st.msgs.push({ t: lv.done, k: 'p' }); }
-      draw();
+      push(); setWS(r.ws, r.msgs || [], r.closed); draw();
     }
     setTimeout(tick, 750);
   };
@@ -435,106 +439,111 @@ function layout(t, x0, depth, out) {
   let x = x0; t.kids.forEach(c => x = layout(c, x, depth + 1, out));
   t.x = (t.kids[0].x + t.kids[t.kids.length - 1].x) / 2; t.y = depth; out.d = Math.max(out.d, depth); return x;
 }
-function sink(t, d, max) { // put words on one baseline
-  if (!t.kids.length) { t.y = max; return; } t.kids.forEach(c => sink(c, d + 1, max));
-}
+function sink(t, max) { if (!t.kids.length) { t.y = max; return; } t.kids.forEach(c => sink(c, max)); }
 function drawForest(trees, o) {
   const out = { d: 0 }; let x = o.pad;
   const nl = trees.reduce((a, t) => a + leaves(t), 0), room = o.avail - 2 * o.pad - (trees.length - 1) * o.sep;
   GAP = Math.max(52, Math.min(86, room / Math.max(nl, 1)));
   trees.forEach(t => { x = layout(t, x, 0, out) + o.sep; });
-  if (o.baseline) trees.forEach(t => sink(t, 0, out.d));
+  if (o.baseline) trees.forEach(t => sink(t, out.d));
   const W = Math.max(x - o.sep + o.pad, 160), H = (out.d + 1) * ROW + 30;
   let g = '';
   const edges = t => t.kids.forEach(c => { g += `<path class="edge" d="M${t.x} ${t.y * ROW + 28} L${c.x} ${c.y * ROW + 10}"/>`; edges(c); });
   trees.forEach(edges);
   const node = t => {
     const y = t.y * ROW + 22, txt = t.word !== undefined ? t.word : t.cat;
-    const bw = Math.max(40, txt.length * 9 + 18, t.extra ? t.extra.length * 7 + 14 : 0), bh = t.extra ? 40 : 26;
+    const bw = Math.max(40, txt.length * 9 + 18), bh = 26;
     let inner = '';
     if (t.isNew) inner += `<rect class="new" x="${t.x - bw / 2}" y="${y - 18}" width="${bw}" height="${bh}" rx="5"/>`;
     if (t.k !== undefined) inner += `<rect class="hit" x="${t.x - bw / 2}" y="${y - 18}" width="${bw}" height="${bh}" rx="5"/>`;
     const cls = t.word !== undefined ? (t.copy ? 'copy' : 'word') : (t.cat === '?' ? 'q' : 'cat');
     inner += `<text class="${cls}" x="${t.x}" y="${y}" text-anchor="middle">${esc(txt)}</text>`;
-    if (t.extra) inner += `<rect class="strbg" x="${t.x - t.extra.length * 3.6 - 4}" y="${y + 4}" width="${t.extra.length * 7.2 + 8}" height="15"/>`;
-    if (t.extra) inner += `<text class="str" x="${t.x}" y="${y + 15}" text-anchor="middle">${esc(t.extra)}</text>`;
+    if (t.extra) inner += `<rect class="strbg" x="${t.x - t.extra.length * 3.6 - 4}" y="${y + 4}" width="${t.extra.length * 7.2 + 8}" height="15"/><text class="str" x="${t.x}" y="${y + 15}" text-anchor="middle">${esc(t.extra)}</text>`;
     if (t.badge) inner += `<text class="badge" x="${t.x + bw / 2 + 4}" y="${y - 8}">${t.badge}</text>`;
-    g += t.k !== undefined ? `<g data-k="${t.k}" class="${t.sel ? 'sel' : ''}" role="button" tabindex="0" aria-label="${esc(t.aria || txt)}">${inner}</g>` : inner;
+    g += t.k !== undefined ? `<g data-k="${esc(t.k)}" class="${t.sel ? 'sel' : ''}" role="button" tabindex="0" aria-pressed="${!!t.sel}" aria-label="${esc(t.aria || txt)}">${inner}</g>` : inner;
     t.kids.forEach(node);
   };
   trees.forEach(node);
   if (o.ws) g += `<path class="bracket" d="M10 4 h-6 v${H - 8} h6 M${W - 10} 4 h6 v${H - 8} h-6"/>`;
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria)}">${g}</svg>`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(o.aria)}">${g}</svg>`;
 }
 const clone = t => ({ ...t, kids: t.kids.map(clone) });
+function markPiece(t, k, aria) { t.k = k; t.aria = aria; t.kids.forEach(c => markPiece(c, k, aria)); }
 function mpTree(R, s, d, path) {
-  const k = path.join('.'), selI = st.sel.indexOf(k);
-  const base = { k, sel: selI >= 0, badge: selI >= 0 ? (selI ? 'Q' : 'P') : '' };
+  const k = path.join('.'), n = st.sel.indexOf(k);
+  const base = { k, sel: n >= 0, badge: n >= 0 ? (n ? 'Q' : 'P') : '' };
   if (s.li !== undefined) return { ...base, word: E.liText(s.li), kids: [] };
   if (E.lowerCopy(R, s, d)) return { word: `copy(${E.labText(E.labelAt(R, s, d))})`, copy: true, kids: [] };
   return { ...base, cat: E.labText(E.labelAt(R, s, d)), kids: [mpTree(R, s.set[0], d + 1, [...path, 0]), mpTree(R, s.set[1], d + 1, [...path, 1])] };
 }
 function drawPic() {
-  const lv = L(), box = document.getElementById('pic'), avail = Math.max(280, box.clientWidth - 20);
+  const lv = L(), box = document.getElementById('pic'), avail = Math.max(260, box.clientWidth - 20);
   let h = '';
   if (lv.kind === 'sentence') {
-    const trees = st.pieces.map((p, i) => { const t = clone(p.tree); t.k = 'p' + i; t.sel = st.sel.includes(i); t.badge = ''; t.aria = `piece ${p.str.join(' ')}, ${p.cat}`;
-      t.isNew = p.tree.isNew; return t; });
+    const trees = st.pieces.map((p, i) => {
+      const t = clone(p.tree); markPiece(t, 'p' + i, `${p.str.join(' ')}, ${p.cat}`); t.sel = st.sel.includes(i); return t;
+    });
     h = `<div class="cap">The sentence. Click neighbouring pieces to select them.</div><div class="treebox">${drawForest(trees, { pad: 6, sep: 18, avail, baseline: true, aria: 'Sentence pieces' })}</div>`;
   } else if (lv.kind === 'free') {
     const pool = allExprs(), used = new Set(st.derived.flatMap(d => d.ins));
-    const build = e => e.lex ? { cat: e.cat, kids: [{ word: e.str[0], kids: [] }] } : (() => {
-      const kids = e.ins.map(k => build(pool.find(x => keyOf(x) === k)));
-      const concat = e.ins.map(k => k.split('|')[0]).join(' ');
-      return { cat: e.cat, kids, isNew: keyOf(e) === st.fresh, extra: e.str.join(' ') !== concat ? '“' + e.str.join(' ') + '”' : '' };
-    })();
+    const build = e => {
+      const k = keyOf(e), n = st.sel.indexOf(k);
+      const base = { k, sel: n >= 0, badge: n >= 0 ? String(n + 1) : '', aria: `${e.str.join(' ')}, ${e.cat}` };
+      if (e.lex) return { ...base, cat: e.cat, kids: [{ word: e.str[0], kids: [] }] };
+      const concat = e.ins.map(x => x.split('|')[0]).join(' ');
+      return { ...base, cat: e.cat, kids: e.ins.map(x => build(pool.find(y => keyOf(y) === x))), isNew: k === st.fresh,
+        extra: e.str.join(' ') !== concat ? '“' + e.str.join(' ') + '”' : '' };
+    };
     const roots = st.derived.filter(d => !used.has(keyOf(d))).map(build);
-    h = roots.length ? `<div class="cap">Derivations built so far</div><div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees' })}</div>`
-      : `<div class="empty">Nothing derived yet. Start from a noun: select cat : N⁰, then Rule 1.</div>`;
+    h = `<div class="cap">Lexicon. Items are never used up.</div><div class="chips">` +
+      L().lexicon.map(([w, c]) => { const k = w + '|' + c, n = st.sel.indexOf(k);
+        return `<button class="chip" type="button" data-e="${esc(k)}" aria-pressed="${n >= 0}"${off() ? ' disabled' : ''}>${esc(w)} <span class="c">${esc(c)}</span>${n >= 0 ? `<span class="n">${n + 1}</span>` : ''}</button>`; }).join('') + '</div>' +
+      (roots.length ? `<div class="cap">Built so far</div><div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees' })}</div>`
+        : `<div class="empty">Nothing built yet. Click an item in the lexicon, then a rule.</div>`);
   } else {
     const items = st.ws.map((R, i) => { const t = mpTree(R, R, 0, [i]); if (E.key(R) === st.fresh) t.isNew = true; return t; });
     h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
-      (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select (right).</div>`);
+      (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
   }
   box.innerHTML = h;
 }
 
-/* ---------- infoview ---------- */
-function drawSide() {
-  const lv = L();
-  let h = '<h4>Hypotheses</h4>';
-  if (lv.kind === 'sentence') {
-    h += st.pieces.map((p, i) => `<button class="hyp${i === st.fresh ? ' fresh' : ''}" type="button" data-p="${i}" aria-pressed="${st.sel.includes(i)}">${esc(p.str.join(' '))} <span class="c">: ${esc(p.cat)}</span></button>`).join('');
-  } else if (lv.kind === 'free') {
-    h += allExprs().map(e => { const k = keyOf(e), n = st.sel.indexOf(k);
-      return `<button class="hyp${k === st.fresh ? ' fresh' : ''}" type="button" data-e="${esc(k)}" aria-pressed="${n >= 0}">${esc(e.str.join(' '))} <span class="c">: ${esc(e.cat)}</span>${n >= 0 ? `<span class="n">${n + 1}</span>` : ''}</button>`; }).join('');
-  } else {
-    h += `<div class="hyp" style="cursor:default">WS : ${esc(E.renderWS(st.ws))}</div>`;
-  }
+/* ---------- rules, goal, messages ---------- */
+function drawTools() {
+  const lv = L(), dis = off() ? ' disabled' : '';
+  let h = '';
   if (lv.kind === 'mp') {
-    h += '<h4 style="margin-top:12px">Select draws an item into WS</h4><div class="lexbtns">' +
-      ['the', 'n', 'cat', 'will', 'v', 'sleep'].map(x => `<button class="lexbtn" type="button" data-li="${x}"${st.closed || playing ? ' disabled' : ''}>${esc(E.liText(x))}</button>`).join('') + '</div>';
+    h += '<div class="cap">Select draws an item into WS</div><div class="chips">' +
+      ['the', 'n', 'cat', 'will', 'v', 'sleep'].map(x => `<button class="chip" type="button" data-li="${x}"${dis}>${esc(E.liText(x))}</button>`).join('') + '</div>';
     const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
-    h += `<h4 style="margin-top:10px">Rule</h4><button class="rule" type="button" id="mergeBtn"${st.closed || playing ? ' disabled' : ''}><b>MERGE</b> (${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS) <small>replaces P and Q by {P, Q}</small></button>`;
-    h += `<div class="goal${st.closed ? ' done' : ''}">${st.closed ? 'Goal closed. No goals left.' : '⊢ WS = [one object, every node labeled]; externalization must give “' + lv.target.join(' ') + '”'}</div>`;
+    h += `<div class="cap">Rule</div><button class="rule" type="button" id="mergeBtn"${dis}><b>MERGE</b>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS)<small>replaces P and Q by {P, Q}</small></button>`;
   } else {
-    h += '<h4 style="margin-top:12px">Rules</h4>' + E.grammars[lv.g].rules.map((r, i) => {
+    h += '<div class="cap">Rules</div>' + E.grammars[lv.g].rules.map((r, i) => {
       const [main, note] = r.name.split('  [');
-      return `<button class="rule" type="button" data-r="${i}"${st.closed || playing ? ' disabled' : ''}><b>Rule ${i + 1}:</b> <span>${esc(main)}${note ? `<small>[${esc(note)}</small>` : ''}</span></button>`; }).join('');
-    const goal = lv.kind === 'sentence' ? `${lv.words.map(w => w[0]).join(' ')} : ${lv.goal}` : `${lv.goal.str.join(' ')} : ${lv.goal.cat}`;
-    h += `<div class="goal${st.closed ? ' done' : ''}">${st.closed ? 'Goal closed. No goals left.' : '⊢ ' + esc(goal)}</div>`;
+      return `<button class="rule" type="button" data-r="${i}"${dis}><b>Rule ${i + 1}</b>${esc(main)}${note ? `<small>[${esc(note)}</small>` : ''}</button>`; }).join('');
   }
-  document.getElementById('info').innerHTML = h;
-  let m = st.msgs.map(x => `<div class="msg ${x.k}">${x.lean ? '<span class="src">Same message as Lean</span>' : ''}${esc(x.t)}</div>`).join('');
+  document.getElementById('tools').innerHTML = h;
+}
+function drawGoal() {
+  const lv = L(), el = document.getElementById('goal');
+  const text = lv.kind === 'sentence' ? `${lv.words.map(w => w[0]).join(' ')} : ${lv.goal}`
+    : lv.kind === 'free' ? `${lv.goal.str.join(' ')} : ${lv.goal.cat}`
+    : `one object in WS, every node labeled (pronounced “${lv.target.join(' ')}”; checked automatically)`;
+  el.className = 'goal' + (st.closed ? ' done' : '');
+  el.innerHTML = `<b>${st.closed ? 'Goal reached' : 'Goal'}</b><span>${esc(text)}</span>`;
+}
+function drawMsgs() {
+  const lv = L();
+  let m = st.msgs.map(x => `<div class="msg ${x.k}">${esc(x.t)}</div>`).join('');
   if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${esc(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
-  if (st.closed && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level: ${esc(LEVELS[cur + 1].name)}</button>`;
+  if (st.closed && !playing && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level: ${esc(LEVELS[cur + 1].name)}</button>`;
   document.getElementById('msgs').innerHTML = m;
   document.getElementById('undo').disabled = !st.hist.length || playing;
   document.getElementById('reset').disabled = playing;
   const sb = document.getElementById('solve'); sb.hidden = !lv.solution; sb.disabled = playing;
   document.querySelectorAll('.tab').forEach((b, i) => { b.setAttribute('aria-selected', i === cur); b.querySelector('.tick').textContent = solved.has(i) ? '✓' : ''; });
 }
-function draw() { drawPic(); drawSide(); }
+function draw() { drawPic(); drawTools(); drawGoal(); drawMsgs(); }
 function showLevel(i) {
   cur = i; st = initState(L());
   document.getElementById('lead').innerHTML = L().lead;
@@ -546,36 +555,36 @@ function showLevel(i) {
 document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab" role="tab" type="button" data-i="${i}">${esc(lv.name)}<span class="tick"></span><small>${esc(lv.era)}</small></button>`).join('');
 document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b && !playing) showLevel(+b.dataset.i); });
 function toggleSel(k, max) {
-  if (st.closed || playing) return;
+  if (off()) return;
   const i = st.sel.indexOf(k);
   if (i >= 0) st.sel.splice(i, 1); else { st.sel.push(k); if (max && st.sel.length > max) st.sel.shift(); }
   st.msgs = []; draw();
 }
 document.getElementById('pic').addEventListener('click', e => {
+  const chip = e.target.closest('[data-e]'); if (chip) return toggleSel(chip.dataset.e);
   const g = e.target.closest('[data-k]'); if (!g) return;
-  const k = g.dataset.k;
-  if (L().kind === 'sentence') toggleSel(+k.slice(1)); else toggleSel(k, 2);
+  const k = g.dataset.k, kind = L().kind;
+  if (kind === 'sentence') toggleSel(+k.slice(1)); else if (kind === 'free') toggleSel(k); else toggleSel(k, 2);
 });
-document.getElementById('pic').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('[data-k]')) { e.preventDefault(); e.target.closest('[data-k]').dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
-document.getElementById('info').addEventListener('click', e => {
-  if (playing) return;
-  const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.p !== undefined) toggleSel(+b.dataset.p);
-  else if (b.dataset.e !== undefined) toggleSel(b.dataset.e);
-  else if (b.dataset.r !== undefined && !st.closed) (L().kind === 'sentence' ? applySentence : applyFree)(+b.dataset.r);
-  else if (b.dataset.li !== undefined && !st.closed) selectLI(b.dataset.li);
-  else if (b.id === 'mergeBtn' && !st.closed) doMerge();
+document.getElementById('pic').addEventListener('keydown', e => {
+  const g = e.target.closest && e.target.closest('[data-k]');
+  if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); g.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+});
+document.getElementById('tools').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || off()) return;
+  if (b.dataset.r !== undefined) (L().kind === 'sentence' ? applySentence : applyFree)(+b.dataset.r);
+  else if (b.dataset.li !== undefined) selectLI(b.dataset.li);
+  else if (b.id === 'mergeBtn') doMerge();
 });
 document.getElementById('msgs').addEventListener('click', e => {
-  if (e.target.id === 'whyBtn') { st.showWhy = true; drawSide(); }
+  if (e.target.id === 'whyBtn') { st.showWhy = true; drawMsgs(); }
   if (e.target.id === 'nextLevel') showLevel(cur + 1);
 });
 document.getElementById('undo').addEventListener('click', () => { if (!st.hist.length) return; const h = st.hist.slice(0, -1), prev = JSON.parse(st.hist[st.hist.length - 1]); st = { ...prev, hist: h, msgs: [] }; draw(); });
 document.getElementById('reset').addEventListener('click', () => { st = initState(L()); draw(); });
 document.getElementById('solve').addEventListener('click', solve);
 let lastW = 0;
-const picRO = new ResizeObserver(() => { const w = document.getElementById('pic').clientWidth; if (Math.abs(w - lastW) > 8) { lastW = w; drawPic(); } });
-picRO.observe(document.getElementById('pic'));
+new ResizeObserver(() => { const w = document.getElementById('pic').clientWidth; if (Math.abs(w - lastW) > 8) { lastW = w; drawPic(); } }).observe(document.getElementById('pic'));
 const start = LEVELS.findIndex(lv => '#' + lv.id === location.hash);
 showLevel(start >= 0 ? start : 0);
 window.addEventListener('hashchange', () => { const i = LEVELS.findIndex(lv => '#' + lv.id === location.hash); if (i >= 0 && i !== cur && !playing) showLevel(i); });
