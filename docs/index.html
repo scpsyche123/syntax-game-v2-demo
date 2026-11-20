@@ -137,7 +137,7 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <footer class="band"><div class="wrap cols">
 <div>
 <h3>What is running</h3>
-<p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (levels 1–4), and with a domain given as a decidable condition (level 5, where a category is a whole workspace).</p>
+<p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (the linear levels), and with a domain given by a pattern and a decidable condition (the X-bar schema, where X and Y are variables, and MERGE, where a category is a whole workspace).</p>
 <p>Your browser cannot run Lean, so this page runs a JavaScript simulation of it.</p>
 </div>
 <div>
@@ -156,13 +156,28 @@ const Engine = (() => {
   const grammars = {
     'linear₁': { rules: lin },
     'linear₂': { rules: [...lin, R('N → D N', ['D', 'N'], 'N')] },
-    'xbarGB': { rules: [
-      R('N′ → N⁰', ['N⁰'], 'N′'), R('D′ → D⁰ NP', ['D⁰', 'NP'], 'D′'),
-      R('V′ → V⁰ DP  [V assigns accusative]', ['V⁰', 'DP'], 'V′'),
-      R("T′ → T⁰ VP  [Infl lowering: T's affix attaches to V]", ['T⁰', 'VP'], 'T′', 'lower'),
-      R('NP → N′', ['N′'], 'NP'), R('DP → D′', ['D′'], 'DP'), R('VP → V′', ['V′'], 'VP'),
-      R('TP → DP T′  [finite T assigns nominative]', ['DP', 'T′'], 'TP')] }
+    'xbarGB': { rules: [] }
   };
+  /* X-bar schema: five rules with variables X, Y over head categories; GB data as conditions */
+  const cSel = [['D', 'N'], ['V', 'D'], ['T', 'V']], specs = [['T', 'D']], epp = ['T'],
+    caseC = ['V'], caseS = ['T'], adjuncts = [];
+  const has2 = (xs, x, y) => xs.some(([a, b]) => a === x && b === y);
+  const caseOK = (as, x, y) => y !== 'D' || as.includes(x);
+  const pc = c => [c.slice(0, 1), c.slice(1)];
+  const S = (name, apply) => ({ name, schema: true, apply });
+  const one = (ins, bar, ok, cat) => { if (ins.length !== 1) return null; const [x, b] = pc(ins[0].cat); return b === bar && ok(x) ? { str: ins[0].str, cat: cat(x) } : null; };
+  const two = (ins, b1, b2, ok, build, cat) => { if (ins.length !== 2) return null; const [p, q] = [pc(ins[0].cat), pc(ins[1].cat)];
+    return p[1] === b1 && q[1] === b2 && ok(p[0], q[0]) ? { str: build(p[0], q[0], ins[0].str, ins[1].str), cat: cat(p[0], q[0]) } : null; };
+  grammars.xbarGB.rules = [
+    S('X′ → X⁰  [X takes no complement]', ins => one(ins, '⁰', x => !cSel.some(([h]) => h === x), x => x + '′')),
+    S('XP → X′  [X needs no specifier (EPP)]', ins => one(ins, '′', x => !epp.includes(x), x => x + 'P')),
+    S('XP → YP X′  [YP is the specifier of X; a DP needs Case from X]',
+      ins => two(ins, 'P', '′', (y, x) => has2(specs, x, y) && caseOK(caseS, x, y), (y, x, s1, s2) => [...s1, ...s2], (y, x) => x + 'P')),
+    S("X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
+      ins => two(ins, '⁰', 'P', (x, y) => has2(cSel, x, y) && caseOK(caseC, x, y), (x, y, s1, s2) => x === 'T' ? builds.lower([s1, s2]) : [...s1, ...s2], x => x + '′')),
+    S('X′ → X′ YP  [YP is an adjunct of X]',
+      ins => two(ins, '′', 'P', (x, y) => has2(adjuncts, x, y), (x, y, s1, s2) => [...s1, ...s2], x => x + '′'))
+  ];
   const attachAffix = (v, a) => (v === 'see' && a === '-s') ? 'sees' : v + 's';
   const builds = {
     flat: xs => xs.flat(),
@@ -177,10 +192,17 @@ const Engine = (() => {
     if (i < 0) return { ok: false, msg: `${g} has no rule "${typed}". Its rules are:\n` + rs.map(r => '  ' + r.name).join('\n') };
     return { ok: true, rule: rs[i], index: i };
   }
+  const ruleMain = n => n.split('  [')[0];
+  const ruleCond = n => n.includes('[') ? n.split('[')[1].split(']')[0] : '';
   function applyRule(rule, inputs) {
     const cats = inputs.map(e => e.cat);
+    if (rule.schema) {
+      const out = rule.apply(inputs);
+      if (!out) return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the pattern on its right-hand side and by its condition: ${ruleCond(rule.name)}.` };
+      return { ok: true, out };
+    }
     if (cats.length !== rule.posCat.length || cats.some((c, i) => c !== rule.posCat[i]))
-      return { ok: false, msg: `The rule "${rule.name}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the categories on its right-hand side.` };
+      return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the categories on its right-hand side.` };
     return { ok: true, out: { str: builds[rule.build](inputs.map(e => e.str)), cat: rule.result } };
   }
 
@@ -328,11 +350,11 @@ const LEVELS = [
      'Suppose instead we keep only Rule 3, D → D N, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
    lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'TP' },
-   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rule table is produced by a function, the X-bar schema, from GB data: c-selection decides which complements exist; only Case positions take a DP, so the Case Filter is a property of the table; there is no TP → T′ (EPP). T′ → T⁰ VP does not concatenate: it lowers the affix onto the verb. Lexical items are never used up. Click inputs in order (words in the lexicon or nodes in the trees), then a rule.</p>',
-   solution: [[0, [['cat', 'N⁰']]], [4, [['cat', 'N′']]], [1, [['the', 'D⁰'], ['cat', 'NP']]], [5, [['the cat', 'D′']]],
-     [0, [['dog', 'N⁰']]], [4, [['dog', 'N′']]], [1, [['the', 'D⁰'], ['dog', 'NP']]], [5, [['the dog', 'D′']]],
-     [2, [['see', 'V⁰'], ['the dog', 'DP']]], [6, [['see the dog', 'V′']]], [3, [['-s', 'T⁰'], ['see the dog', 'VP']]], [7, [['the cat', 'DP'], ['sees the dog', 'T′']]]],
-   done: 'Twelve rule applications. GB entered as data (what the schema generates, which positions accept a DP, which rule lowers the affix), not as new machinery in the language.' },
+   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema: five rules with variables X and Y, which range over head categories. GB enters as conditions on their domains: c-selection (D selects NP, V selects DP, T selects VP); Case (V assigns accusative to its complement, finite T nominative to its specifier), so a DP stands only where it gets Case; EPP (T needs a specifier). When X is T, Rule 4 lowers the affix onto the verb instead of concatenating. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>Lexical items are never used up. Click inputs in order (words in the lexicon or nodes in the trees), then a rule.</p>',
+   solution: [[0, [['cat', 'N⁰']]], [1, [['cat', 'N′']]], [3, [['the', 'D⁰'], ['cat', 'NP']]], [1, [['the cat', 'D′']]],
+     [0, [['dog', 'N⁰']]], [1, [['dog', 'N′']]], [3, [['the', 'D⁰'], ['dog', 'NP']]], [1, [['the dog', 'D′']]],
+     [3, [['see', 'V⁰'], ['the dog', 'DP']]], [1, [['see the dog', 'V′']]], [3, [['-s', 'T⁰'], ['see the dog', 'VP']]], [2, [['the cat', 'DP'], ['sees the dog', 'T′']]]],
+   done: 'Twelve applications of four schema rules. GB entered as conditions on the domains of these rules (which complement a head selects, where a DP gets Case, which head needs a specifier, which rule lowers the affix), not as new machinery in the language.' },
  { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['the', 'cat', 'will', 'sleep'],
    lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
    solution: ['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep', 'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],

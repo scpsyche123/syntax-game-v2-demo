@@ -12,49 +12,10 @@ msgstr "Project-Id-Version: Game v4.23.0\n"
 msgid "level completed! 🎉"
 msgstr ""
 
-#. §0: `rule \"N' -> N0\" cat`
-#. §1: `rule \"NP -> N'\" cat_N'`
+#. §0: `rule \"X' -> X0\" cat`
+#. §1: `rule \"XP -> X'\" cat_N'`
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Start with a noun: §0, then §1."
-msgstr ""
-
-#. §0: `N′ → N⁰`
-#. §1: `NP → N′`
-#. §2: `D′ → D⁰ NP`
-#. §3: `DP → D′`
-#. §4: `V′ → V⁰ DP`
-#. §5: `VP → V′`
-#. §6: `T′ → T⁰ VP`
-#. §7: `TP → DP T′`
-#. §8: `rule \"N' -> N0\" cat`
-#. §9: `cat_N'`
-#. §10: `cat_NP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Same language, a different grammar.\n"
-"\n"
-"Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
-"The rule table is not written by hand. A function — the **X-bar schema** — produces it\n"
-"from GB's lexical information:\n"
-"\n"
-"- **X-bar schema:** X′ → X⁰ (YP), XP → (YP) X′.\n"
-"- **c-selection:** D selects NP, V selects DP, T selects VP.\n"
-"- **Case:** a DP may only stand where Case is assigned: as the complement of V (accusative)\n"
-"  or the specifier of finite T (nominative). No other rule accepts a DP,\n"
-"  so the Case Filter is a property of the rule table.\n"
-"- **EPP:** there is no rule TP → T′.\n"
-"- **Infl lowering:** T′ → T⁰ VP does not just concatenate. It attaches the affix in T⁰ to\n"
-"  the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,\n"
-"  not only concatenation.\n"
-"\n"
-"The rules this produces:\n"
-"\n"
-"§0 · §1 · §2 · §3 · §4 · §5 · §6 · §7\n"
-"\n"
-"**Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).\n"
-"\n"
-"Build from the bottom up, for example §8. Each result gets a name you can\n"
-"use in the next step (§9, then §10, …).\n"
-"The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs."
 msgstr ""
 
 #. §0: `select the n cat will v sleep`
@@ -122,6 +83,14 @@ msgstr ""
 
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Build ⟨the cat sees the dog, TP⟩ in X-bar theory with GB modules."
+msgstr ""
+
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Twelve applications of four schema rules, all with the command from levels 1 and 2.\n"
+"\n"
+"GB's modules entered as conditions on the domains of the schema rules — which complement a\n"
+"head selects, where a DP gets Case, which head needs a specifier, which rule lowers the\n"
+"affix — not as new machinery in the language."
 msgstr ""
 
 #. §0: `?`
@@ -278,7 +247,7 @@ msgstr ""
 msgid "A linear grammar"
 msgstr ""
 
-#. §0: `rule \"T' -> T0 VP\" s see_the_dog_VP`
+#. §0: `rule \"X' -> X0 YP\" s see_the_dog_VP`
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Now T: §0. Watch what happens to *see*."
 msgstr ""
@@ -296,11 +265,45 @@ msgid "§0 is §1 with three more words (the : D, this : D, dog : N) and one mor
 "**Goal:** show that ⟨a a the this dog, N⟩ ∈ L(linear₂), using only Rule 4."
 msgstr ""
 
+#. §0: `X′ → X⁰`
+#. §1: `XP → X′`
+#. §2: `XP → YP X′`
+#. §3: `X′ → X⁰ YP`
+#. §4: `X′ → X′ YP`
+#. §5: `rule \"X' -> X0\" cat`
+#. §6: `cat_N'`
+#. §7: `cat_NP`
 #: Game.Levels.Demo.L03_XBarGB
-msgid "Twelve rule applications, all with the command from levels 1 and 2.\n"
+msgid "Same language, a different grammar.\n"
 "\n"
-"GB's modules entered as data — what the schema generates, which positions accept a DP,\n"
-"which rule lowers the affix — not as new machinery in the language."
+"Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
+"The rules are the **X-bar schema**: five rules with variables X and Y, which range over\n"
+"head categories. Each rule's domain is fixed by the pattern on its right-hand side and by a\n"
+"condition stated with GB's lexical information:\n"
+"\n"
+"- Rule 1: §0. X takes no complement.\n"
+"- Rule 2: §1. X needs no specifier (EPP: T needs one).\n"
+"- Rule 3: §2. YP is the specifier of X; a DP needs Case from X.\n"
+"- Rule 4: §3. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.\n"
+"- Rule 5: §4. YP is an adjunct of X.\n"
+"\n"
+"GB's lexical information:\n"
+"\n"
+"- **c-selection:** D selects NP, V selects DP, T selects VP.\n"
+"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
+"  specifier. A DP is accepted only where Case is assigned, so the Case Filter is a\n"
+"  property of the rules' domains.\n"
+"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′.\n"
+"- **Infl lowering:** when X is T, Rule 4 does not just concatenate. It attaches the affix in\n"
+"  T⁰ to the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,\n"
+"  not only concatenation.\n"
+"- **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
+"\n"
+"**Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).\n"
+"\n"
+"Build from the bottom up, for example §5. Each result gets a name you can\n"
+"use in the next step (§6, then §7, …).\n"
+"The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs."
 msgstr ""
 
 #. §0: `select x y …`

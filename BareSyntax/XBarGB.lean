@@ -1,21 +1,24 @@
 /-
-Level 2 grammar: `xbarGB` — X-bar theory with GB modules, as a Bare Grammar.
+Level 3 grammar: `xbarGB` — X-bar theory with GB modules, as a Bare Grammar.
 
 Categories are pairs ⟨head category, bar level⟩. Nothing about X-bar lives in a
-constructor: the X-bar schema is a FUNCTION that turns GB's lexical
-information (c-selection, Case positions) into an ordinary rule table.
+constructor. The X-bar schema is five rules with variables X and Y over head
+categories. Each is a condition-domain rule (`FRule`): its domain is fixed by
+the pattern on its right-hand side (X⁰, X′, YP) and by a condition stated with
+GB's lexical information.
 
-What is in:
-* X-bar schema: X′ → X⁰ (no complement), X′ → X⁰ YP (complement),
-  XP → X′ (no specifier), XP → YP X′ (specifier).
-* c-selection: D selects NP, V selects DP, T selects VP.
-* Case: a DP can only stand where Case is assigned — complement of V
-  (accusative) and specifier of finite T (nominative). No other rule takes a
-  DP, so the Case Filter is a property of the rule table.
-* EPP: TP must have a specifier, so there is no rule TP → T′.
-* Infl lowering (affix hopping): the rule T′ → T⁰ VP does not concatenate; its
-  `build` attaches T's affix to the verb (see + -s = sees). Rules in Bare
-  Grammar are arbitrary partial functions, not only concatenation.
+* X′ → X⁰       X takes no complement.
+* XP → X′       X needs no specifier (EPP: T needs one).
+* XP → YP X′    YP is the specifier of X; a DP needs Case from X.
+* X′ → X⁰ YP    X c-selects Y; a DP needs Case from X. When X is T, the affix
+                in T⁰ lowers onto the verb (Infl lowering) instead of
+                concatenating: see + -s = sees.
+* X′ → X′ YP    YP is an adjunct of X. This fragment lists no adjuncts.
+
+GB data: c-selection (D selects NP, V selects DP, T selects VP); Case (V assigns
+accusative to its complement, finite T nominative to its specifier); EPP (T
+needs a specifier). Because a DP is accepted only where Case is assigned, the
+Case Filter is a property of the rules' domains.
 
 What is out: theta theory, binding, movement chains.
 -/
@@ -41,25 +44,28 @@ def Pos.text : Pos → String
 def XCat.text (c : XCat) : String :=
   c.pos.text ++ (match c.bar with | .zero => "⁰" | .one => "′" | .two => "P")
 
+def x0 (p : Pos) : XCat := ⟨p, .zero⟩
+def x1 (p : Pos) : XCat := ⟨p, .one⟩
+def xp (p : Pos) : XCat := ⟨p, .two⟩
+
 /-! ## GB's lexical information (data) -/
 
 /-- c-selection: (head, category of its complement phrase). -/
 def cSelection : List (Pos × Pos) := [(.D, .N), (.V, .D), (.T, .V)]
 
-/-- Heads that project without a complement in this fragment. -/
-def noComplement : List Pos := [.N]
+/-- Specifiers: (head, category of its specifier phrase). -/
+def specifiers : List (Pos × Pos) := [(.T, .D)]
 
-/-- Specifier positions, with the Case they assign: (head, specifier, note). -/
-def specifiers : List (Pos × Pos × String) := [(.T, .D, "finite T assigns nominative")]
+/-- EPP: heads whose phrase must have a specifier. -/
+def epp : List Pos := [.T]
 
-/-- Heads whose phrase may lack a specifier. T is absent: EPP. -/
-def noSpecifier : List Pos := [.N, .D, .V]
+/-- Case: heads that assign Case to their complement (V: accusative) and to
+    their specifier (finite T: nominative). -/
+def caseToComplement : List Pos := [.V]
+def caseToSpecifier : List Pos := [.T]
 
-/-- Case notes on complement positions. -/
-def complementNote : Pos → Pos → String
-  | .V, .D => "  [V assigns accusative]"
-  | .T, .V => "  [Infl lowering: T's affix attaches to V]"
-  | _, _   => ""
+/-- Adjuncts: (head, category of the adjoined phrase). None in this fragment. -/
+def adjuncts : List (Pos × Pos) := []
 
 /-! ## Morphology for Infl lowering -/
 
@@ -68,37 +74,58 @@ def attachAffix (verb affix : String) : String :=
   | "see", "-s" => "sees"
   | v, _ => v ++ "s"
 
-/-- T′ → T⁰ VP: the affix in T⁰ lowers onto the first word of VP (the verb). -/
+/-- The affix in T⁰ lowers onto the first word of VP (the verb). -/
 def lowerAffix : List (List String) → List String
   | [[affix], v :: rest] => attachAffix v affix :: rest
   | xs => xs.flatten
 
-/-! ## The X-bar schema: GB data ↦ rule table -/
+/-! ## The X-bar schema: five rules with variables -/
 
-def x0 (p : Pos) : XCat := ⟨p, .zero⟩
-def x1 (p : Pos) : XCat := ⟨p, .one⟩
-def xp (p : Pos) : XCat := ⟨p, .two⟩
+/-- A DP needs Case from the head X. -/
+def caseOK (assigners : List Pos) (x y : Pos) : Bool := y != .D || assigners.contains x
 
-def xbarRules : List (Rule XCat) :=
-  (noComplement.map fun p =>
-    { name := s!"{(x1 p).text} → {(x0 p).text}", posCat := [x0 p], result := x1 p,
-      build := List.flatten }) ++
-  (cSelection.map fun (h, c) =>
-    { name := s!"{(x1 h).text} → {(x0 h).text} {(xp c).text}" ++ complementNote h c,
-      posCat := [x0 h, xp c], result := x1 h,
-      build := if h = .T then lowerAffix else List.flatten }) ++
-  (noSpecifier.map fun p =>
-    { name := s!"{(xp p).text} → {(x1 p).text}", posCat := [x1 p], result := xp p,
-      build := List.flatten }) ++
-  (specifiers.map fun (h, s, note) =>
-    { name := s!"{(xp h).text} → {(xp s).text} {(x1 h).text}  [{note}]",
-      posCat := [xp s, x1 h], result := xp h, build := List.flatten })
+def barRule : FRule XCat Unit where
+  name := "X′ → X⁰  [X takes no complement]"
+  apply := fun _ ins => match ins with
+    | [(s, ⟨x, .zero⟩)] => if cSelection.any (·.1 == x) then none else some (s, x1 x)
+    | _ => none
+
+def projRule : FRule XCat Unit where
+  name := "XP → X′  [X needs no specifier (EPP)]"
+  apply := fun _ ins => match ins with
+    | [(s, ⟨x, .one⟩)] => if epp.contains x then none else some (s, xp x)
+    | _ => none
+
+def specRule : FRule XCat Unit where
+  name := "XP → YP X′  [YP is the specifier of X; a DP needs Case from X]"
+  apply := fun _ ins => match ins with
+    | [(s₁, ⟨y, .two⟩), (s₂, ⟨x, .one⟩)] =>
+      if specifiers.contains (x, y) && caseOK caseToSpecifier x y then some (s₁ ++ s₂, xp x) else none
+    | _ => none
+
+def compRule : FRule XCat Unit where
+  name := "X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]"
+  apply := fun _ ins => match ins with
+    | [(s₁, ⟨x, .zero⟩), (s₂, ⟨y, .two⟩)] =>
+      if cSelection.contains (x, y) && caseOK caseToComplement x y then
+        some (if x == .T then lowerAffix [s₁, s₂] else s₁ ++ s₂, x1 x)
+      else none
+    | _ => none
+
+def adjRule : FRule XCat Unit where
+  name := "X′ → X′ YP  [YP is an adjunct of X]"
+  apply := fun _ ins => match ins with
+    | [(s₁, ⟨x, .one⟩), (s₂, ⟨y, .two⟩)] =>
+      if adjuncts.contains (x, y) then some (s₁ ++ s₂, x1 x) else none
+    | _ => none
 
 def xbarGB : BareGrammar where
   Cat     := XCat
   decCat  := inferInstance
   lexicon := [(["the"], x0 .D), (["cat"], x0 .N), (["dog"], x0 .N),
               (["see"], x0 .V), (["-s"], x0 .T)]
-  rules   := xbarRules
+  rules   := []
+  Arg     := Unit
+  frules  := [barRule, projRule, specRule, compRule, adjRule]
 
 end BareSyntax

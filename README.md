@@ -13,7 +13,7 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 | 1 | `linear₁` | a grammar is categories, a lexicon and rules: *a very good day* as a D in three steps |
 | — | `linear₁` | *a very day* is not in the language: every move is rejected (page and playground only; a lean4game level needs a solution) |
 | 2 | `linear₂` | overgeneration: with N → D N alone the grammar derives *a a the this dog* as an N |
-| 3 | `xbarGB` | X-bar schema as a function from GB data (c-selection, Case positions, EPP) to a rule table; Infl lowering as a non-concatenative rule |
+| 3 | `xbarGB` | X-bar schema as five rules with variables X, Y (condition-domain rules); GB data (c-selection, Case, EPP) as conditions on their domains; Infl lowering as a non-concatenative rule |
 | 4 | `mpWS` | workspace-era MERGE: an expression is a workspace, MERGE(P, Q, WS) = [{P, Q}, …]; labeling algorithm; externalization checked automatically |
 
 ## Layout

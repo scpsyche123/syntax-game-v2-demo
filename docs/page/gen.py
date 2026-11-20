@@ -43,13 +43,15 @@ LEVELS = {
                       'rule "N -> D N" a the_this_dog_N', 'rule "N -> D N" a a_the_this_dog_N'],
                wrong=[(0, 'rule "A -> Adv A" the dog'), (0, 'rule "D -> D N" this the')]),
   'xbar': dict(G='xbarGB', lex=XB_LEX, goal='CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T)',
-               steps=['rule "N\' -> N0" cat', 'rule "NP -> N\'" cat_N\'', 'rule "D\' -> D0 NP" the cat_NP',
-                      'rule "DP -> D\'" the_cat_D\'', 'rule "N\' -> N0" dog', 'rule "NP -> N\'" dog_N\'',
-                      'rule "D\' -> D0 NP" the dog_NP', 'rule "DP -> D\'" the_dog_D\'',
-                      'rule "V\' -> V0 DP" see the_dog_DP', 'rule "VP -> V\'" see_the_dog_V\'',
-                      'rule "T\' -> T0 VP" s see_the_dog_VP', 'rule "TP -> DP T\'" the_cat_DP sees_the_dog_T\''],
-               wrong=[(2, 'rule "D\' -> D0 NP" the cat_N\''), (11, 'rule "TP -> T\'" sees_the_dog_T\''),
-                      (8, 'rule "V\' -> V0 DP" see dog_NP')]),
+               steps=['rule "X\' -> X0" cat', 'rule "XP -> X\'" cat_N\'', 'rule "X\' -> X0 YP" the cat_NP',
+                      'rule "XP -> X\'" the_cat_D\'', 'rule "X\' -> X0" dog', 'rule "XP -> X\'" dog_N\'',
+                      'rule "X\' -> X0 YP" the dog_NP', 'rule "XP -> X\'" the_dog_D\'',
+                      'rule "X\' -> X0 YP" see the_dog_DP', 'rule "XP -> X\'" see_the_dog_V\'',
+                      'rule "X\' -> X0 YP" s see_the_dog_VP', 'rule "XP -> YP X\'" the_cat_DP sees_the_dog_T\''],
+               wrong=[(2, 'rule "X\' -> X0 YP" the cat_N\''), (11, 'rule "XP -> X\'" sees_the_dog_T\''),
+                      (8, 'rule "X\' -> X0 YP" see dog_NP'), (0, 'rule "X\' -> X0" the'),
+                      (4, 'rule "X\' -> X\' YP" cat_N\' the_cat_DP'), (8, 'rule "XP -> YP X\'" the_cat_DP the_dog_D\''),
+                      (0, 'rule "N\' -> N0" cat')]),
   'mp': dict(G=None, lex=[], goal='MP.Converges ["the", "cat", "will", "sleep"]',
              steps=['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep',
                     'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
@@ -120,7 +122,7 @@ truth['impossible'] = {'cases': imp}
 assert not any(c['ok'] for c in imp)
 
 # rule lists as Lean shows them
-ev = run(HEAD + '#eval linear₁.ruleNames\n#eval linear₂.ruleNames\n#eval xbarGB.ruleNames\n')
+ev = run(HEAD + '#eval linear₁.ruleNames\n#eval linear₂.ruleNames\n#eval xbarGB.fruleNames\n')
 truth['rules'] = {'linear₁': json.loads(ev[0]['data']), 'linear₂': json.loads(ev[1]['data']),
                   'xbarGB': json.loads(ev[2]['data'])}
 json.dump(truth, open(os.path.join(HERE, 'truth.json'), 'w'), ensure_ascii=False, indent=1)

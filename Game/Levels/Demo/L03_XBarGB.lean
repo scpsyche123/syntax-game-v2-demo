@@ -11,26 +11,31 @@ Introduction "
 Same language, a different grammar.
 
 Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.
-The rule table is not written by hand. A function — the **X-bar schema** — produces it
-from GB's lexical information:
+The rules are the **X-bar schema**: five rules with variables X and Y, which range over
+head categories. Each rule's domain is fixed by the pattern on its right-hand side and by a
+condition stated with GB's lexical information:
 
-- **X-bar schema:** X′ → X⁰ (YP), XP → (YP) X′.
+- Rule 1: `X′ → X⁰`. X takes no complement.
+- Rule 2: `XP → X′`. X needs no specifier (EPP: T needs one).
+- Rule 3: `XP → YP X′`. YP is the specifier of X; a DP needs Case from X.
+- Rule 4: `X′ → X⁰ YP`. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.
+- Rule 5: `X′ → X′ YP`. YP is an adjunct of X.
+
+GB's lexical information:
+
 - **c-selection:** D selects NP, V selects DP, T selects VP.
-- **Case:** a DP may only stand where Case is assigned: as the complement of V (accusative)
-  or the specifier of finite T (nominative). No other rule accepts a DP,
-  so the Case Filter is a property of the rule table.
-- **EPP:** there is no rule TP → T′.
-- **Infl lowering:** T′ → T⁰ VP does not just concatenate. It attaches the affix in T⁰ to
-  the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,
+- **Case:** V assigns accusative to its complement; finite T assigns nominative to its
+  specifier. A DP is accepted only where Case is assigned, so the Case Filter is a
+  property of the rules' domains.
+- **EPP:** T needs a specifier, so Rule 2 does not apply to T′.
+- **Infl lowering:** when X is T, Rule 4 does not just concatenate. It attaches the affix in
+  T⁰ to the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,
   not only concatenation.
-
-The rules this produces:
-
-`N′ → N⁰` · `NP → N′` · `D′ → D⁰ NP` · `DP → D′` · `V′ → V⁰ DP` · `VP → V′` · `T′ → T⁰ VP` · `TP → DP T′`
+- **Adjuncts:** none in this fragment, so Rule 5 never applies here.
 
 **Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).
 
-Build from the bottom up, for example `rule \"N' -> N0\" cat`. Each result gets a name you can
+Build from the bottom up, for example `rule \"X' -> X0\" cat`. Each result gets a name you can
 use in the next step (`cat_N'`, then `cat_NP`, …).
 The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs.
 "
@@ -42,24 +47,25 @@ Statement (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
     (see : (["see"], x0 .V) ∈ xbarGB.lexicon)
     (s : (["-s"], x0 .T) ∈ xbarGB.lexicon) :
     CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T) := by
-  Hint "Start with a noun: `rule \"N' -> N0\" cat`, then `rule \"NP -> N'\" cat_N'`."
-  rule "N' -> N0" cat
-  rule "NP -> N'" cat_N'
-  rule "D' -> D0 NP" the cat_NP
-  rule "DP -> D'" the_cat_D'
-  rule "N' -> N0" dog
-  rule "NP -> N'" dog_N'
-  rule "D' -> D0 NP" the dog_NP
-  rule "DP -> D'" the_dog_D'
-  rule "V' -> V0 DP" see the_dog_DP
-  rule "VP -> V'" see_the_dog_V'
-  Hint "Now T: `rule \"T' -> T0 VP\" s see_the_dog_VP`. Watch what happens to *see*."
-  rule "T' -> T0 VP" s see_the_dog_VP
-  rule "TP -> DP T'" the_cat_DP sees_the_dog_T'
+  Hint "Start with a noun: `rule \"X' -> X0\" cat`, then `rule \"XP -> X'\" cat_N'`."
+  rule "X' -> X0" cat
+  rule "XP -> X'" cat_N'
+  rule "X' -> X0 YP" the cat_NP
+  rule "XP -> X'" the_cat_D'
+  rule "X' -> X0" dog
+  rule "XP -> X'" dog_N'
+  rule "X' -> X0 YP" the dog_NP
+  rule "XP -> X'" the_dog_D'
+  rule "X' -> X0 YP" see the_dog_DP
+  rule "XP -> X'" see_the_dog_V'
+  Hint "Now T: `rule \"X' -> X0 YP\" s see_the_dog_VP`. Watch what happens to *see*."
+  rule "X' -> X0 YP" s see_the_dog_VP
+  rule "XP -> YP X'" the_cat_DP sees_the_dog_T'
 
 Conclusion "
-Twelve rule applications, all with the command from levels 1 and 2.
+Twelve applications of four schema rules, all with the command from levels 1 and 2.
 
-GB's modules entered as data — what the schema generates, which positions accept a DP,
-which rule lowers the affix — not as new machinery in the language.
+GB's modules entered as conditions on the domains of the schema rules — which complement a
+head selects, where a DP gets Case, which head needs a specifier, which rule lowers the
+affix — not as new machinery in the language.
 "

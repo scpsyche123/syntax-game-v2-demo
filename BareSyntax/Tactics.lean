@@ -1,8 +1,9 @@
 /-
 Player commands.
 
-* `rule "N → D A N" a good day` — apply a data-domain rule (levels 1–2) to
-  expressions in the hypothesis panel. The result is COMPUTED by the rule and
+* `rule "N → A N" good day` — apply a rule to expressions in the hypothesis
+  panel: a data-domain rule (the linear levels) or a condition-domain rule
+  without an argument (the X-bar schema, `rule "X' -> X0 YP" the cat_NP`). The result is COMPUTED by the rule and
   added as a new hypothesis; the player never types the output. When the
   result is the goal expression, the level closes.
   Rule names may be typed in ASCII: `"D' -> D0 NP"` = `"D′ → D⁰ NP"`.
@@ -26,6 +27,24 @@ open Lean Meta Elab Tactic
 /-! ## Helpers evaluated at tactic time -/
 
 def BareGrammar.ruleNames (G : BareGrammar) : List String := G.rules.map (·.name)
+def BareGrammar.fruleNames (G : BareGrammar) : List String := G.frules.map (·.name)
+
+/-- Output string and category of a condition-domain rule (used at tactic time). -/
+def fapplyStr (G : BareGrammar) (r : FRule G.Cat G.Arg) (a : G.Arg) (inputs : List (Expr G.Cat)) :
+    Option (List String) :=
+  (r.apply a inputs).map Prod.fst
+def fapplyCat (G : BareGrammar) (r : FRule G.Cat G.Arg) (a : G.Arg) (inputs : List (Expr G.Cat)) :
+    Option G.Cat :=
+  (r.apply a inputs).map Prod.snd
+
+/-- A rule's name without its bracketed condition. -/
+def ruleMain (name : String) : String := (name.splitOn "  [").head!
+
+/-- The condition of a rule: the text in its brackets. -/
+def ruleCondition (name : String) : String :=
+  match name.splitOn "[" with
+  | _ :: rest :: _ => (rest.splitOn "]").head!
+  | _ => ""
 
 def applyRuleStr (G : BareGrammar) (r : Rule G.Cat) (inputs : List (Expr G.Cat)) :
     Option (List String) :=
@@ -87,42 +106,68 @@ elab_rules : tactic
     let ins ← xs.mapM readInput
     let (G, _, _) := ins[0]!
     let Gname := grammarText G
-    -- find the rule by name
+    -- find the rule by name: data-domain rules first, then condition-domain rules
     let names ← evalStrList (mkApp (mkConst ``BareGrammar.ruleNames) G)
+    let fnames ← evalStrList (mkApp (mkConst ``BareGrammar.fruleNames) G)
     let want := normRuleName nm.getString
-    let some i := names.findIdx? (fun n => normRuleName n == want)
-      | throwError m!"{Gname} has no rule \"{nm.getString}\". Its rules are:\n" ++
-          "\n".intercalate (names.map ("  " ++ ·))
-    let ruleName := names[i]!
-    -- the rule, its membership proof, the input list
     let catTy := mkApp (mkConst ``BareGrammar.Cat) G
-    let rulesE := mkApp (mkConst ``BareGrammar.rules) G
-    let ruleTy := mkApp (mkConst ``Rule) catTy
-    let iE := mkNatLit i
-    let hlt ← mkDecideProof (← mkAppM ``LT.lt #[iE, ← mkAppM ``List.length #[rulesE]])
-    let finE ← mkAppOptM ``Fin.mk #[none, iE, hlt]
-    let rE ← mkAppOptM ``List.get #[ruleTy, rulesE, finE]
     let exprTy := mkApp (mkConst ``BareSyntax.Expr) catTy
     let inputsE ← mkListLit exprTy (ins.toList.map (·.2.1))
-    -- compute the output string; reject if the rule is undefined on these inputs
-    let some outStr ← evalOptStrList (mkApp3 (mkConst ``applyRuleStr) G rE inputsE)
-      | do
-        let given ← ins.toList.mapM fun (_, e, _) => do
-          let e ← reduce e
-          catText (e.getArg! 3)
-        throwError m!"The rule \"{ruleName}\" is not defined on inputs of category " ++
-          m!"{", ".intercalate given}. Its domain is fixed by the categories on its right-hand side."
-    let outCat ← reduce (← mkAppM ``Rule.result #[rE])
-    let outE ← mkAppM ``Prod.mk #[mkStrList outStr, outCat]
-    let outTy := mkApp2 (mkConst ``Deriv) G outE
-    -- proof term
-    let hmem ← mkAppOptM ``List.get_mem #[ruleTy, rulesE, finE]
+    let givenCats : TacticM String := do
+      let cs ← ins.toList.mapM fun (_, e, _) => do
+        let e ← reduce e
+        catText (e.getArg! 3)
+      pure (", ".intercalate cs)
     let dl ← ins.toList.foldrM (fun (_, e, d) acc => do
         mkAppOptM ``DerivList.cons #[G, e, none, d, acc])
       (mkApp (mkConst ``DerivList.nil) G)
-    let heq ← mkDecideProof (← mkEq (mkApp3 (mkConst ``applyRule) G rE inputsE)
-      (← mkAppM ``Option.some #[outE]))
-    let d ← mkAppOptM ``Deriv.app #[G, rE, inputsE, outE, hmem, dl, heq]
+    let (outStr, outCat, outE, d) ← match names.findIdx? (fun n => normRuleName n == want) with
+    | some i => do
+      let ruleName := names[i]!
+      let rulesE := mkApp (mkConst ``BareGrammar.rules) G
+      let ruleTy := mkApp (mkConst ``Rule) catTy
+      let iE := mkNatLit i
+      let hlt ← mkDecideProof (← mkAppM ``LT.lt #[iE, ← mkAppM ``List.length #[rulesE]])
+      let finE ← mkAppOptM ``Fin.mk #[none, iE, hlt]
+      let rE ← mkAppOptM ``List.get #[ruleTy, rulesE, finE]
+      -- compute the output string; reject if the rule is undefined on these inputs
+      let some outStr ← evalOptStrList (mkApp3 (mkConst ``applyRuleStr) G rE inputsE)
+        | throwError m!"The rule \"{ruleMain ruleName}\" is not defined on inputs of category " ++
+            m!"{← givenCats}. Its domain is fixed by the categories on its right-hand side."
+      let outCat ← reduce (← mkAppM ``Rule.result #[rE])
+      let outE ← mkAppM ``Prod.mk #[mkStrList outStr, outCat]
+      let hmem ← mkAppOptM ``List.get_mem #[ruleTy, rulesE, finE]
+      let heq ← mkDecideProof (← mkEq (mkApp3 (mkConst ``applyRule) G rE inputsE)
+        (← mkAppM ``Option.some #[outE]))
+      pure (outStr, outCat, outE, ← mkAppOptM ``Deriv.app #[G, rE, inputsE, outE, hmem, dl, heq])
+    | none =>
+      match fnames.findIdx? (fun n => normRuleName n == want) with
+      | none => throwError m!"{Gname} has no rule \"{nm.getString}\". Its rules are:\n" ++
+          "\n".intercalate ((names ++ fnames).map ("  " ++ ·))
+      | some j => do
+        -- a condition-domain rule; `rule` handles those whose argument type is Unit
+        let ruleName := fnames[j]!
+        let argTy := mkApp (mkConst ``BareGrammar.Arg) G
+        unless (← whnf argTy).isConstOf ``Unit || (← whnf argTy).isAppOf ``PUnit do
+          throwError m!"The rule \"{ruleName}\" takes an argument; it is not used with `rule`."
+        let unitE := mkConst ``Unit.unit
+        let frulesE := mkApp (mkConst ``BareGrammar.frules) G
+        let fruleTy := mkApp2 (mkConst ``FRule) catTy argTy
+        let jE := mkNatLit j
+        let hlt ← mkDecideProof (← mkAppM ``LT.lt #[jE, ← mkAppM ``List.length #[frulesE]])
+        let finE ← mkAppOptM ``Fin.mk #[none, jE, hlt]
+        let rE ← mkAppOptM ``List.get #[fruleTy, frulesE, finE]
+        let some outStr ← evalOptStrList (mkApp4 (mkConst ``fapplyStr) G rE unitE inputsE)
+          | throwError m!"The rule \"{ruleMain ruleName}\" is not defined on inputs of category " ++
+              m!"{← givenCats}. Its domain is fixed by the pattern on its right-hand side " ++
+              m!"and by its condition: {ruleCondition ruleName}."
+        let outCat := (← reduce (mkApp4 (mkConst ``fapplyCat) G rE unitE inputsE)).getArg! 1
+        let outE ← mkAppM ``Prod.mk #[mkStrList outStr, outCat]
+        let hmem ← mkAppOptM ``List.get_mem #[fruleTy, frulesE, finE]
+        let heq ← mkDecideProof (← mkEq (← mkAppM ``FRule.apply #[rE, unitE, inputsE])
+          (← mkAppM ``Option.some #[outE]))
+        pure (outStr, outCat, outE, ← mkAppOptM ``Deriv.fapp #[G, rE, unitE, inputsE, outE, hmem, dl, heq])
+    let outTy := mkApp2 (mkConst ``Deriv) G outE
     let catT ← catText outCat
     let n := match out? with
       | some o => o.getId

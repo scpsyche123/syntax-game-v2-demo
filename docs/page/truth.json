@@ -555,7 +555,7 @@
  "xbar": {
   "steps": [
    {
-    "cmd": "rule \"N' -> N0\" cat",
+    "cmd": "rule \"X' -> X0\" cat",
     "before": [
      [
       "the",
@@ -608,7 +608,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"NP -> N'\" cat_N'",
+    "cmd": "rule \"XP -> X'\" cat_N'",
     "before": [
      [
       "the",
@@ -669,7 +669,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"D' -> D0 NP\" the cat_NP",
+    "cmd": "rule \"X' -> X0 YP\" the cat_NP",
     "before": [
      [
       "the",
@@ -738,7 +738,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"DP -> D'\" the_cat_D'",
+    "cmd": "rule \"XP -> X'\" the_cat_D'",
     "before": [
      [
       "the",
@@ -815,7 +815,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"N' -> N0\" dog",
+    "cmd": "rule \"X' -> X0\" dog",
     "before": [
      [
       "the",
@@ -900,7 +900,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"NP -> N'\" dog_N'",
+    "cmd": "rule \"XP -> X'\" dog_N'",
     "before": [
      [
       "the",
@@ -993,7 +993,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"D' -> D0 NP\" the dog_NP",
+    "cmd": "rule \"X' -> X0 YP\" the dog_NP",
     "before": [
      [
       "the",
@@ -1094,7 +1094,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"DP -> D'\" the_dog_D'",
+    "cmd": "rule \"XP -> X'\" the_dog_D'",
     "before": [
      [
       "the",
@@ -1203,7 +1203,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"V' -> V0 DP\" see the_dog_DP",
+    "cmd": "rule \"X' -> X0 YP\" see the_dog_DP",
     "before": [
      [
       "the",
@@ -1320,7 +1320,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"VP -> V'\" see_the_dog_V'",
+    "cmd": "rule \"XP -> X'\" see_the_dog_V'",
     "before": [
      [
       "the",
@@ -1445,7 +1445,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"T' -> T0 VP\" s see_the_dog_VP",
+    "cmd": "rule \"X' -> X0 YP\" s see_the_dog_VP",
     "before": [
      [
       "the",
@@ -1578,7 +1578,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"TP -> DP T'\" the_cat_DP sees_the_dog_T'",
+    "cmd": "rule \"XP -> YP X'\" the_cat_DP sees_the_dog_T'",
     "before": [
      [
       "the",
@@ -1721,7 +1721,7 @@
   ],
   "wrong": [
    {
-    "cmd": "rule \"D' -> D0 NP\" the cat_N'",
+    "cmd": "rule \"X' -> X0 YP\" the cat_N'",
     "before": [
      [
       "the",
@@ -1756,14 +1756,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D′ → D⁰ NP\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"X′ → X⁰ YP\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the pattern on its right-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
      }
     ],
     "ok": false,
     "after_step": 2
    },
    {
-    "cmd": "rule \"TP -> T'\" sees_the_dog_T'",
+    "cmd": "rule \"XP -> X'\" sees_the_dog_T'",
     "before": [
      [
       "the",
@@ -1834,14 +1834,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "xbarGB has no rule \"TP -> T'\". Its rules are:\n  N′ → N⁰\n  D′ → D⁰ NP\n  V′ → V⁰ DP  [V assigns accusative]\n  T′ → T⁰ VP  [Infl lowering: T's affix attaches to V]\n  NP → N′\n  DP → D′\n  VP → V′\n  TP → DP T′  [finite T assigns nominative]"
+      "text": "The rule \"XP → X′\" is not defined on inputs of category T′. Its domain is fixed by the pattern on its right-hand side and by its condition: X needs no specifier (EPP)."
      }
     ],
     "ok": false,
     "after_step": 11
    },
    {
-    "cmd": "rule \"V' -> V0 DP\" see dog_NP",
+    "cmd": "rule \"X' -> X0 YP\" see dog_NP",
     "before": [
      [
       "the",
@@ -1900,11 +1900,195 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"V′ → V⁰ DP  [V assigns accusative]\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"X′ → X⁰ YP\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its right-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
      }
     ],
     "ok": false,
     "after_step": 8
+   },
+   {
+    "cmd": "rule \"X' -> X0\" the",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"X′ → X⁰\" is not defined on inputs of category D⁰. Its domain is fixed by the pattern on its right-hand side and by its condition: X takes no complement."
+     }
+    ],
+    "ok": false,
+    "after_step": 0
+   },
+   {
+    "cmd": "rule \"X' -> X' YP\" cat_N' the_cat_DP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"X′ → X′ YP\" is not defined on inputs of category N′, DP. Its domain is fixed by the pattern on its right-hand side and by its condition: YP is an adjunct of X."
+     }
+    ],
+    "ok": false,
+    "after_step": 4
+   },
+   {
+    "cmd": "rule \"XP -> YP X'\" the_cat_DP the_dog_D'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"XP → YP X′\" is not defined on inputs of category DP, D′. Its domain is fixed by the pattern on its right-hand side and by its condition: YP is the specifier of X; a DP needs Case from X."
+     }
+    ],
+    "ok": false,
+    "after_step": 8
+   },
+   {
+    "cmd": "rule \"N' -> N0\" cat",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X′ → X⁰  [X takes no complement]\n  XP → X′  [X needs no specifier (EPP)]\n  XP → YP X′  [YP is the specifier of X; a DP needs Case from X]\n  X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]\n  X′ → X′ YP  [YP is an adjunct of X]"
+     }
+    ],
+    "ok": false,
+    "after_step": 0
    }
   ]
  },
@@ -2334,14 +2518,11 @@
    "N → D N"
   ],
   "xbarGB": [
-   "N′ → N⁰",
-   "D′ → D⁰ NP",
-   "V′ → V⁰ DP  [V assigns accusative]",
-   "T′ → T⁰ VP  [Infl lowering: T's affix attaches to V]",
-   "NP → N′",
-   "DP → D′",
-   "VP → V′",
-   "TP → DP T′  [finite T assigns nominative]"
+   "X′ → X⁰  [X takes no complement]",
+   "XP → X′  [X needs no specifier (EPP)]",
+   "XP → YP X′  [YP is the specifier of X; a DP needs Case from X]",
+   "X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
+   "X′ → X′ YP  [YP is an adjunct of X]"
   ]
  }
 }
