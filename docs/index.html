@@ -46,7 +46,7 @@
       <h1 id="title">Formalization of Syntactic Theory</h1>
       <p class="subtitle">Investigating grammatical structure, invariance, and the expressive limits of syntactic models through formal methods.</p>
       <!-- To add an author line, insert it here, e.g. <p class="lede">Name · Affiliation</p> -->
-      <p class="lede">An undergraduate research project in theoretical linguistics. It treats grammars as mathematical objects: it asks which of their properties are invariant under structure-preserving transformations, compares what different syntactic models can express, and checks small results in the proof assistant Lean&nbsp;4.</p>
+      <p class="lede">This is an undergraduate research project in theoretical linguistics. It studies grammars as mathematical objects, asking which of their properties are invariant under structure-preserving transformations and what different syntactic models can express. Claims about small grammars are checked in the proof assistant Lean&nbsp;4.</p>
       <p class="actions">
         <a class="btn-primary" href="#overview">Explore the research</a>
         <a class="link-quiet" href="game/">Try the syntax game</a>
@@ -89,9 +89,9 @@
   <div class="wrap">
     <p class="sec-no" aria-hidden="true">§1</p>
     <div class="sec-body">
-      <h2 id="h-overview"><span class="vh">§1 </span>Research Overview</h2>
-      <p class="lead">Generative grammars are usually judged by what they generate. This project asks what else a grammar commits us to: which of its properties are structural rather than artefacts of a particular notation, and what one model of syntax can express that another cannot.</p>
-      <p>Formal methods make these questions answerable, at least in small and exact cases. Once a grammar is treated as a mathematical object (a lexicon together with operations that build complex expressions from simpler ones) one can state precisely what it generates, which transformations preserve its structure, and which assumptions a given property depends on. Claims about small grammars are then checked in the proof assistant Lean&nbsp;4, so that each is either proved or visibly not.</p>
+      <h2 id="h-overview"><span class="vh">§1 </span>Research overview</h2>
+      <p class="lead">One way to evaluate a grammar is by the expressions it generates. This project asks what else a grammar commits us to: which of its properties are structural, as opposed to artefacts of a particular notation, and what one model of syntax can express that another cannot.</p>
+      <p>Formal methods make these questions answerable, at least for small grammars. If a grammar is treated as a mathematical object, a lexicon together with operations that build complex expressions from simpler ones, one can state exactly what it generates and which transformations preserve its structure. One can also ask which assumptions a given property depends on. The project checks such claims in the proof assistant Lean&nbsp;4, where a claim stands only once Lean has accepted a proof of it.</p>
       <p>The project is organized around three questions:</p>
       <ol class="rq">
         <li><span class="q">Does successfully generating the right expressions guarantee that a grammar captures the relevant linguistic generalizations?</span> <a class="where" href="#bare-grammar">§2</a></li>
@@ -130,9 +130,9 @@
   <div class="wrap">
     <p class="sec-no" aria-hidden="true">§2</p>
     <div class="sec-body">
-      <h2 id="h-bg"><span class="vh">§2 </span>Bare Grammar and Explanatory Adequacy</h2>
+      <h2 id="h-bg"><span class="vh">§2 </span>Bare Grammar and explanatory adequacy</h2>
       <p class="question">Does successfully generating the right expressions guarantee that a grammar captures the relevant linguistic generalizations?</p>
-      <p>Keenan and Stabler’s <em>Bare Grammar</em> (2003) reduces a grammar to its essentials. An expression pairs a string with a category. A grammar consists of a lexicon of basic expressions and a set of generating functions, partial functions that build expressions from expressions. Its language <span class="m"><var>L</var>(<var>G</var>)</span> is the closure of the lexicon under the generating functions. Because no further theory is built into the format, grammars inspired by quite different syntactic frameworks can be stated, and compared, in the same terms.</p>
+      <p>In Keenan and Stabler’s <em>Bare Grammar</em> (2003), an expression pairs a string with a category. A grammar consists of a lexicon of basic expressions and a set of generating functions, partial functions that build expressions from expressions. Its language <span class="m"><var>L</var>(<var>G</var>)</span> is the closure of the lexicon under the generating functions. Because no further theory is built into the format, grammars inspired by quite different syntactic frameworks can be stated, and compared, in the same terms.</p>
       <p>Weak generative criteria evaluate a grammar by the strings it generates. A grammar can meet such criteria without capturing the generalizations it is meant to express. The project investigates this through <em>overlexicalization</em>: grammars in which complex expressions are listed in the lexicon instead of being derived from their parts. In the limiting case, for any finite set of target expressions, the grammar whose lexicon simply lists them, and which has no generating functions, generates exactly that set while expressing no regularity at all.</p>
 
       <figure aria-labelledby="f2-cap">
@@ -191,10 +191,10 @@
             </svg>
           </div>
         </div>
-        <figcaption id="f2-cap"><b>Figure 2.</b> Same language, different analyses. <span class="m"><var>G</var><sub>1</sub></span> is the linear grammar of the syntax game’s first level: lexicon <span class="obj">a</span>&nbsp;:&nbsp;D, <span class="obj">very</span>&nbsp;:&nbsp;Adv, <span class="obj">good</span>&nbsp;:&nbsp;A, <span class="obj">day</span>&nbsp;:&nbsp;N, and rules Adv A → A, A N → N, D N → D (daughters → mother). <span class="m"><var>G</var><sub>1</sub>′</span> adds ⟨<span class="obj">very good</span>, A⟩ to the lexicon. Since <span class="m"><var>G</var><sub>1</sub></span> already generates that expression, the two grammars generate exactly the same expressions, <span class="m nowrap"><var>L</var>(<var>G</var><sub>1</sub>′) = <var>L</var>(<var>G</var><sub>1</sub>)</span>. In <span class="m"><var>G</var><sub>1</sub>′</span>, however, ⟨<span class="obj">a very good day</span>, D⟩ also has a derivation in which <span class="obj">very good</span> has no internal structure. An illustration of the general point, not one of the presented examples.</figcaption>
+        <figcaption id="f2-cap"><b>Figure 2.</b> Two grammars with the same language. <span class="m"><var>G</var><sub>1</sub></span> is the linear grammar of the syntax game’s first level: lexicon <span class="obj">a</span>&nbsp;:&nbsp;D, <span class="obj">very</span>&nbsp;:&nbsp;Adv, <span class="obj">good</span>&nbsp;:&nbsp;A, <span class="obj">day</span>&nbsp;:&nbsp;N, and rules Adv A → A, A N → N, D N → D (daughters → mother). <span class="m"><var>G</var><sub>1</sub>′</span> adds ⟨<span class="obj">very good</span>, A⟩ to the lexicon. Since <span class="m"><var>G</var><sub>1</sub></span> already generates that expression, the two grammars generate exactly the same expressions, <span class="m nowrap"><var>L</var>(<var>G</var><sub>1</sub>′) = <var>L</var>(<var>G</var><sub>1</sub>)</span>. In <span class="m"><var>G</var><sub>1</sub>′</span>, however, ⟨<span class="obj">a very good day</span>, D⟩ also has a derivation in which <span class="obj">very good</span> has no internal structure. The figure illustrates the general point and is not one of the presented examples.</figcaption>
       </figure>
 
-      <p>The examples raise several related issues:</p>
+      <p>The examples bear on the following issues:</p>
       <ul>
         <li>weak generative capacity versus explanatory adequacy;</li>
         <li>grammars that generate the same expressions but differ structurally;</li>
@@ -205,7 +205,7 @@
       </ul>
 
       <div class="env checked">
-        <p><span class="rh">Status.</span> The overlexicalization examples and their analysis were presented at an academic discussion group in July 2026. They are an analysis of constructed cases, not a published result and not the proof of a new theorem.</p>
+        <p><span class="rh">Status.</span> The overlexicalization examples and their analysis were presented at an academic discussion group in July 2026. The work analyses constructed cases. It has not been published, and it does not prove a new theorem.</p>
       </div>
       <div class="env open">
         <p><span class="rh">Question 2.1.</span> Which stronger structural constraints would distinguish a grammar that captures a generalization from one that merely lists its instances? <a href="#automorphisms">§3</a> considers one way of making the difference precise.</p>
@@ -219,9 +219,9 @@
   <div class="wrap">
     <p class="sec-no" aria-hidden="true">§3</p>
     <div class="sec-body">
-      <h2 id="h-aut"><span class="vh">§3 </span>Automorphisms and Grammatical Invariance</h2>
+      <h2 id="h-aut"><span class="vh">§3 </span>Automorphisms and grammatical invariance</h2>
       <p class="question">Which grammatical properties remain invariant under structure-preserving transformations, and what does this tell us about the grammar?</p>
-      <p>A grammar fixes a set of expressions together with the operations that relate them. Many of its apparent properties, however, belong to the way it happens to be written down: the names of its categories, the identity of particular words, the order in which a notation lists things. The mathematical tool for separating structure from presentation is the <em>automorphism</em>, a transformation of a structure onto itself that preserves all of its operations. Keenan and Stabler build their account on this idea: the structurally significant notions of a grammar are those that its automorphisms leave invariant.</p>
+      <p>A grammar fixes a set of expressions together with the operations that relate them. Many of its apparent properties, however, belong to the way it happens to be written down: the names of its categories, the identity of particular words, the order in which a notation lists things. A standard mathematical tool for separating structure from presentation is the <em>automorphism</em>, a transformation of a structure onto itself that preserves all of its operations. Keenan and Stabler build their account on this idea: the structurally significant notions of a grammar are those that its automorphisms leave invariant.</p>
 
       <div class="env">
         <p><span class="rh">Definition 3.1</span> (automorphism)<span class="rh">.</span> Let <var>G</var> be a grammar with language <span class="m"><var>L</var>(<var>G</var>)</span> and generating functions <var>F</var>. An automorphism of <var>G</var> is a bijection <span class="m nowrap"><var>h</var> : <var>L</var>(<var>G</var>) → <var>L</var>(<var>G</var>)</span> that fixes every <span class="m nowrap"><var>f</var> ∈ <var>F</var></span>: for all expressions <span class="m nowrap"><var>x</var><sub>1</sub>, …, <var>x</var><sub><var>n</var></sub></span>, the tuple <span class="m nowrap">(<var>h</var>(<var>x</var><sub>1</sub>), …, <var>h</var>(<var>x</var><sub><var>n</var></sub>))</span> lies in the domain of <var>f</var> exactly when <span class="m nowrap">(<var>x</var><sub>1</sub>, …, <var>x</var><sub><var>n</var></sub>)</span> does, and then</p>
@@ -236,7 +236,7 @@
       <div class="env example">
         <p><span class="rh">Example 3.3.</span> Let <var>G</var> have the lexicon ⟨<span class="obj">Kim</span>, NP⟩, ⟨<span class="obj">Lee</span>, NP⟩, ⟨<span class="obj">laughed</span>, VP⟩, ⟨<span class="obj">cried</span>, VP⟩ and a single generating function <var>f</var>, defined on pairs of an NP and a VP, with <span class="m nowrap"><var>f</var>(⟨<var>u</var>, NP⟩, ⟨<var>v</var>, VP⟩) = ⟨<var>u v</var>, S⟩</span>. The map σ that exchanges <span class="obj">Kim</span> and <span class="obj">Lee</span>, and accordingly the sentences built from them, is an automorphism. Writing each expression by its string,</p>
         <p class="display">σ(<var>f</var>(<span class="obj">Kim</span>, <span class="obj">laughed</span>)) = <var>f</var>(σ(<span class="obj">Kim</span>), σ(<span class="obj">laughed</span>)) = <var>f</var>(<span class="obj">Lee</span>, <span class="obj">laughed</span>).</p>
-        <p>No automorphism, by contrast, can send <span class="obj">Kim</span> to <span class="obj">laughed</span>: <span class="obj">Kim</span> occurs as the first argument of <var>f</var>, and <span class="obj">laughed</span> never does. In <var>G</var>, membership in a category is invariant; being the particular word <span class="obj">Kim</span> is not.</p>
+        <p>No automorphism, by contrast, can send <span class="obj">Kim</span> to <span class="obj">laughed</span>: <span class="obj">Kim</span> occurs as the first argument of <var>f</var>, and <span class="obj">laughed</span> never does. So in <var>G</var> membership in a category is invariant, while the property of being the word <span class="obj">Kim</span> is not.</p>
       </div>
 
       <figure aria-labelledby="f3-cap">
@@ -267,8 +267,8 @@
         <figcaption id="f3-cap"><b>Figure 3.</b> The automorphism group acting on the sentences of <var>G</var>. σ exchanges <span class="obj">Kim</span> and <span class="obj">Lee</span>; τ exchanges <span class="obj">laughed</span> and <span class="obj">cried</span>. With the identity and στ they make up <span class="m nowrap">Aut(<var>G</var>) ≅ ℤ<sub>2</sub> × ℤ<sub>2</sub></span>. Its orbits are {<span class="obj">Kim</span>, <span class="obj">Lee</span>}, {<span class="obj">laughed</span>, <span class="obj">cried</span>} and the four sentences, which in this grammar coincide with the categories NP, VP and S.</figcaption>
       </figure>
 
-      <p>Now let <span class="m"><var>G</var><sub>list</sub></span> be the grammar whose lexicon lists the four sentences of <var>G</var> as expressions of category S, with no generating functions. Its expressions of category S are exactly those of <var>G</var>, so no criterion based on the sentences generated can tell the two grammars apart. Their automorphism groups can. In <var>G</var>, the relation ‘<var>x</var> and <var>y</var> have the same subject’ is invariant. In <span class="m"><var>G</var><sub>list</sub></span>, every one of the 24 permutations of the four sentences is an automorphism, including the one that exchanges <span class="obj">Kim laughed</span> with <span class="obj">Lee laughed</span> and fixes the rest, and that permutation does not preserve the relation. The overlexicalized grammar generates the same sentences while drawing no structural distinctions among them.</p>
-      <p>This is the sense in which automorphisms may help separate a grammar that captures a generalization from one that lists its instances. Whether invariance-based conditions can do work that weak generative criteria cannot, in grammars of realistic size, is what this direction sets out to investigate.</p>
+      <p>Now let <span class="m"><var>G</var><sub>list</sub></span> be the grammar whose lexicon lists the four sentences of <var>G</var> as expressions of category S, with no generating functions. Its expressions of category S are exactly those of <var>G</var>, so no criterion based on the sentences generated can tell the two grammars apart. Their automorphism groups, however, differ. In <var>G</var>, the relation ‘<var>x</var> and <var>y</var> have the same subject’ is invariant. In <span class="m"><var>G</var><sub>list</sub></span>, every one of the 24 permutations of the four sentences is an automorphism, including the one that exchanges <span class="obj">Kim laughed</span> with <span class="obj">Lee laughed</span> and fixes the rest, and that permutation does not preserve the relation. The overlexicalized grammar generates the same sentences but makes no structural distinctions among them.</p>
+      <p>This is the sense in which automorphisms may help separate a grammar that captures a generalization from one that lists its instances. This direction asks whether conditions stated in terms of invariance can do work that weak generative criteria cannot, in grammars of realistic size.</p>
 
       <div class="env open">
         <p><span class="rh">Question 3.4.</span> How do overlexicalization and rule redundancy affect the automorphism group of a grammar? The lexical redundancy of Figure 2 changes neither the language nor the generating functions, so whether it is visible to <span class="m">Aut(<var>G</var>)</span> at all depends on whether automorphisms are also required to preserve the lexicon.</p>
@@ -280,7 +280,7 @@
         <p><span class="rh">Question 3.6.</span> When two models represent different kinds of syntactic objects, for instance trees with ordered daughters and sets built by MERGE, what is the appropriate notion of structure-preserving map between them, so that their invariants can be compared? This links the present direction to <a href="#expressive-power">§4</a>.</p>
       </div>
       <div class="env">
-        <p><span class="rh">Remark 3.7.</span> This direction is exploratory. The examples above are expository. No new group-theoretic characterization of grammatical properties, no classification theorem, and no formal comparison of automorphism groups is claimed. Relevant prior work includes Keenan and Stabler (2003) and Holder (2010). A small Lean-checked instance of symmetry reasoning appears in <a href="#obs-4-4">Observation 4.4</a>.</p>
+        <p><span class="rh">Remark 3.7.</span> This direction is exploratory, and the examples above are expository. The project has not proved a group-theoretic characterization of grammatical properties, a classification theorem, or a formal comparison of automorphism groups. Relevant prior work includes Keenan and Stabler (2003) and Holder (2010). A small Lean-checked instance of symmetry reasoning appears in <a href="#obs-4-4">Observation 4.4</a>.</p>
       </div>
     </div>
   </div>
@@ -291,7 +291,7 @@
   <div class="wrap">
     <p class="sec-no" aria-hidden="true">§4</p>
     <div class="sec-body">
-      <h2 id="h-exp"><span class="vh">§4 </span>Expressive Power of Syntactic Models</h2>
+      <h2 id="h-exp"><span class="vh">§4 </span>Expressive power of syntactic models</h2>
       <p class="question">What can one syntactic model express that another cannot, and which theoretical assumptions account for the difference?</p>
       <p>This is the project’s main long-term aim: to investigate the expressive capabilities and limitations of formal syntactic models, potentially including X-bar theory, Bare Phrase Structure and Minimalist approaches. The question becomes precise only once it is settled what is being compared, and by which observations. These comparisons are easily conflated:</p>
 
@@ -331,7 +331,7 @@
         <p><span class="rh">Observation 4.1</span> <i>(checked in Lean)</i><span class="rh">.</span> In the Minimalist fragment, the constructor that represents MERGE records the order of its arguments: <code>set a b ≠ set b a</code> for two distinct roots, and the MERGE rule produces both orders from the same workspace. The definition being modelled, <span class="m nowrap">MERGE(<var>P</var>, <var>Q</var>) = {<var>P</var>, <var>Q</var>}</span>, describes an unordered set; the representation does not yet match it.</p>
       </div>
       <div class="env checked">
-        <p><span class="rh">Observation 4.2</span> <i>(checked in Lean)</i><span class="rh">.</span> For the Swahili sentence <span class="obj">mtoto atalala</span> ‘the child will sleep’, there are two distinct objects <span class="m nowrap"><var>r</var><sub>1</sub> ≠ <var>r</var><sub>2</sub></span> that differ only in the order of the daughters of nP. Both are fully labeled, both satisfy the fragment’s conditions at the conceptual–intentional interface, both externalize as <span class="obj">mtoto atalala</span>, and both are reached by complete derivations. Uniqueness of the convergent object therefore fails under raw equality of objects. Uniqueness up to the order of MERGE is a different claim, and it is unproved.</p>
+        <p><span class="rh">Observation 4.2</span> <i>(checked in Lean)</i><span class="rh">.</span> For the Swahili sentence <span class="obj">mtoto atalala</span> ‘the child will sleep’, there are two distinct objects <span class="m nowrap"><var>r</var><sub>1</sub> ≠ <var>r</var><sub>2</sub></span> that differ only in the order of the daughters of nP. Both are fully labeled and satisfy the fragment’s conditions at the conceptual-intentional interface. Both externalize as <span class="obj">mtoto atalala</span>, and each is reached by a complete derivation. Uniqueness of the convergent object therefore fails under raw equality of objects. Uniqueness up to the order of MERGE is a different claim, and it is unproved.</p>
       </div>
 
       <figure aria-labelledby="f5-cap">
@@ -434,7 +434,7 @@
       <p class="lead">Lean&nbsp;4 is a proof assistant: definitions are written in a typed language, and a statement counts as established only when Lean accepts a proof of it. The project uses Lean to state grammatical definitions exactly and to check claims about small grammars.</p>
 
       <h3>Grammars as data</h3>
-      <p>The Bare Grammar library follows Keenan and Stabler’s format. An expression pairs a string with a category; a grammar is a lexicon and a table of rules; a derivation is an inductively defined object; and an expression belongs to the language exactly when a derivation of it exists.</p>
+      <p>The Bare Grammar library follows Keenan and Stabler’s format. An expression pairs a string with a category, and a grammar is a lexicon with a table of rules. Derivations are defined inductively, and an expression belongs to the language exactly when a derivation of it exists.</p>
 <pre class="lean" tabindex="0" aria-label="Lean code: Bare Grammar definitions, abridged"><code><span class="kw">abbrev</span> Expr (Cat : Type) := List String × Cat      <span class="cm">-- a string paired with a category</span>
 
 <span class="kw">structure</span> BareGrammar <span class="kw">where</span>
@@ -454,7 +454,7 @@
       <p class="src">Abridged from <a href="https://github.com/scpsyche123/syntax-game-v2-demo/blob/main/BareSyntax/Basic.lean"><code>BareSyntax/Basic.lean</code></a>; implicit arguments are omitted. The ellipses stand for further fields and constructors, including a second form of rule whose domain is a decidable condition rather than a list of categories, needed when a category is itself a structured object such as a workspace.</p>
       <p>Grammars from three periods of generative syntax are instances of this one definition: linear grammars; the X-bar schema with Government-and-Binding conditions (c-selection, Case, the EPP, θ-roles and Move&nbsp;α), produced from parameters, with Turkish setting the head parameter to final; and workspace-based MERGE with a labeling algorithm and interface conditions, for Swahili.</p>
 
-      <h3>Endocentricity: a theorem, or a type</h3>
+      <h3>Endocentricity as a theorem and as a type</h3>
       <p>In X-bar theory a phrase has the category of its head. An earlier version of the X-bar formalization stated this as a property of trees and proved it. The current version builds it into the representation: trees are indexed by bar level and category, and the type of the function that returns a tree’s head states the property.</p>
 <pre class="lean" tabindex="0" aria-label="Lean code: X-bar trees and the head function"><code><span class="kw">inductive</span> XTree : Bar → Pos → Type <span class="kw">where</span>
   | word     : (e : LexicalEntry c) → Lexicon c e.word → XTree .zero c
@@ -467,9 +467,9 @@
 
 <span class="kw">def</span> Head : XTree b c → LexicalEntry c</code></pre>
       <p class="src">From <a href="https://github.com/scpsyche123/syntax-game/blob/main/XSyntax/Tree.lean"><code>XSyntax/Tree.lean</code></a> and <a href="https://github.com/scpsyche123/syntax-game/blob/main/XSyntax/Operations.lean"><code>XSyntax/Operations.lean</code></a> in the earlier X-bar repository.</p>
-      <p><code>XTree b c</code> is the type of trees of bar level <var>b</var> and category <var>c</var>. A complement can be attached only with evidence <code>Selects c d</code> that a head of category <var>c</var> selects a phrase of category <var>d</var>, and a word can be placed only with evidence that the lexicon licenses it in category <var>c</var>. <code>Head</code> assigns to every tree of category <var>c</var> a lexical entry of the same category <var>c</var>; that Lean accepts this definition is the endocentricity property.</p>
+      <p><code>XTree b c</code> is the type of trees of bar level <var>b</var> and category <var>c</var>. A complement can be attached only with evidence <code>Selects c d</code> that a head of category <var>c</var> selects a phrase of category <var>d</var>, and a word can be placed only with evidence that the lexicon licenses it in category <var>c</var>. <code>Head</code> assigns to every tree of category <var>c</var> a lexical entry of the same category <var>c</var>. Since Lean accepts this definition, its type is itself the statement of endocentricity.</p>
       <div class="env">
-        <p><span class="rh">Remark 5.1.</span> The two versions differ in kind. In the first, endocentricity is a theorem about a general representation, one that could in principle have failed for some tree. In the second, an exocentric tree cannot be written down at all: violations are unrepresentable rather than refuted. This suits a teaching tool, but it matters for comparison, since a principle built into the types can no longer be varied, or its consequences measured, within the same representation. Which principles should be types and which should be theorems is a methodological question for <a href="#expressive-power">§4</a>.</p>
+        <p><span class="rh">Remark 5.1.</span> The two versions differ in kind. In the first, endocentricity is a theorem about a general representation, one that could in principle have failed for some tree. In the second, an exocentric tree cannot be written down at all: violations are unrepresentable rather than refuted. This is convenient in a teaching tool. For comparison it has a cost: a principle built into the types can no longer be varied, or its consequences measured, within the same representation. Which principles should be types and which should be theorems is a methodological question for <a href="#expressive-power">§4</a>.</p>
       </div>
 
       <figure aria-labelledby="t1-cap">
@@ -493,7 +493,7 @@
         <figcaption id="t1-cap"><b>Table 1.</b> Structural assumptions in the project’s two Lean representations of phrase structure, as currently implemented.</figcaption>
       </figure>
 
-      <h3>What has been checked</h3>
+      <h3>Checked so far</h3>
       <ul>
         <li>X-bar trees: well-formedness by construction, selection and lexical licensing as required evidence, and endocentricity by the type of <code>Head</code> (earlier repository).</li>
         <li>Proofs that particular strings are not generated by a small linear grammar, for example <span class="obj">a very good day</span> in a grammar in which <span class="obj">very</span> can never be the input to a rule (earlier repository).</li>
@@ -521,7 +521,7 @@
   <div class="wrap">
     <p class="sec-no" aria-hidden="true">§6</p>
     <div class="sec-body">
-      <h2 id="h-game"><span class="vh">§6 </span>Interactive Syntax Game</h2>
+      <h2 id="h-game"><span class="vh">§6 </span>Interactive syntax game</h2>
       <p>The syntax game is a pedagogical application of the formalization. In five short levels the player builds derivations by choosing rules and their inputs; strings, trees and workspaces are computed by the rules and never typed by the player. Each level’s grammar is a Bare Grammar defined in Lean.</p>
       <ol class="levels">
         <li><span class="lvname">A linear grammar.</span> <span class="obj">a very good day</span> as an expression of category D, in three steps.</li>
@@ -541,7 +541,7 @@
   <div class="wrap">
     <p class="sec-no" aria-hidden="true">§7</p>
     <div class="sec-body">
-      <h2 id="h-src"><span class="vh">§7 </span>Sources and Project Materials</h2>
+      <h2 id="h-src"><span class="vh">§7 </span>Sources and project materials</h2>
       <dl class="sources">
         <div>
           <dt>Lean 4 source code</dt>
@@ -561,7 +561,7 @@
         <div>
           <dt>Interactive demo</dt>
           <dd><a href="game/">The syntax game</a>
-            <small>Five levels in the browser; nothing to install.</small></dd>
+            <small>Five levels; runs in the browser without installation.</small></dd>
         </div>
         <div>
           <dt>Main repository</dt>

@@ -27,8 +27,8 @@ The site is published from `main/docs`:
 |---|---|---|
 | `docs/index.html` (+ `docs/assets/`) | `/syntax-game-v2-demo/` | research homepage (static HTML/CSS, self-hosted fonts) |
 | `docs/game/index.html` | `/syntax-game-v2-demo/game/` | the playable game page (self-contained) |
-| `docs/page/` | — | scripts that check the game's engine against Lean |
-| `docs/research/` | — | research notes |
+| `docs/page/` | not a page | scripts that check the game's engine against Lean |
+| `docs/research/` | not a page | research notes (Markdown) |
 
 Old links to game levels (`/syntax-game-v2-demo/#mp` etc.) are forwarded to `game/`.
 
