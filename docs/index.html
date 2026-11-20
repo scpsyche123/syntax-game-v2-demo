@@ -86,6 +86,9 @@ svg .bracket{stroke:var(--ink);stroke-width:1.6;fill:none}
 .item:hover{background:var(--hover)}
 .item .rn{font:600 13px "IBM Plex Sans",sans-serif;color:var(--blue)}
 .item small{font:12.5px "IBM Plex Sans",sans-serif;color:var(--muted)}
+.item.lexeme{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.item .lex-main{display:inline-flex;gap:6px;align-items:baseline}
+.item .lex-gloss{font:12px/1.3 "IBM Plex Sans",sans-serif;color:var(--muted)}
 .item .c{color:var(--blue)}
 .item .n{font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
 .item[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
@@ -434,7 +437,7 @@ const LEVELS = [
    done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
      'Suppose instead we keep only Rule 3, D N → D, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
  { id: 'xbar-gb', kind: 'free', g: 'xbarTR', name: 'X-bar theory with GB', era: 'Principles and parameters',
-   lexicon: [['kedi', 'N⁰'], ['köpek', 'N⁰'], ['gör', 'V⁰'], ['-Iyor', 'T⁰'], ['', 'C⁰']], goal: { str: ['kedi', 'köpeği', 'görüyor'], cat: 'CP' },
+   lexicon: [['kedi', 'N⁰', 'cat'], ['köpek', 'N⁰', 'dog'], ['gör', 'V⁰', 'see'], ['-Iyor', 'T⁰', 'PROG'], ['', 'C⁰', 'silent complementizer']], goal: { str: ['kedi', 'köpeği', 'görüyor'], cat: 'CP' },
    arrow: { from: 'T⁰', to: 'V⁰', label: 'suffix lowering' },
    lead: '<h2>X-bar theory with GB: Turkish</h2><p class="gloss"><i>Kedi köpeği görüyor.</i><br>kedi köpeğ-i gör-üyor<br>cat dog-ACC see-PROG<br>‘The cat sees the dog.’</p><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. They are a function of parameters: English and Turkish are two settings of it. Turkish is head-final, so Rule 4 is YP X⁰ → X′: the complement comes before its head (English: X⁰ YP → X′).</p><p>GB enters as conditions on the rules’ domains: c-selection (C selects TP, T selects VP, V selects NP; Turkish has no articles, so the nominal arguments here are NPs); Case (V assigns accusative to its complement, spelled -I: köpek → köpeği; finite T assigns nominative to its specifier); EPP (T needs a specifier); θ (V assigns an external θ-role, so VP needs its subject). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
    solution: [[0, ['kedi|N⁰']], [1, ['kedi|N′']], [0, ['köpek|N⁰']], [1, ['köpek|N′']],
@@ -443,6 +446,7 @@ const LEVELS = [
    done: ['Ten rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ. In a head-final language this movement does not change the word order — the subject comes first either way — but the grammar still requires it.',
      'The arrow shows suffix lowering: the suffix *-Iyor* in T⁰ joins the verb in V⁰ (gör + -Iyor = görüyor, by vowel harmony). This is not the only analysis. In a head-final language V and T are adjacent, so lowering the suffix and raising the verb to T give the same string. For English, Chomsky (1957) has Affix Hopping, a transformation; Emonds (1978) and Pollock (1989) have the finite verb raise to T in French; in Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T; Bobaljik (1995) joins tense and verb under adjacency at PF; in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here joining is a property of one rule: a different analysis changes that rule, not the language.'] },
  { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['mtoto', 'atalala'],
+   glosses: { m: 'CL1 (noun class 1)', toto: 'child', ata: '1SM-FUT', v: 'silent light verb', lala: 'sleep' },
    lead: '<h2>The Minimalist Program: Swahili</h2><p class="gloss"><i>Mtoto atalala.</i><br>m-toto a-ta-lala<br>1-child 1SM-FUT-sleep<br>‘The child will sleep.’</p><p>The class-1 prefix m- is n: noun class is a φ-feature on n. T is a-ta-: the future -ta- with the class-1 subject marker a- (Agree is not modeled, so T’s φ counts as valued). v is silent.</p><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. MERGE is free, but the finished object must meet conditions at the interface: selection (T takes vP, n and v take a root), the θ-criterion (the subject nP first merges with vP), and chains (only the subject moves, once, to the specifier of T). Draw the items into WS, click two objects, then MERGE. Word order, which copy is pronounced, and the joining of prefixes are checked automatically.</p>',
    solution: ['select m toto ata v lala', 'merge m toto', 'merge v lala', 'merge nP vP', 'merge ata {nP, vP}', 'merge nP TP'],
    done: 'The subject has to start in vP (θ-criterion), but there {nP, vP} has no label: n carries φ (noun class 1), v does not. Internal MERGE to the specifier of T solves it: the lower nP is a copy, invisible to labeling, so that node is labeled v, and the new root {nP, TP} is labeled ⟨φ,φ⟩ — the class-1 φ of m- and of the subject marker a-. Only the higher copy is pronounced, and the prefixes join their words: mtoto atalala.' }
@@ -640,8 +644,8 @@ function drawPic() {
     };
     const roots = rootsOf().map((d, i) => build(d, 'T' + i));
     h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
-      lv.lexicon.map(([w, c]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
-        return `<button class="item" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}>${esc(w || '∅')} <span class="c">${esc(c)}</span></button>`; }).join('') +
+      lv.lexicon.map(([w, c, gloss]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
+        return `<button class="item lexeme" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}><span class="lex-main">${esc(w || '∅')} <span class="c">${esc(c)}</span></span><span class="lex-gloss">${esc(gloss)}</span></button>`; }).join('') +
       `</div>` + rulesRow(lv, dis) +
       (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees',
         arrow: st.closed && lv.arrow ? lv.arrow : null })}</div>`
@@ -651,7 +655,7 @@ function drawPic() {
     const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
     h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
       '<div class="tools"><span class="lab">Select</span>' +
-      ['m', 'toto', 'ata', 'v', 'lala'].map(x => `<button class="item" type="button" data-li="${x}"${dis}>${esc(E.liText(x))}</button>`).join('') +
+      ['m', 'toto', 'ata', 'v', 'lala'].map(x => `<button class="item lexeme" type="button" data-li="${x}"${dis}><span class="lex-main">${esc(E.liText(x))}</span><span class="lex-gloss">${esc(lv.glosses[x])}</span></button>`).join('') +
       `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS) <small>replaces P and Q by {P, Q}</small></button></div>` +
       (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
   }
