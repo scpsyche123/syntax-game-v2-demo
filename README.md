@@ -4,6 +4,8 @@
 
 The five-level interactive demo is published from `main/docs` with GitHub Pages. It is a browser-based JavaScript simulation of the Lean 4 implementation; the full game is still in development.
 
+**Research beyond the game:** The first [Lean-checked expressive-power investigation](docs/research/expressive-power-2026-11-21.md) and its [proof file](playground/Expressivity.lean) examine the current model's representation of unordered MERGE, unrestricted rule arguments, and symmetry of linearization. This is exploratory work, not a claimed equivalence or separation of full linguistic theories.
+
 Playable page: `docs/index.html` (self-contained). It runs a JavaScript transcription of
 `BareSyntax/`, checked against Lean's output case by case; see `docs/page/README.md`.
 
