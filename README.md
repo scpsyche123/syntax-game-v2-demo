@@ -25,7 +25,7 @@ The site is published from `main/docs`:
 
 | Path | URL | What it is |
 |---|---|---|
-| `docs/index.html` (+ `docs/assets/`) | `/syntax-game-v2-demo/` | research homepage (static HTML/CSS, self-hosted fonts) |
+| `docs/index.html` (+ `docs/assets/fonts/`) | `/syntax-game-v2-demo/` | research homepage (one HTML file, self-hosted fonts) |
 | `docs/game/index.html` | `/syntax-game-v2-demo/game/` | the playable game page (self-contained) |
 | `docs/page/` | not a page | scripts that check the game's engine against Lean |
 | `docs/research/` | not a page | research notes (Markdown) |
