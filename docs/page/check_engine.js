@@ -4,7 +4,7 @@
 // derived expressions keep everything Lean's category carries (a waiting phrase
 // is displayed only as VP/DP, but its string matters).
 const fs = require('fs'), path = require('path'), vm = require('vm');
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'game', 'index.html'), 'utf8');
 const src = /<script id="engine">([\s\S]*?)<\/script>/.exec(html)[1];
 const sandbox = { module: { exports: {} } };
 vm.runInNewContext(src, sandbox);

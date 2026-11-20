@@ -1,6 +1,6 @@
 # Demo page
 
-`../index.html` is a self-contained, playable page with five levels: a linear grammar,
+`../game/index.html` is a self-contained, playable page with five levels: a linear grammar,
 a string it cannot derive (*a very day*), an overgenerating grammar (*a a the this dog*),
 X-bar theory with GB, and the workspace-era Minimalist Program.
 

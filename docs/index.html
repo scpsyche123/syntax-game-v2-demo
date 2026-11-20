@@ -3,777 +3,594 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bare Grammar Demo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-<style>
-/* VOICE everyday-scholarly: a worked example for linguists, exact and calm
-   IDEA a syntax handout you can play: the sentence and its trees, with the rules beside them
-   PICTURE the derivation (or the workspace) drawn as trees that grow as you apply rules; selected and new nodes marked
-   COLOUR white paper, ink, one deep Lean-blue for structure and the header band, vermilion for selection, change and failure
-   TYPE Source Serif 4 for prose and titles, IBM Plex Sans for controls, IBM Plex Mono for rules and the goal
-   LAYOUT blue band with title, a note that this is a demo, and five numbered round level buttons; left: one box with trees and the rules under them, goal strip with the automatic check; right: level text and messages */
-:root{color-scheme:light dark;
---bg:light-dark(#ffffff,#14161b);--ink:light-dark(#1a1c22,#e6e7eb);--muted:light-dark(#5b6070,#9ba1ae);
---blue:light-dark(#1d3f8f,#93b2ff);--band:#1d3f8f;--panel:light-dark(#f2f4f9,#1c1f26);--line:light-dark(#d8dce6,#2e323c);
---acc:light-dark(#cf3f22,#ff7b5e);--accbg:light-dark(#fdeee9,#3a211b);--okbg:light-dark(#eaf1ff,#1c2a45);--selbg:light-dark(#fff3d6,#3b3220);--sel:light-dark(#b07600,#f0b84a);--hover:light-dark(#e2e7f2,#272b34);
---green:light-dark(#1b7a3c,#7ed69a);--greenbg:light-dark(#e5f5eb,#16301f);--gray:light-dark(#686d7a,#9aa0ad);--graybg:light-dark(#eef0f3,#22252c)}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-*{box-sizing:border-box;min-width:0}
-html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:17px/1.6 "Source Serif 4",Georgia,serif;overflow-x:clip}
-a{color:var(--blue)}
-.band{padding-block:clamp(22px,3.2vw,48px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
-.wrap{max-width:1240px;margin:0 auto}
-header{background:var(--band);color:#fff}
-header h1{font-weight:600;font-size:clamp(32px,4.6vw,50px);line-height:1.05;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
-header p{max-width:66ch;margin:0 0 12px;color:#dfe6f7}
-header p.note{margin-bottom:20px;font-style:italic;color:#c9d4f0}
-.tabs{display:flex;flex-wrap:wrap;gap:12px}
-.tab{position:relative;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);background:transparent;color:#fff;font:600 19px/1 "IBM Plex Sans",system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;padding:0}
-.tab:hover{border-color:#fff}
-.tab[aria-selected=true]{background:#fff;color:#14234d;border-color:#fff}
-.tab .tick{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#2f9e5a;color:#fff;font:700 12px/20px "IBM Plex Sans",sans-serif;text-align:center;box-shadow:0 0 0 2px var(--band)}
-.tab .tick:empty{display:none}
-.tab.gray{color:#aab5d0;border-style:dashed;border-color:rgba(255,255,255,.4)}
-.tab.gray[aria-selected=true]{background:#d7dbe4;border-color:#d7dbe4;border-style:solid;color:#3d4250}
-button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-/* the stage: board, goal, controls and messages on the left; level text on the right */
-.stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);grid-template-areas:"play lead";column-gap:28px;align-items:start}
-.play{grid-area:play}.lead{grid-area:lead}
-@media(max-width:1000px){.stage{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "play"}}
-.lead{max-width:72ch;margin:0 0 14px}
-.lead h2{font-size:clamp(26px,3vw,34px);line-height:1.1;margin:0 0 8px;font-weight:600}
-.lead p{margin:0 0 8px}
-.lead p.gloss{font-size:15.5px;line-height:1.45;padding-left:12px;border-left:2px solid var(--line);margin-bottom:12px}
-.board{border:1px solid var(--line);border-radius:8px 8px 0 0}
-.goal{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:10px 14px;font:15px/1.45 "IBM Plex Mono",monospace;overflow-wrap:anywhere}
-.goal b{font:600 14px "IBM Plex Sans",sans-serif;color:var(--muted)}
-.goal .st{font:500 14px "IBM Plex Sans",sans-serif;color:var(--muted);text-align:right}
-@media(max-width:560px){.goal{grid-template-columns:auto minmax(0,1fr)}.goal .st{grid-column:1/-1}}
-.goal.done{background:var(--greenbg);color:var(--green);border-color:var(--green);border-top:1px solid var(--green);margin-top:-1px}
-.goal.done b,.goal.done .st{color:var(--green);font-weight:600}
-.goal.gray{background:var(--graybg);color:var(--gray)}
-.goal.gray b,.goal.gray .st{color:var(--gray)}
-
-.cap{font:500 14px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);padding:10px 12px 0}
-.treebox{overflow-x:auto;padding:4px 8px 10px}
-.treebox svg{display:block;margin:0 auto}
-svg text{font-family:"IBM Plex Sans",sans-serif;font-size:14px;fill:var(--ink)}
-svg .cat{font-weight:600;fill:var(--blue)}
-svg .word{font-family:"Source Serif 4",serif;font-style:italic;font-size:15px}
-svg .str{font-size:12.5px;fill:var(--acc)}
-svg .lower{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-dasharray:5 3}
-svg .ahead{fill:var(--blue)}
-svg .lowlab{fill:var(--blue);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
-svg .move{stroke:var(--acc);stroke-width:1.4;fill:none;stroke-dasharray:6 3}
-svg .mhead{fill:var(--acc)}
-svg .movelab{fill:var(--acc);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
-svg .edge{stroke:var(--muted);stroke-width:1.2;fill:none}
-svg .q{fill:var(--acc);font-weight:600}
-svg .copy{fill:var(--muted)}
-svg .hit{fill:transparent;stroke:transparent}
-svg [data-k]{cursor:pointer}
-svg [data-k]:hover .hit{fill:var(--panel);stroke:var(--line)}
-svg .sel .hit,svg .sel:hover .hit{fill:var(--selbg);stroke:var(--sel);stroke-width:2}
-svg .badge{font:600 11px "IBM Plex Sans",sans-serif;fill:var(--sel)}
-svg .bracket{stroke:var(--ink);stroke-width:1.6;fill:none}
-.empty{padding:10px 12px 16px;color:var(--muted);font-style:italic}
-
-/* clickable items inside the board: rules, lexicon, Select, MERGE */
-.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px 4px}
-.tools .lab{font:500 13px "IBM Plex Sans",sans-serif;color:var(--muted);margin-right:2px}
-.tools .brk{flex-basis:100%;height:0}
-.item{display:inline-flex;align-items:baseline;gap:6px;min-height:36px;padding:7px 10px;border:1px solid transparent;border-radius:5px;background:var(--panel);color:var(--ink);font:14px/1.3 "IBM Plex Mono",monospace;cursor:pointer;text-align:left}
-.item:hover{background:var(--hover)}
-.item .rn{font:600 13px "IBM Plex Sans",sans-serif;color:var(--blue)}
-.item small{font:12.5px "IBM Plex Sans",sans-serif;color:var(--muted)}
-.item.lexeme{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
-.item .lex-main{display:inline-flex;gap:6px;align-items:baseline}
-.item .lex-gloss{font:12px/1.3 "IBM Plex Sans",sans-serif;color:var(--muted)}
-.item .c{color:var(--blue)}
-.item .n{font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
-.item[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
-.item:disabled{opacity:.5;cursor:default}
-.item:disabled:hover{background:var(--panel)}
-
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
-.btn{font:500 15px/1 "IBM Plex Sans",sans-serif;min-height:44px;padding:0 14px;border-radius:6px;border:1px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer}
-.btn.solid{background:var(--blue);color:var(--bg)}
-.btn:disabled{opacity:.4;cursor:default}
-.btn[hidden]{display:none}
-.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:14px}
-.msg{font:13.5px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:9px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
-.msg.i{background:var(--okbg);border-left:3px solid var(--blue)}
-.msg.e{background:var(--accbg);border-left:3px solid var(--acc)}
-.msg.p{font-family:"Source Serif 4",serif;font-size:16px;white-space:normal;padding-left:0}
-
-footer.band{padding-block:18px 26px}
-footer{border-top:1px solid var(--line);font:13.5px/1.55 "IBM Plex Sans",sans-serif;color:var(--muted)}
-footer .cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;opacity:.85}
-footer h3{font:600 13.5px/1.3 "IBM Plex Sans",sans-serif;margin:0 0 6px;color:var(--muted)}
-footer p{margin:0 0 6px}
-footer a{color:inherit}
-code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
-@media(max-width:900px){footer .cols{grid-template-columns:minmax(0,1fr)}}
-</style>
+<meta name="color-scheme" content="light">
+<title>Formalization of Syntactic Theory</title>
+<meta name="description" content="A research project in theoretical linguistics on grammatical structure, automorphisms and invariance, and the expressive power of syntactic models, with formalizations in Lean 4.">
+<link rel="preload" href="assets/fonts/stix-two-text.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%224%22 fill=%22%232f5f5b%22/%3E%3Ctext x=%2216%22 y=%2224%22 font-size=%2222%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22serif%22%3E%C2%A7%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/site.css">
+<script>
+  // Links made before the game moved to game/ (e.g. …/syntax-game-v2-demo/#mp) still reach the level.
+  (function () {
+    var h = location.hash.slice(1);
+    if (['linear', 'not-in-language', 'overgeneration', 'xbar-gb', 'mp'].indexOf(h) > -1) {
+      location.replace('game/#' + h);
+    }
+  })();
+</script>
 </head>
 <body>
-<header class="band"><div class="wrap">
-<h1>One language, many grammars</h1>
-<p>Bare Grammar (Keenan &amp; Stabler 2003) treats a grammar as data: categories, a lexicon and rules. In this Lean 4 implementation the same language states a linear grammar (English), X-bar theory with GB modules (Turkish), and the workspace-era Minimalist Program (Swahili). Each level below is playable: pick inputs, pick a rule, and the grammar accepts or rejects the step.</p>
-<p class="note">This is a five-level demo that shows the basic capabilities of the system. The full game has not been built yet. If you would rather not play every step yourself, click Solution to see the result.</p>
-<div class="tabs" role="tablist" id="tabs"></div>
-</div></header>
+<a class="skip" href="#main">Skip to content</a>
 
-<main class="band"><div class="wrap stage">
-<div class="play">
-  <div class="board" id="pic"></div>
-  <div class="goal" id="goal" aria-live="polite"></div>
-  <div class="row">
-    <button class="btn solid" id="nextLevel" type="button" hidden>Next level</button>
-    <button class="btn" id="undo" type="button">Undo</button>
-    <button class="btn" id="reset" type="button">Start over</button>
-    <button class="btn" id="solve" type="button">Solution</button>
+<header class="site-head">
+  <div class="wrap">
+    <a class="site-name" href="./">Formalization of Syntactic Theory</a>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#bare-grammar">Research directions</a></li>
+        <li><a href="#lean">Lean 4</a></li>
+        <li><a href="#game">Syntax game</a></li>
+        <li><a href="#sources">Sources</a></li>
+      </ul>
+    </nav>
   </div>
-  <div class="msgs" id="msgs" aria-live="polite"></div>
-</div>
-<div class="lead" id="lead"></div>
-</div></main>
+</header>
 
-<footer class="band"><div class="wrap cols">
-<div>
-<h3>What is running</h3>
-<p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (the linear levels), and with a domain given by a pattern and a decidable condition (the X-bar schema, where X and Y are variables and the head direction is a parameter, and MERGE, where a category is a whole workspace).</p>
-<p>Your browser cannot run Lean, so this page runs a JavaScript simulation of it.</p>
-</div>
-<div>
-<h3>Sources</h3>
-<p>Bobaljik, J. D. (1995). <i>Morphosyntax: The Syntax of Verbal Inflection.</i> PhD thesis, MIT.</p>
-<p>Carstens, V. (2005). Agree and EPP in Bantu. <i>Natural Language &amp; Linguistic Theory</i> 23.</p>
-<p>Chomsky, N. (1957). <i>Syntactic Structures.</i> Mouton.</p>
-<p>Chomsky, N. (1993). A minimalist program for linguistic theory. In K. Hale &amp; S. J. Keyser (eds.), <i>The View from Building 20.</i> MIT Press.</p>
-<p>Chomsky, N. (2013). Problems of projection. <i>Lingua</i> 130.</p>
-<p>Chomsky, N. (2020). <i>The UCLA Lectures.</i> MERGE as quoted in V. J. Pan, <i>Lecture 10: The Minimalist Program</i>, §9.</p>
-<p>Embick, D. &amp; Noyer, R. (2001). Movement operations after syntax. <i>Linguistic Inquiry</i> 32.</p>
-<p>Emonds, J. (1978). The verbal complex V′–V in French. <i>Linguistic Inquiry</i> 9.</p>
-<p>Halle, M. &amp; Marantz, A. (1993). Distributed Morphology and the pieces of inflection. In <i>The View from Building 20.</i></p>
-<p>Keenan, E. &amp; Stabler, E. (2003). <i>Bare Grammar: Lectures on Linguistic Invariants.</i> CSLI.</p>
-<p>Koopman, H. &amp; Sportiche, D. (1991). The position of subjects. <i>Lingua</i> 85.</p>
-<p>Kramer, R. (2015). <i>The Morphosyntax of Gender.</i> Oxford University Press.</p>
-<p>Pollock, J.-Y. (1989). Verb movement, Universal Grammar, and the structure of IP. <i>Linguistic Inquiry</i> 20.</p>
-</div>
-</div></footer>
+<main id="main">
 
-<script id="engine">
-/* A transcription of BareSyntax (Linear.lean, XBarGB.lean, MP.lean, Tactics.lean messages). */
-const Engine = (() => {
-  const R = (name, posCat, result, build = 'flat') => ({ name, posCat, result, build });
-  const lin = [R('Adv A → A', ['Adv', 'A'], 'A'), R('A N → N', ['A', 'N'], 'N'), R('D N → D', ['D', 'N'], 'D')];
-  const grammars = {
-    'linear₁': { rules: lin },
-    'linear₂': { rules: [...lin, R('D N → N', ['D', 'N'], 'N')] }
-  };
-  /* X-bar schema (variables X, Y over head categories) plus Move α, as a function of parameters
-     (XBarGB.lean: GBParams, xbarSchema). A category may carry a waiting phrase: VP/NP. */
-  const has2 = (xs, x, y) => xs.some(([a, b]) => a === x && b === y);
-  const P = e => { const m = /^([A-Z])(⁰|′|P)/.exec(e.cat); return { x: m[1], b: m[2], m: e.mover || null }; };
-  const out = (str, x, b, mover) => mover ? { str, cat: x + b + '/' + mover.pos + 'P', mover } : { str, cat: x + b };
-  const same = (a, b) => a.length === b.length && a.every((w, i) => w === b[i]);
-  const S = (name, apply, arity) => ({ name, schema: true, apply, arity });
-  function xbarSchema(p) {
-    const caseOK = (as, x, y) => y !== p.nominal || as.includes(x);
-    const headOrder = (h, c) => p.headFinal ? [...c, ...h] : [...h, ...c];
-    const joinTV = (sT, sVP) => {
-      if (p.headFinal) return (sT.length === 1 && sVP.length) ? [...sVP.slice(0, -1), p.attach(sVP[sVP.length - 1], sT[0])] : [...sVP, ...sT];
-      return (sT.length === 1 && sVP.length) ? [p.attach(sVP[0], sT[0]), ...sVP.slice(1)] : [...sT, ...sVP];
-    };
-    const compApply = (h, c) => {
-      const x = P(h), y = P(c);
-      if (x.b !== '⁰' || x.m || y.b !== 'P' || !has2(p.cSel, x.x, y.x) || !caseOK(p.caseC, x.x, y.x)) return null;
-      const cs = (x.x === 'V' && y.x === p.nominal) ? p.acc(c.str) : c.str;
-      return out(x.x === 'T' ? joinTV(h.str, cs) : headOrder(h.str, cs), x.x, '′', y.m);
-    };
-    return [
-      S('X⁰ → X′  [X takes no complement]', ins => {
-        if (ins.length !== 1) return null; const a = P(ins[0]);
-        return a.b === '⁰' && !p.cSel.some(([h]) => h === a.x) ? out(ins[0].str, a.x, '′', a.m) : null; }, 1),
-      S('X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]', ins => {
-        if (ins.length !== 1) return null; const a = P(ins[0]);
-        return a.b === '′' && !p.epp.includes(a.x) && !p.extTheta.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
-      S(`YP X′ → XP  [YP is the specifier of X; ${p.argText} that gets no Case there leaves a trace and waits to move]`, ins => {
-        if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
-        if (y.b !== 'P' || x.b !== '′' || y.m || x.m || !has2(p.specs, x.x, y.x)) return null;
-        return caseOK(p.caseS, x.x, y.x) ? out([...ins[0].str, ...ins[1].str], x.x, 'P', null)
-          : out(ins[1].str, x.x, 'P', { str: ins[0].str, pos: y.x }); }, 2),
-      S((p.headFinal ? 'YP X⁰ → X′' : 'X⁰ YP → X′') + `  [X c-selects Y; ${p.argText} needs Case from X; T's suffix joins V]`, ins => {
-        if (ins.length !== 2) return null;
-        return p.headFinal ? compApply(ins[1], ins[0]) : compApply(ins[0], ins[1]); }, 2),
-      S('X′ YP → X′  [YP is an adjunct of X]', ins => {
-        if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
-        if (x.b !== '′' || y.b !== 'P' || x.m || y.m || !has2(p.adjuncts, x.x, y.x)) return null;
-        return out([...ins[0].str, ...ins[1].str], x.x, '′', null); }, 2),
-      S(`Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where ${p.argText} needs Case from X]`, ins => {
-        if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
-        if (y.b !== 'P' || x.b !== '′' || y.m || !x.m) return null;
-        if (!same(x.m.str, ins[0].str) || x.m.pos !== y.x || !has2(p.landing, x.x, y.x) || !caseOK(p.caseS, x.x, y.x)) return null;
-        return out([...ins[0].str, ...ins[1].str], x.x, 'P', null); }, 2)
-    ];
-  }
-  const accWordTR = w => ({ 'köpek': 'köpeği', 'kedi': 'kediyi' })[w] || w + 'i';
-  const turkish = { headFinal: true, nominal: 'N', argText: 'an NP', cSel: [['C', 'T'], ['T', 'V'], ['V', 'N']],
-    specs: [['V', 'N']], landing: [['T', 'N']], epp: ['T'], extTheta: ['V'], caseC: ['V'], caseS: ['T'], adjuncts: [],
-    attach: (v, s) => (v === 'gör' && s === '-Iyor') ? 'görüyor' : v + s,
-    acc: ws => ws.length ? [...ws.slice(0, -1), accWordTR(ws[ws.length - 1])] : [] };
-  grammars.xbarTR = { rules: xbarSchema(turkish) };
-  const attachAffix = (v, a) => (v === 'see' && a === '-s') ? 'sees' : v + 's';
-  const builds = {
-    flat: xs => xs.flat(),
-    lower: xs => (xs.length === 2 && xs[0].length === 1 && xs[1].length >= 1)
-      ? [attachAffix(xs[1][0], xs[0][0]), ...xs[1].slice(1)] : xs.flat()
-  };
-  const exprText = e => `⟨${e.str.length ? e.str.join(' ') : '∅'}, ${e.cat}⟩`;
-  const normRuleName = s => s.split('[')[0].replace(/′/g, "'").replace(/⁰/g, '0').replace(/→/g, '->')
-    .split(' ').filter(x => x !== '').join(' ');
-  function findRule(g, typed) {
-    const rs = grammars[g].rules, i = rs.findIndex(r => normRuleName(r.name) === normRuleName(typed));
-    if (i < 0) return { ok: false, msg: `${g} has no rule "${typed}". Its rules are:\n` + rs.map(r => '  ' + r.name).join('\n') };
-    return { ok: true, rule: rs[i], index: i };
-  }
-  const ruleMain = n => n.split('  [')[0];
-  const ruleCond = n => n.includes('[') ? n.split('[')[1].split(']')[0] : '';
-  function applyRule(rule, inputs) {
-    const cats = inputs.map(e => e.cat);
-    if (rule.schema) {
-      const out = rule.apply(inputs);
-      if (!out) return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the pattern on its left-hand side and by its condition: ${ruleCond(rule.name)}.` };
-      return { ok: true, out };
-    }
-    if (cats.length !== rule.posCat.length || cats.some((c, i) => c !== rule.posCat[i]))
-      return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the categories on its left-hand side.` };
-    return { ok: true, out: { str: builds[rule.build](inputs.map(e => e.str)), cat: rule.result } };
-  }
+<!-- ============================== Hero ============================== -->
+<section class="hero" aria-labelledby="title">
+  <div class="wrap">
+    <div>
+      <h1 id="title">Formalization of Syntactic Theory</h1>
+      <p class="subtitle">Investigating grammatical structure, invariance, and the expressive limits of syntactic models through formal methods.</p>
+      <!-- To add an author line, insert it here, e.g. <p class="lede">Name · Affiliation</p> -->
+      <p class="lede">An undergraduate research project in theoretical linguistics. It treats grammars as mathematical objects: it asks which of their properties are invariant under structure-preserving transformations, compares what different syntactic models can express, and checks small results in the proof assistant Lean&nbsp;4.</p>
+      <p class="actions">
+        <a class="btn-primary" href="#overview">Explore the research</a>
+        <a class="link-quiet" href="game/">Try the syntax game</a>
+      </p>
+    </div>
 
-  /* ---- MP ---- */
-  /* Swahili: m-toto a-ta-lala. n = m- (noun class 1, φ), T = a-ta- (valued φ), v silent. */
-  const LI = {
-    m: { feat: 'n', phi: true, pron: true, prefix: true, text: 'm-' }, toto: { feat: 'root', phi: false, pron: true },
-    ata: { feat: 'T', phi: true, pron: true, prefix: true, text: 'a-ta-' },
-    v: { feat: 'v', phi: false, pron: false }, lala: { feat: 'root', phi: false, pron: true }
-  };
-  const li = x => ({ li: x }), set = (a, b) => ({ set: [a, b] });
-  const key = s => s.li !== undefined ? s.li : '{' + key(s.set[0]) + ',' + key(s.set[1]) + '}';
-  const eq = (a, b) => key(a) === key(b);
-  const terms = s => s.li !== undefined ? [s] : [s, ...terms(s.set[0]), ...terms(s.set[1])];
-  const occDepths = (X, R, d) => (eq(R, X) ? [d] : []).concat(R.set ? [...occDepths(X, R.set[0], d + 1), ...occDepths(X, R.set[1], d + 1)] : []);
-  const lowerCopy = (R, X, d) => occDepths(X, R, 0).some(x => x < d);
-  const feat = s => LI[s.li].feat;
-  function labelAt(R, s, d) {
-    if (s.li !== undefined) return { lab: feat(s), head: s.li };
-    const [a, b] = s.set, la = labelAt(R, a, d + 1), lb = labelAt(R, b, d + 1);
-    const ca = lowerCopy(R, a, d + 1), cb = lowerCopy(R, b, d + 1);
-    if (ca && !cb) return lb;
-    if (cb && !ca) return la;
-    if (a.li !== undefined && b.li !== undefined) {
-      if (feat(a) === 'root' && feat(b) !== 'root') return { lab: feat(b), head: b.li };
-      if (feat(b) === 'root' && feat(a) !== 'root') return { lab: feat(a), head: a.li };
-      return null;
-    }
-    if (a.li !== undefined) return feat(a) !== 'root' ? { lab: feat(a), head: a.li } : null;
-    if (b.li !== undefined) return feat(b) !== 'root' ? { lab: feat(b), head: b.li } : null;
-    const phi = l => !!(l && l.head && LI[l.head].phi);
-    return phi(la) && phi(lb) ? { lab: '⟨φ,φ⟩', head: null } : null;
-  }
-  function allLabeled(R, s, d) {
-    if (s.li !== undefined) return true;
-    const [a, b] = s.set;
-    return labelAt(R, s, d) !== null && (lowerCopy(R, a, d + 1) || allLabeled(R, a, d + 1)) && (lowerCopy(R, b, d + 1) || allLabeled(R, b, d + 1));
-  }
-  const isHead = s => s.li !== undefined && feat(s) !== 'root';
-  const isArg = (R, s, d) => { const l = labelAt(R, s, d); return !!l && l.lab === 'n'; };
-  function linearize(R, s, d) {
-    if (s.li !== undefined) return LI[s.li].pron ? [[s.li, !!LI[s.li].prefix]] : [];
-    const [a, b] = s.set;
-    if (lowerCopy(R, a, d + 1)) return linearize(R, b, d + 1);
-    if (lowerCopy(R, b, d + 1)) return linearize(R, a, d + 1);
-    if (isHead(b) && !isHead(a)) return [...linearize(R, b, d + 1), ...linearize(R, a, d + 1)];
-    if (isArg(R, b, d + 1) && !isArg(R, a, d + 1)) return [...linearize(R, b, d + 1), ...linearize(R, a, d + 1)];
-    return [...linearize(R, a, d + 1), ...linearize(R, b, d + 1)];
-  }
-  /* a prefix joins the next item into one word */
-  function joinPrefixes(xs) {
-    if (!xs.length) return [];
-    const [[w, pre], ...rest] = xs, tail = joinPrefixes(rest);
-    return pre ? (tail.length ? [w + tail[0], ...tail.slice(1)] : [w]) : [w, ...tail];
-  }
-  const ext = (R, s, d) => joinPrefixes(linearize(R, s, d));
-  /* ---- interface conditions at CI (MP.lean: selectionOK, thetaOK, chainsOK) ---- */
-  function occs(s, d) {
-    if (s.li !== undefined) return [];
-    const [a, b] = s.set;
-    return [[a, b, d + 1, s], [b, a, d + 1, s], ...occs(a, d + 1), ...occs(b, d + 1)];
-  }
-  const labelIs = (R, s, d, f) => { const l = labelAt(R, s, d); return !!l && l.lab === f; };
-  const isRoot = s => s.li !== undefined && feat(s) === 'root';
-  const isSet = s => s.set !== undefined;
-  const selects = (R, h, X, d) => ({ T: () => isSet(X) && labelIs(R, X, d, 'v'),
-    n: () => isRoot(X), v: () => isRoot(X), root: () => true })[LI[h].feat]();
-  const selectionOK = R => occs(R, 0).every(([x, y, d]) => x.li === undefined ? true
-    : LI[x.li].feat === 'root' ? (y.li !== undefined && (feat(y) === 'n' || feat(y) === 'v')) : selects(R, x.li, y, d));
-  const minVP = s => isSet(s) && ((eq(s.set[0], li('v')) && isRoot(s.set[1])) || (eq(s.set[1], li('v')) && isRoot(s.set[0])));
-  const pick = (low, xs) => xs.reduce((m, o) => m === null ? o : ((low ? o[2] > m[2] : o[2] < m[2]) ? o : m), null);
-  const thetaOK = R => terms(R).every(X => {
-    const mine = occs(R, 0).filter(o => eq(o[0], X));
-    const first = !mine.length ? true : (isSet(X) && labelIs(R, X, mine[0][2], 'n')) ? (() => { const lo = pick(true, mine); return lo ? minVP(lo[1]) : false; })() : true;
-    return first && (!minVP(X) || mine.some(([, sis, d]) => isSet(sis) && labelIs(R, sis, d, 'n')));
-  });
-  const chainsOK = R => terms(R).every(X => {
-    const mine = occs(R, 0).filter(o => eq(o[0], X));
-    if (new Set(mine.map(o => key(o[3]))).size < 2) return true;
-    const hi = pick(false, mine);
-    return !hi || (isSet(X) && labelIs(R, X, hi[2], 'n') && mine.length === 2 && isSet(hi[1]) && labelIs(R, hi[1], hi[2], 'T'));
-  });
-  const ciMsgs = {
-    selection: 'Narrow syntax is done, but a selection requirement fails: T takes a vP, n and v take a root, and every root needs n or v.',
-    theta: 'Narrow syntax is done, but the θ-criterion fails: the nP must first merge with vP, where v assigns its θ-role.',
-    chain: 'Narrow syntax is done, but a chain is ill-formed: only the nP moves, once, from its θ-position to the specifier of T (Last Resort).' };
-  const ciFail = R => !selectionOK(R) ? 'selection' : !thetaOK(R) ? 'theta' : !chainsOK(R) ? 'chain' : null;
-  const labText = l => l === null ? '?' : (l.lab === 'root' ? '√' : l.lab);
-  const liText = x => LI[x].text || (LI[x].feat === 'root' ? '√' + x : x);
-  function render(R, s, d) {
-    if (s.li !== undefined) return liText(s.li);
-    if (lowerCopy(R, s, d)) return `copy(${labText(labelAt(R, s, d))})`;
-    return `${labText(labelAt(R, s, d))}:{${render(R, s.set[0], d + 1)}, ${render(R, s.set[1], d + 1)}}`;
-  }
-  const renderWS = ws => '[' + ws.map(R => render(R, R, 0)).join(', ') + ']';
-  const erase = (xs, x) => { const i = xs.findIndex(y => eq(y, x)); return i < 0 ? xs : [...xs.slice(0, i), ...xs.slice(i + 1)]; };
-  const has = (xs, x) => xs.some(y => eq(y, x));
-  function mergeWS(P, Q, ws) {
-    if (has(ws, P) && has(erase(ws, P), Q)) return [set(P, Q), ...erase(erase(ws, P), Q)];
-    if (has(ws, Q) && has(terms(Q), P) && !eq(P, Q)) return [set(P, Q), ...erase(ws, Q)];
-    if (has(ws, P) && has(terms(P), Q) && !eq(P, Q)) return [set(P, Q), ...erase(ws, P)];
-    return null;
-  }
-  const undefinedMsg = (p, q) => `MERGE(${p}, ${q}, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE).`;
-  function afterMerge(ws, target) {
-    if (ws.length !== 1) return { closed: false, msgs: [] };
-    const R = ws[0];
-    if (!allLabeled(R, R, 0)) return { closed: false, msgs: ['The workspace holds one object, but some node is still unlabeled (shown as ?).'] };
-    const ci = ciFail(R);
-    if (ci) return { closed: false, msgs: [ciMsgs[ci]] };
-    const out = ext(R, R, 0);
-    if (out.join(' ') !== target.join(' ')) return { closed: false, msgs: [`Narrow syntax is done, but externalization gives “${out.join(' ')}”, not “${target.join(' ')}”.`] };
-    return { closed: true, msgs: [`Converged. Externalization: “${out.join(' ')}”.`] };
-  }
-  /* references, as typed in Lean: `the`, `DP`, `{DP, vP}` */
-  function occurrences(ws) {
-    const out = [];
-    ws.forEach(R => { const go = (s, d) => { out.push([R, s, d]); if (s.set) { go(s.set[0], d + 1); go(s.set[1], d + 1); } }; go(R, 0); });
-    return out;
-  }
-  const dedup = xs => xs.reduce((acc, x) => has(acc, x) ? acc : [...acc, x], []);
-  function parseRef(t) {
-    t = t.trim();
-    if (t.startsWith('{')) { const inner = t.slice(1, -1); let depth = 0, cut = -1;
-      for (let i = 0; i < inner.length; i++) { if (inner[i] === '{') depth++; if (inner[i] === '}') depth--; if (inner[i] === ',' && depth === 0) { cut = i; break; } }
-      return { pair: [parseRef(inner.slice(0, cut)), parseRef(inner.slice(cut + 1))] }; }
-    return { name: t };
-  }
-  const refText = r => r.name !== undefined ? r.name : `{${refText(r.pair[0])}, ${refText(r.pair[1])}}`;
-  function resolve(ws, r) {
-    if (r.name !== undefined) {
-      const s = r.name;
-      if (LI[s]) return occurrences(ws).some(([, o]) => eq(o, li(s))) ? { ok: true, so: li(s) } : { ok: false, msg: `There is no \`${s}\` in the workspace.` };
-      const hits = dedup(occurrences(ws).filter(([R, o, d]) => o.set && (() => { const l = labelAt(R, o, d); return l && l.lab !== '⟨φ,φ⟩' && labText(l) + 'P' === s; })()).map(x => x[1]));
-      if (hits.length === 1) return { ok: true, so: hits[0] };
-      if (!hits.length) return { ok: false, msg: `There is no \`${s}\` in the workspace (no object labeled ${s.slice(0, -1)}).` };
-      return { ok: false, msg: `\`${s}\` is ambiguous: more than one object in the workspace has that label.` };
-    }
-    const A = resolve(ws, r.pair[0]); if (!A.ok) return A;
-    const B = resolve(ws, r.pair[1]); if (!B.ok) return B;
-    const hits = dedup(occurrences(ws).map(x => x[1]).filter(o => eq(o, set(A.so, B.so)) || eq(o, set(B.so, A.so))));
-    return hits.length === 1 ? { ok: true, so: hits[0] } : { ok: false, msg: `There is no object {${refText(r.pair[0])}, ${refText(r.pair[1])}} in the workspace.` };
-  }
-  /* run a Lean-style MP command on a workspace */
-  function mpCommand(ws, cmd, target) {
-    const m = /^select (.*)$/.exec(cmd);
-    if (m) return { ok: true, ws: [...ws, ...m[1].split(/\s+/).map(li)], msgs: [] };
-    const rest = cmd.replace(/^merge /, '');
-    let depth = 0, cut = -1;
-    for (let i = 0; i < rest.length; i++) { if (rest[i] === '{') depth++; if (rest[i] === '}') depth--; if (rest[i] === ' ' && depth === 0) { cut = i; break; } }
-    const rp = parseRef(rest.slice(0, cut)), rq = parseRef(rest.slice(cut + 1));
-    const P = resolve(ws, rp); if (!P.ok) return { ok: false, msg: P.msg };
-    const Q = resolve(ws, rq); if (!Q.ok) return { ok: false, msg: Q.msg };
-    const ws2 = mergeWS(P.so, Q.so, ws);
-    if (!ws2) return { ok: false, msg: undefinedMsg(refText(rp), refText(rq)) };
-    const a = afterMerge(ws2, target);
-    return { ok: true, ws: ws2, msgs: a.msgs, closed: a.closed };
-  }
-  return { grammars, findRule, applyRule, exprText, normRuleName, LI, li, set, eq, key, terms, labelAt, lowerCopy,
-    labText, liText, render, renderWS, mergeWS, undefinedMsg, afterMerge, resolve, parseRef, mpCommand, ext, allLabeled, isHead, isArg, ciFail };
-})();
-if (typeof module !== 'undefined') module.exports = Engine;
-</script>
+    <figure>
+      <svg viewBox="0 0 420 222" role="img" aria-labelledby="f1-title f1-desc">
+        <title id="f1-title">A commutative square</title>
+        <desc id="f1-desc">Top row: the pair x, y is mapped by f to f of x, y. Bottom row: the pair h of x, h of y is mapped by f to f of h of x, h of y. Vertical arrows apply h. Both paths from the top left to the bottom right give the same expression.</desc>
+        <defs>
+          <marker id="ah1" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+            <path class="head" d="M2,1.6 L8.6,5 L2,8.4"/>
+          </marker>
+        </defs>
+        <g font-size="22">
+          <text x="70" y="52" text-anchor="middle">(<tspan class="it">x</tspan>, <tspan class="it">y</tspan>)</text>
+          <text x="338" y="52" text-anchor="middle"><tspan class="it">f</tspan>(<tspan class="it">x</tspan>, <tspan class="it">y</tspan>)</text>
+          <text x="70" y="188" text-anchor="middle">(<tspan class="it">h</tspan>(<tspan class="it">x</tspan>), <tspan class="it">h</tspan>(<tspan class="it">y</tspan>))</text>
+          <text x="338" y="188" text-anchor="middle"><tspan class="it">f</tspan>(<tspan class="it">h</tspan>(<tspan class="it">x</tspan>), <tspan class="it">h</tspan>(<tspan class="it">y</tspan>))</text>
+        </g>
+        <line class="arr" x1="124" y1="45" x2="282" y2="45" marker-end="url(#ah1)"/>
+        <line class="arr" x1="148" y1="181" x2="254" y2="181" marker-end="url(#ah1)"/>
+        <line class="arr" x1="70" y1="68" x2="70" y2="160" marker-end="url(#ah1)"/>
+        <line class="arr" x1="338" y1="68" x2="338" y2="160" marker-end="url(#ah1)"/>
+        <g font-size="20">
+          <text x="203" y="34" text-anchor="middle" class="it accent">f</text>
+          <text x="201" y="170" text-anchor="middle" class="it accent">f</text>
+          <text x="58" y="121" text-anchor="end" class="accent"><tspan class="it">h</tspan> × <tspan class="it">h</tspan></text>
+          <text x="351" y="121" class="it accent">h</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A structure-preserving transformation. A bijection <var>h</var> on the expressions of a grammar is an automorphism when it commutes with every generating function <var>f</var>, so that both paths around the square agree: <span class="m nowrap"><var>h</var>(<var>f</var>(<var>x</var>, <var>y</var>)) = <var>f</var>(<var>h</var>(<var>x</var>), <var>h</var>(<var>y</var>))</span>. Properties preserved by every automorphism are the grammar’s invariants (<a href="#automorphisms">§3</a>).</figcaption>
+    </figure>
+  </div>
+</section>
 
-<script>
-{
-const E = Engine;
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+<!-- ============================== §1 Overview ============================== -->
+<section class="section" id="overview" aria-labelledby="h-overview">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§1</p>
+    <div class="sec-body">
+      <h2 id="h-overview"><span class="vh">§1 </span>Research Overview</h2>
+      <p class="lead">Generative grammars are usually judged by what they generate. This project asks what else a grammar commits us to: which of its properties are structural rather than artefacts of a particular notation, and what one model of syntax can express that another cannot.</p>
+      <p>Formal methods make these questions answerable, at least in small and exact cases. Once a grammar is treated as a mathematical object (a lexicon together with operations that build complex expressions from simpler ones) one can state precisely what it generates, which transformations preserve its structure, and which assumptions a given property depends on. Claims about small grammars are then checked in the proof assistant Lean&nbsp;4, so that each is either proved or visibly not.</p>
+      <p>The project is organized around three questions:</p>
+      <ol class="rq">
+        <li><span class="q">Does successfully generating the right expressions guarantee that a grammar captures the relevant linguistic generalizations?</span> <a class="where" href="#bare-grammar">§2</a></li>
+        <li><span class="q">Which grammatical properties remain invariant under structure-preserving transformations, and what does this tell us about the grammar?</span> <a class="where" href="#automorphisms">§3</a></li>
+        <li><span class="q">What can one syntactic model express that another cannot, and which theoretical assumptions account for the difference?</span> <a class="where" href="#expressive-power">§4</a></li>
+      </ol>
+      <p>The first has been examined through constructed examples. The second and third are open research directions; the third is the project’s main long-term aim. <a href="#lean">§5</a> describes the Lean formalization on which all three draw, and <a href="#game">§6</a> a teaching game built from it.</p>
 
-const LEVELS = [
- { id: 'linear', kind: 'sentence', g: 'linear₁', name: 'A linear grammar', era: 'Build it',
-   words: [['a', 'D'], ['very', 'Adv'], ['good', 'A'], ['day', 'N']], goal: 'D',
-   lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence, then click a rule. The rule decides whether it applies and computes the result.</p>',
-   solution: [[0, ['very', 'good']], [1, ['very good', 'day']], [2, ['a', 'very good day']]],
-   done: 'Three rule applications. Nothing about linear grammar is built into the language: the next levels change only the data.' },
- { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Cannot be cleared', impossible: true,
-   words: [['a', 'D'], ['very', 'Adv'], ['day', 'N']], goal: 'D',
-   lead: '<h2>Not in the language</h2><p>Same grammar. Try to build <i>a very day</i> as a D. This level cannot be cleared: every grouping of neighbours, with every rule, is rejected.</p>',
-   why: '*very* is an Adv. The only rule that takes an Adv is Rule 1, Adv A → A, and it needs an A right after it; here *very* is followed by *day*, an N. No rule takes D and Adv either. So *very* can never join anything, and *a very day* is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
-   done: '' },
- { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration', rules: [3],
-   words: [['a', 'D'], ['a', 'D'], ['the', 'D'], ['this', 'D'], ['dog', 'N']], goal: 'N',
-   lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: D N → N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as an N, using only Rule 4.</p>',
-   solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [3, ['a', 'a the this dog']]],
-   done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
-     'Suppose instead we keep only Rule 3, D N → D, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
- { id: 'xbar-gb', kind: 'free', g: 'xbarTR', name: 'X-bar theory with GB', era: 'Principles and parameters',
-   lexicon: [['kedi', 'N⁰', 'cat'], ['köpek', 'N⁰', 'dog'], ['gör', 'V⁰', 'see'], ['-Iyor', 'T⁰', 'PROG'], ['', 'C⁰', 'silent complementizer']], goal: { str: ['kedi', 'köpeği', 'görüyor'], cat: 'CP' },
-   arrow: { from: 'T⁰', to: 'V⁰', label: 'suffix lowering' },
-   lead: '<h2>X-bar theory with GB: Turkish</h2><p class="gloss"><i>Kedi köpeği görüyor.</i><br>kedi köpeğ-i gör-üyor<br>cat dog-ACC see-PROG<br>‘The cat sees the dog.’</p><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. They are a function of parameters: English and Turkish are two settings of it. Turkish is head-final, so Rule 4 is YP X⁰ → X′: the complement comes before its head (English: X⁰ YP → X′).</p><p>GB enters as conditions on the rules’ domains: c-selection (C selects TP, T selects VP, V selects NP; Turkish has no articles, so the nominal arguments here are NPs); Case (V assigns accusative to its complement, spelled -I: köpek → köpeği; finite T assigns nominative to its specifier); EPP (T needs a specifier); θ (V assigns an external θ-role, so VP needs its subject). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
-   solution: [[0, ['kedi|N⁰']], [1, ['kedi|N′']], [0, ['köpek|N⁰']], [1, ['köpek|N′']],
-     [3, ['köpek|NP', 'gör|V⁰']], [2, ['kedi|NP', 'köpeği gör|V′']], [3, ['köpeği gör|VP/NP|kedi', '-Iyor|T⁰']],
-     [5, ['kedi|NP', 'köpeği görüyor|T′/NP|kedi']], [3, ['kedi köpeği görüyor|TP', '|C⁰']], [1, ['kedi köpeği görüyor|C′']]],
-   done: ['Ten rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ. In a head-final language this movement does not change the word order — the subject comes first either way — but the grammar still requires it.',
-     'The arrow shows suffix lowering: the suffix *-Iyor* in T⁰ joins the verb in V⁰ (gör + -Iyor = görüyor, by vowel harmony). This is not the only analysis. In a head-final language V and T are adjacent, so lowering the suffix and raising the verb to T give the same string. For English, Chomsky (1957) has Affix Hopping, a transformation; Emonds (1978) and Pollock (1989) have the finite verb raise to T in French; in Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T; Bobaljik (1995) joins tense and verb under adjacency at PF; in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here joining is a property of one rule: a different analysis changes that rule, not the language.'] },
- { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['mtoto', 'atalala'],
-   glosses: { m: 'CL1 (noun class 1)', toto: 'child', ata: '1SM-FUT', v: 'silent light verb', lala: 'sleep' },
-   lead: '<h2>The Minimalist Program: Swahili</h2><p class="gloss"><i>Mtoto atalala.</i><br>m-toto a-ta-lala<br>1-child 1SM-FUT-sleep<br>‘The child will sleep.’</p><p>The class-1 prefix m- is n: noun class is a φ-feature on n. T is a-ta-: the future -ta- with the class-1 subject marker a- (Agree is not modeled, so T’s φ counts as valued). v is silent.</p><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. MERGE is free, but the finished object must meet conditions at the interface: selection (T takes vP, n and v take a root), the θ-criterion (the subject nP first merges with vP), and chains (only the subject moves, once, to the specifier of T). Draw the items into WS, click two objects, then MERGE. Word order, which copy is pronounced, and the joining of prefixes are checked automatically.</p>',
-   solution: ['select m toto ata v lala', 'merge m toto', 'merge v lala', 'merge nP vP', 'merge ata {nP, vP}', 'merge nP TP'],
-   done: 'The subject has to start in vP (θ-criterion), but there {nP, vP} has no label: n carries φ (noun class 1), v does not. Internal MERGE to the specifier of T solves it: the lower nP is a copy, invisible to labeling, so that node is labeled v, and the new root {nP, TP} is labeled ⟨φ,φ⟩ — the class-1 φ of m- and of the subject marker a-. Only the higher copy is pronounced, and the prefixes join their words: mtoto atalala.' }
-];
+      <div class="state wide">
+        <section class="done" aria-labelledby="h-done">
+          <h3 id="h-done">Carried out</h3>
+          <ul>
+            <li>Overlexicalization examples testing weak generative criteria in Keenan and Stabler’s Bare Grammar, presented at an academic discussion group in July 2026 <a class="ref" href="#bare-grammar">§2</a></li>
+            <li>A Lean&nbsp;4 formalization of X-bar trees with categories, bar levels and selection, in which endocentricity is built into the type of the head function <a class="ref" href="#lean">§5</a></li>
+            <li>Bare Grammar in Lean&nbsp;4, with linear, X-bar/GB and Minimalist grammars as instances of a single definition <a class="ref" href="#lean">§5</a></li>
+            <li>A first set of Lean-checked observations on MERGE and linear order, unrestricted rules, and symmetry, November 2026 <a class="ref" href="#pilot">§4</a></li>
+            <li>A five-level interactive syntax game built on these grammars <a class="ref" href="#game">§6</a></li>
+          </ul>
+        </section>
+        <section class="todo" aria-labelledby="h-open">
+          <h3 id="h-open">Open</h3>
+          <ul>
+            <li>Structural conditions that separate a grammar capturing a generalization from one that lists its instances <a class="ref" href="#bare-grammar">§2</a></li>
+            <li>What automorphism groups reveal about a grammar, and how invariants can be compared across models <a class="ref" href="#automorphisms">§3</a></li>
+            <li>Precise comparisons of expressive power, potentially among X-bar theory, Bare Phrase Structure and Minimalist approaches <a class="ref" href="#expressive-power">§4</a></li>
+            <li>A representation of unordered MERGE that preserves copies <a class="ref" href="#lean-open">§5</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-let cur = 0, st = null, playing = false;
-const solved = new Set();
-const L = () => LEVELS[cur];
-const off = () => st.closed || playing;
+<!-- ============================== §2 Bare Grammar ============================== -->
+<section class="section" id="bare-grammar" aria-labelledby="h-bg">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§2</p>
+    <div class="sec-body">
+      <h2 id="h-bg"><span class="vh">§2 </span>Bare Grammar and Explanatory Adequacy</h2>
+      <p class="question">Does successfully generating the right expressions guarantee that a grammar captures the relevant linguistic generalizations?</p>
+      <p>Keenan and Stabler’s <em>Bare Grammar</em> (2003) reduces a grammar to its essentials. An expression pairs a string with a category. A grammar consists of a lexicon of basic expressions and a set of generating functions, partial functions that build expressions from expressions. Its language <span class="m"><var>L</var>(<var>G</var>)</span> is the closure of the lexicon under the generating functions. Because no further theory is built into the format, grammars inspired by quite different syntactic frameworks can be stated, and compared, in the same terms.</p>
+      <p>Weak generative criteria evaluate a grammar by the strings it generates. A grammar can meet such criteria without capturing the generalizations it is meant to express. The project investigates this through <em>overlexicalization</em>: grammars in which complex expressions are listed in the lexicon instead of being derived from their parts. In the limiting case, for any finite set of target expressions, the grammar whose lexicon simply lists them, and which has no generating functions, generates exactly that set while expressing no regularity at all.</p>
 
-function initState(lv) {
-  if (lv.kind === 'sentence') return { pieces: lv.words.map(([w, c]) => ({ str: [w], cat: c, tree: { cat: c, kids: [{ word: w, kids: [] }] } })), sel: [], hist: [], msgs: [], closed: false, tries: 0 };
-  if (lv.kind === 'free') return { derived: [], sel: [], hist: [], msgs: [], fresh: null, closed: false };
-  return { ws: [], sel: [], hist: [], msgs: [], fresh: null, closed: false };
-}
-const snapshot = () => JSON.stringify({ ...st, hist: [], msgs: [] });
-function push() { st.hist.push(snapshot()); }
-function finish() { st.closed = true; solved.add(cur); [].concat(L().done || []).forEach(t => st.msgs.push({ t, k: 'p' })); }
+      <figure aria-labelledby="f2-cap">
+        <div class="trees">
+          <div>
+            <p class="tree-label"><span class="m"><var>G</var><sub>1</sub></span>: <span class="obj">very good</span> derived</p>
+            <svg viewBox="0 0 320 290" role="img" aria-label="Derivation of a very good day as D in grammar G1: D N to D combines a with very good day; A N to N combines very good with day; Adv A to A combines very with good.">
+              <g class="ln">
+                <line x1="150" y1="48" x2="52" y2="82"/><line x1="150" y1="48" x2="220" y2="82"/>
+                <line x1="220" y1="124" x2="162" y2="158"/><line x1="220" y1="124" x2="280" y2="158"/>
+                <line x1="162" y1="200" x2="117" y2="234"/><line x1="162" y1="200" x2="207" y2="234"/>
+              </g>
+              <g font-size="15">
+                <text x="150" y="20" text-anchor="middle">D</text><text x="164" y="20" class="sans muted rule-lbl" font-size="12">D N → D</text>
+                <text x="50" y="96" text-anchor="middle">D</text>
+                <text x="220" y="96" text-anchor="middle">N</text><text x="234" y="96" class="sans muted rule-lbl" font-size="12">A N → N</text>
+                <text x="162" y="172" text-anchor="middle">A</text><text x="176" y="172" class="sans muted rule-lbl" font-size="12">Adv A → A</text>
+                <text x="280" y="172" text-anchor="middle">N</text>
+                <text x="115" y="248" text-anchor="middle">Adv</text>
+                <text x="207" y="248" text-anchor="middle">A</text>
+              </g>
+              <g font-size="17" class="it">
+                <text x="150" y="39" text-anchor="middle" class="it">a very good day</text>
+                <text x="50" y="115" text-anchor="middle" class="it">a</text>
+                <text x="220" y="115" text-anchor="middle" class="it">very good day</text>
+                <text x="162" y="191" text-anchor="middle" class="it">very good</text>
+                <text x="280" y="191" text-anchor="middle" class="it">day</text>
+                <text x="115" y="267" text-anchor="middle" class="it">very</text>
+                <text x="207" y="267" text-anchor="middle" class="it">good</text>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <p class="tree-label"><span class="m"><var>G</var><sub>1</sub>′</span>: <span class="obj">very good</span> listed</p>
+            <svg viewBox="0 0 320 290" role="img" aria-label="A second derivation of a very good day as D in grammar G1 prime, in which very good is an unanalysed lexical item of category A.">
+              <rect class="hl" x="112" y="155" width="100" height="44" rx="3"/>
+              <g class="ln">
+                <line x1="150" y1="48" x2="52" y2="82"/><line x1="150" y1="48" x2="220" y2="82"/>
+                <line x1="220" y1="124" x2="162" y2="158"/><line x1="220" y1="124" x2="280" y2="158"/>
+              </g>
+              <g font-size="15">
+                <text x="150" y="20" text-anchor="middle">D</text><text x="164" y="20" class="sans muted rule-lbl" font-size="12">D N → D</text>
+                <text x="50" y="96" text-anchor="middle">D</text>
+                <text x="220" y="96" text-anchor="middle">N</text><text x="234" y="96" class="sans muted rule-lbl" font-size="12">A N → N</text>
+                <text x="162" y="172" text-anchor="middle">A</text>
+                <text x="280" y="172" text-anchor="middle">N</text>
+              </g>
+              <g font-size="17">
+                <text x="150" y="39" text-anchor="middle" class="it">a very good day</text>
+                <text x="50" y="115" text-anchor="middle" class="it">a</text>
+                <text x="220" y="115" text-anchor="middle" class="it">very good day</text>
+                <text x="162" y="191" text-anchor="middle" class="it">very good</text>
+                <text x="280" y="191" text-anchor="middle" class="it">day</text>
+              </g>
+              <text x="162" y="222" text-anchor="middle" class="sans accent" font-size="12.5">added lexical item</text>
+            </svg>
+          </div>
+        </div>
+        <figcaption id="f2-cap"><b>Figure 2.</b> Same language, different analyses. <span class="m"><var>G</var><sub>1</sub></span> is the linear grammar of the syntax game’s first level: lexicon <span class="obj">a</span>&nbsp;:&nbsp;D, <span class="obj">very</span>&nbsp;:&nbsp;Adv, <span class="obj">good</span>&nbsp;:&nbsp;A, <span class="obj">day</span>&nbsp;:&nbsp;N, and rules Adv A → A, A N → N, D N → D (daughters → mother). <span class="m"><var>G</var><sub>1</sub>′</span> adds ⟨<span class="obj">very good</span>, A⟩ to the lexicon. Since <span class="m"><var>G</var><sub>1</sub></span> already generates that expression, the two grammars generate exactly the same expressions, <span class="m nowrap"><var>L</var>(<var>G</var><sub>1</sub>′) = <var>L</var>(<var>G</var><sub>1</sub>)</span>. In <span class="m"><var>G</var><sub>1</sub>′</span>, however, ⟨<span class="obj">a very good day</span>, D⟩ also has a derivation in which <span class="obj">very good</span> has no internal structure. An illustration of the general point, not one of the presented examples.</figcaption>
+      </figure>
 
-/* ---------- actions ---------- */
-function applySentence(ri) {
-  const lv = L(), rule = E.grammars[lv.g].rules[ri];
-  const idx = [...st.sel].sort((a, b) => a - b);
-  if (!idx.length) return say('Select the pieces to combine first: click them in the tree.', 'p');
-  if (idx.some((x, i) => i && x !== idx[i - 1] + 1)) {
-    st.tries++;
-    return say(`“${idx.map(i => st.pieces[i].str.join(' ')).join('” and “')}” are not next to each other in the sentence, so a rule that joins them cannot help build it.`, 'p');
-  }
-  const r = E.applyRule(rule, idx.map(i => st.pieces[i]));
-  if (!r.ok) { st.tries++; return say(r.msg, 'e'); }
-  push();
-  const node = { str: r.out.str, cat: r.out.cat, tree: { cat: r.out.cat, kids: idx.map(i => st.pieces[i].tree) } };
-  st.pieces.splice(idx[0], idx.length, node);
-  st.sel = []; st.msgs = [];
-  if (st.pieces.length === 1 && node.cat === lv.goal) finish();
-  draw();
-}
-const keyOf = e => e.str.join(' ') + '|' + e.cat + (e.mover ? '|' + e.mover.str.join(' ') : '');
-const allExprs = () => [...L().lexicon.map(([w, c]) => ({ str: w ? [w] : [], cat: c, lex: true })), ...st.derived];
-const keyOfId = id => id.slice(id.indexOf('#') + 1);
-const rootsOf = () => { const used = new Set(st.derived.flatMap(d => d.ins)); return st.derived.filter(d => !used.has(keyOf(d))); };
-function applyFree(ri) {
-  const lv = L(), rule = E.grammars[lv.g].rules[ri];
-  if (!st.sel.length) return say('Select the inputs first: click words in the lexicon or nodes in the trees.', 'p');
-  const pool = allExprs();
-  /* a one-input rule with two selected: use the one clicked last */
-  const ids = (rule.arity === 1 && st.sel.length === 2) ? [st.sel[1]] : st.sel;
-  let ins = ids.map(id => pool.find(e => keyOf(e) === keyOfId(id)));
-  let r = E.applyRule(rule, ins);
-  if (!r.ok && ins.length === 2) {
-    /* the rule's left-hand side fixes the order of its two inputs */
-    const r2 = E.applyRule(rule, [ins[1], ins[0]]);
-    if (r2.ok) { r = r2; ins = [ins[1], ins[0]]; }
-  }
-  if (!r.ok) return say(r.msg, 'e');
-  if (pool.some(e => keyOf(e) === keyOf(r.out))) { st.sel = []; draw(); return say(`You already have ${r.out.str.join(' ')} : ${r.out.cat}.`, 'p'); }
-  push();
-  st.derived.push({ ...r.out, ins: ins.map(keyOf), ri });
-  st.sel = []; st.msgs = [];
-  if (keyOf(r.out) === keyOf(lv.goal)) finish();
-  draw();
-}
-function selectLI(x) { push(); st.ws = [...st.ws, E.li(x)]; st.sel = []; st.msgs = []; draw(); }
-function soAt(path) { let s = st.ws[path[0]]; for (const i of path.slice(1)) s = s.set[i]; return s; }
-function nameOf(path) {
-  const R = st.ws[path[0]], s = soAt(path);
-  if (s.li !== undefined) return s.li;
-  const l = E.labelAt(R, s, path.length - 1);
-  if (l && l.lab !== '⟨φ,φ⟩') return E.labText(l) + 'P';
-  return `{${nameOf([...path, 0])}, ${nameOf([...path, 1])}}`;
-}
-function setWS(ws2, msgs, closed) {
-  st.ws = ws2; st.sel = [];
-  st.msgs = msgs.map(t => ({ t, k: 'i' }));
-  if (closed) finish();
-}
-function doMerge() {
-  if (st.sel.length !== 2) return say('Click two objects in the workspace first.', 'p');
-  const [p, q] = st.sel.map(k => k.split('.').map(Number));
-  const ws2 = E.mergeWS(soAt(p), soAt(q), st.ws);
-  if (!ws2) return say(E.undefinedMsg(nameOf(p), nameOf(q)), 'e');
-  push();
-  const a = E.afterMerge(ws2, L().target);
-  setWS(ws2, a.msgs, a.closed);
-  draw();
-}
-function say(t, k) { st.msgs = [{ t, k }]; drawMsgs(); }
+      <p>The examples raise several related issues:</p>
+      <ul>
+        <li>weak generative capacity versus explanatory adequacy;</li>
+        <li>grammars that generate the same expressions but differ structurally;</li>
+        <li>lexical and rule redundancy;</li>
+        <li>finite generation;</li>
+        <li>conditions excluding spurious functions and spurious structure;</li>
+        <li>the potential role of stronger structural constraints.</li>
+      </ul>
 
-/* ---------- solution replay ---------- */
-function solve() {
-  const lv = L(); if (!lv.solution || playing) return;
-  st = initState(lv); playing = true; draw();
-  let i = 0;
-  const tick = () => {
-    if (i >= lv.solution.length) { playing = false; draw(); return; }
-    const s = lv.solution[i++];
-    if (lv.kind === 'sentence') {
-      const [ri, strs] = s, start = st.pieces.findIndex((p, j) => strs.every((w, k) => st.pieces[j + k] && st.pieces[j + k].str.join(' ') === w));
-      st.sel = strs.map((_, k) => start + k); applySentence(ri);
-    } else if (lv.kind === 'free') {
-      const [ri, keys] = s; st.sel = keys.map(k => 'S#' + k); applyFree(ri);
-    } else {
-      const r = E.mpCommand(st.ws, s, lv.target);
-      push(); setWS(r.ws, r.msgs || [], r.closed); draw();
-    }
-    setTimeout(tick, 750);
-  };
-  setTimeout(tick, 400);
-}
+      <div class="env checked">
+        <p><span class="rh">Status.</span> The overlexicalization examples and their analysis were presented at an academic discussion group in July 2026. They are an analysis of constructed cases, not a published result and not the proof of a new theorem.</p>
+      </div>
+      <div class="env open">
+        <p><span class="rh">Question 2.1.</span> Which stronger structural constraints would distinguish a grammar that captures a generalization from one that merely lists its instances? <a href="#automorphisms">§3</a> considers one way of making the difference precise.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-/* ---------- trees ---------- */
-const ROW = 54; let GAP = 80;
-const leaves = t => t.kids.length ? t.kids.reduce((a, c) => a + leaves(c), 0) : 1;
-function layout(t, x0, depth, out) {
-  if (!t.kids.length) { t.x = x0 + GAP / 2; t.y = depth; out.d = Math.max(out.d, depth); return x0 + GAP; }
-  let x = x0; t.kids.forEach(c => x = layout(c, x, depth + 1, out));
-  t.x = (t.kids[0].x + t.kids[t.kids.length - 1].x) / 2; t.y = depth; out.d = Math.max(out.d, depth); return x;
-}
-function sink(t, max) { if (!t.kids.length) { t.y = max; return; } t.kids.forEach(c => sink(c, max)); }
-function drawForest(trees, o) {
-  const out = { d: 0 }; let x = o.pad;
-  const nl = trees.reduce((a, t) => a + leaves(t), 0), room = o.avail - 2 * o.pad - (trees.length - 1) * o.sep;
-  GAP = Math.max(52, Math.min(80, room / Math.max(nl, 1)));
-  trees.forEach(t => { x = layout(t, x, 0, out) + o.sep; });
-  if (o.baseline) trees.forEach(t => sink(t, out.d));
-  const W = Math.max(x - o.sep + o.pad, 160), H = out.d * ROW + 36;
-  let g = '';
-  const edges = t => t.kids.forEach(c => { g += `<path class="edge" d="M${t.x} ${t.y * ROW + 28} L${c.x} ${c.y * ROW + 10}"/>`; edges(c); });
-  trees.forEach(edges);
-  const node = t => {
-    const y = t.y * ROW + 22, txt = t.word !== undefined ? t.word : t.cat;
-    const bw = Math.max(40, txt.length * 9 + 18), bh = 26;
-    let inner = '';
-    if (t.k !== undefined) inner += `<rect class="hit" x="${t.x - bw / 2}" y="${y - 18}" width="${bw}" height="${bh}" rx="5"/>`;
-    const cls = t.word !== undefined ? (t.copy ? 'copy' : 'word') : (t.cat === '?' ? 'q' : 'cat');
-    inner += `<text class="${cls}" x="${t.x}" y="${y}" text-anchor="middle">${esc(txt)}</text>`;
-    if (t.badge) inner += `<text class="badge" x="${t.x + bw / 2 + 4}" y="${y - 8}">${t.badge}</text>`;
-    g += t.k !== undefined ? `<g data-k="${esc(t.k)}" class="${t.sel ? 'sel' : ''}" role="button" tabindex="0" aria-pressed="${!!t.sel}" aria-label="${esc(t.aria || txt)}">${inner}</g>` : inner;
-    t.kids.forEach(node);
-  };
-  trees.forEach(node);
-  if (o.arrows && o.arrows.length) {
-    const all = [], walk = t => { all.push(t); t.kids.forEach(walk); }; trees.forEach(walk);
-    const pick = (spec, side) => all.find(t => {
-      if (spec[side + 'Cat'] !== undefined && t.cat === spec[side + 'Cat']) return true;
-      if (spec[side + 'Word'] !== undefined && t.word === spec[side + 'Word']) return true;
-      if (spec[side + 'CatSuffix'] !== undefined && t.cat && t.cat.endsWith(spec[side + 'CatSuffix'])) return true;
-      return false;
-    });
-    g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker><marker id="mh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="mhead" d="M0 0 L10 5 L0 10z"/></marker></defs>`;
-    o.arrows.forEach(spec => {
-      const A = spec.fromNode || pick(spec, 'from'), B = spec.toNode || pick(spec, 'to');
-      if (!A || !B) return;
-      const dir = B.x >= A.x ? 1 : -1;
-      if (spec.kind === 'move') {
-        /* Connect the original trace to the landing NP, not just nearby category text.
-           Both endpoints sit beside their labels, within the same derivation tree. */
-        const x1 = A.x + 16 * dir, y1 = A.y * ROW + 16;
-        const x2 = B.x - 22 * dir, y2 = B.y * ROW + 16;
-        const cx1 = x1 + 20 * dir, cy1 = y1 - 28;
-        const cx2 = x2 - 20 * dir, cy2 = y2 + 28;
-        const lx = (x1 + x2) / 2 - 20 * dir, ly = (y1 + y2) / 2 - 16;
-        g += `<path class="move" d="M${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}" marker-end="url(#mh)"/>` +
-          `<text class="movelab" x="${lx}" y="${ly}" text-anchor="middle">${esc(spec.label)}</text>`;
-      } else {
-        const x1 = A.x + 12 * dir, y1 = A.y * ROW + 22, x2 = B.x - 16 * dir, y2 = B.y * ROW + 16;
-        g += `<path class="lower" d="M${x1} ${y1} C ${A.x + 30 * dir} ${(A.y + 1) * ROW + 14}, ${x2 - 30 * dir} ${y2 - 4}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
-          `<text class="lowlab" x="${B.x - 20 * dir}" y="${y2 + 22}" text-anchor="${dir > 0 ? 'end' : 'start'}">${esc(spec.label)}</text>`;
-      }
-    });
-  }
-  if (o.ws) g += `<path class="bracket" d="M10 4 h-6 v${H - 8} h6 M${W - 10} 4 h6 v${H - 8} h-6"/>`;
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(o.aria)}">${g}</svg>`;
-}
-const clone = t => ({ ...t, kids: t.kids.map(clone) });
-function markPiece(t, k, aria) { t.k = k; t.aria = aria; t.kids.forEach(c => markPiece(c, k, aria)); }
-function mpTree(R, s, d, path) {
-  const k = path.join('.'), n = st.sel.indexOf(k);
-  const base = { k, sel: n >= 0, badge: n >= 0 ? (n ? 'Q' : 'P') : '' };
-  if (s.li !== undefined) return { ...base, word: E.liText(s.li), kids: [] };
-  if (E.lowerCopy(R, s, d)) return { word: `copy(${E.labText(E.labelAt(R, s, d))})`, copy: true, kids: [] };
-  const [a, b] = s.set, ka = mpTree(R, a, d + 1, [...path, 0]), kb = mpTree(R, b, d + 1, [...path, 1]);
-  const swap = (E.isHead(b) && !E.isHead(a)) || (E.isArg(R, b, d + 1) && !E.isArg(R, a, d + 1));
-  return { ...base, cat: E.labText(E.labelAt(R, s, d)), kids: swap ? [kb, ka] : [ka, kb] };
-}
+<!-- ============================== §3 Automorphisms ============================== -->
+<section class="section" id="automorphisms" aria-labelledby="h-aut">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§3</p>
+    <div class="sec-body">
+      <h2 id="h-aut"><span class="vh">§3 </span>Automorphisms and Grammatical Invariance</h2>
+      <p class="question">Which grammatical properties remain invariant under structure-preserving transformations, and what does this tell us about the grammar?</p>
+      <p>A grammar fixes a set of expressions together with the operations that relate them. Many of its apparent properties, however, belong to the way it happens to be written down: the names of its categories, the identity of particular words, the order in which a notation lists things. The mathematical tool for separating structure from presentation is the <em>automorphism</em>, a transformation of a structure onto itself that preserves all of its operations. Keenan and Stabler build their account on this idea: the structurally significant notions of a grammar are those that its automorphisms leave invariant.</p>
 
-/* ---------- the board: trees, then the clickable rules in the same box ---------- */
-function rulesRow(lv, dis) {
-  const rs = E.grammars[lv.g].rules, show = lv.rules || rs.map((_, i) => i);
-  return '<div class="tools"><span class="lab">Rules</span>' + show.map(i => {
-    const main = rs[i].name.split('  [')[0];
-    return `<button class="item" type="button" data-r="${i}"${dis}><span class="rn">Rule ${i + 1}</span>${esc(main)}</button>`; }).join('') + '</div>';
-}
-function drawPic() {
-  const lv = L(), box = document.getElementById('pic'), avail = Math.max(260, box.clientWidth - 20), dis = off() ? ' disabled' : '';
-  let h = '';
-  if (lv.kind === 'sentence') {
-    const trees = st.pieces.map((p, i) => {
-      const t = clone(p.tree); markPiece(t, 'p' + i, `${p.str.join(' ')}, ${p.cat}`); t.sel = st.sel.includes(i); return t;
-    });
-    h = `<div class="cap">The sentence. Click neighbouring pieces to select them, then a rule.</div>` + rulesRow(lv, dis) + `<div class="treebox">${drawForest(trees, { pad: 6, sep: 18, avail, baseline: true, aria: 'Sentence pieces' })}</div>`;
-  } else if (lv.kind === 'free') {
-    const pool = allExprs(), find = x => pool.find(y => keyOf(y) === x);
-    const shown = c => c.replace(/\/.*$/, '');
-    /* moved: key of the phrase that Move α took out of this subtree; it is drawn there as tᵢ */
-    const build = (e, id, moved, mark) => {
-      const k = keyOf(e), base = { k: id + '#' + k, sel: st.sel.includes(id + '#' + k), aria: `${e.str.join(' ') || '∅'}, ${shown(e.cat)}` };
-      if (e.lex) return { ...base, cat: e.cat + (mark || ''), moveTo: !!mark, kids: [{ word: e.str[0] || '∅', kids: [] }] };
-      if (e.ri === 5) return { ...base, cat: shown(e.cat), kids: [build(find(e.ins[0]), id + '.0', null, 'ᵢ'), build(find(e.ins[1]), id + '.1', e.ins[0])] };
-      return { ...base, cat: shown(e.cat) + (mark || ''), moveTo: !!mark, kids: e.ins.map((x, j) =>
-        (moved && x === moved && e.mover && j === 0 && e.ri === 2) ? { word: 'tᵢ', moveFrom: true, kids: [] } : build(find(x), id + '.' + j, moved)) };
-    };
-    const roots = rootsOf().map((d, i) => build(d, 'T' + i));
-    const treeHas = (t, pred) => pred(t) || t.kids.some(c => treeHas(c, pred));
-    const arrows = [];
-    if (roots.some(t => treeHas(t, n => n.cat === 'T⁰') && treeHas(t, n => n.cat === 'V⁰'))) arrows.push({ kind: 'lower', fromCat: 'T⁰', toCat: 'V⁰', label: 'suffix lowering' });
-    const findNode = (t, pred) => pred(t) ? t : t.kids.map(c => findNode(c, pred)).find(Boolean);
-    roots.forEach(t => {
-      const fromNode = findNode(t, n => n.moveFrom), toNode = findNode(t, n => n.moveTo);
-      if (fromNode && toNode) arrows.push({ kind: 'move', fromNode, toNode, label: 'Move α' });
-    });
-    h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
-      lv.lexicon.map(([w, c, gloss]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
-        return `<button class="item lexeme" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}><span class="lex-main">${esc(w || '∅')} <span class="c">${esc(c)}</span></span><span class="lex-gloss">${esc(gloss)}</span></button>`; }).join('') +
-      `</div>` + rulesRow(lv, dis) +
-      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees', arrows })}</div>`
-        : `<div class="empty">Nothing built yet. Click an item in the lexicon, then a rule.</div>`);
-  } else {
-    const items = st.ws.map((R, i) => mpTree(R, R, 0, [i]));
-    const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
-    h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
-      '<div class="tools"><span class="lab">Select</span>' +
-      ['m', 'toto', 'ata', 'v', 'lala'].map(x => `<button class="item lexeme" type="button" data-li="${x}"${dis}><span class="lex-main">${esc(E.liText(x))}</span><span class="lex-gloss">${esc(lv.glosses[x])}</span></button>`).join('') +
-      `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS)</button></div>` +
-      (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
-  }
-  box.innerHTML = h;
-}
+      <div class="env">
+        <p><span class="rh">Definition 3.1</span> (automorphism)<span class="rh">.</span> Let <var>G</var> be a grammar with language <span class="m"><var>L</var>(<var>G</var>)</span> and generating functions <var>F</var>. An automorphism of <var>G</var> is a bijection <span class="m nowrap"><var>h</var> : <var>L</var>(<var>G</var>) → <var>L</var>(<var>G</var>)</span> that fixes every <span class="m nowrap"><var>f</var> ∈ <var>F</var></span>: for all expressions <span class="m nowrap"><var>x</var><sub>1</sub>, …, <var>x</var><sub><var>n</var></sub></span>, the tuple <span class="m nowrap">(<var>h</var>(<var>x</var><sub>1</sub>), …, <var>h</var>(<var>x</var><sub><var>n</var></sub>))</span> lies in the domain of <var>f</var> exactly when <span class="m nowrap">(<var>x</var><sub>1</sub>, …, <var>x</var><sub><var>n</var></sub>)</span> does, and then</p>
+        <p class="display"><var>h</var>(<var>f</var>(<var>x</var><sub>1</sub>, …, <var>x</var><sub><var>n</var></sub>)) = <var>f</var>(<var>h</var>(<var>x</var><sub>1</sub>), …, <var>h</var>(<var>x</var><sub><var>n</var></sub>)).</p>
+        <p>Under composition, the automorphisms of <var>G</var> form a group, <span class="m">Aut(<var>G</var>)</span>.</p>
+      </div>
+      <div class="env">
+        <p><span class="rh">Definition 3.2</span> (invariant)<span class="rh">.</span> A property <span class="m nowrap"><var>P</var> ⊆ <var>L</var>(<var>G</var>)</span>, or a relation on <span class="m"><var>L</var>(<var>G</var>)</span>, is invariant if every <span class="m nowrap"><var>h</var> ∈ Aut(<var>G</var>)</span> maps it onto itself.</p>
+      </div>
+      <p>Invariance has an immediate consequence for labels. Renaming the categories of a grammar, writing X for NP throughout, say, yields an isomorphic grammar, and every invariant carries over unchanged. A property that depends on what a category is called, rather than on how its members combine, is therefore not structural.</p>
 
-/* ---------- goal strip with the automatic check ---------- */
-function check() {
-  const lv = L();
-  if (lv.impossible) return { cls: 'gray', st: 'Cannot be cleared' };
-  if (st.closed) return { cls: 'done', st: '✓ Cleared' };
-  if (lv.kind === 'sentence') {
-    const n = st.pieces.length, p = st.pieces[0];
-    return { st: n > 1 ? `Not yet: ${n} pieces` : `Not yet: this is ${p.str.join(' ')} : ${p.cat}` };
-  }
-  if (lv.kind === 'free') return { st: 'Not yet' };
-  const n = st.ws.length;
-  if (!n) return { st: 'Not yet: WS is empty' };
-  if (n > 1) return { st: `Not yet: ${n} objects in WS` };
-  const R = st.ws[0];
-  if (!E.allLabeled(R, R, 0)) return { st: 'Not yet: a node has no label' };
-  const ci = E.ciFail(R);
-  return { st: ci ? 'Not yet: ' + { selection: 'selection fails', theta: 'θ-criterion fails', chain: 'a chain is ill-formed' }[ci] : 'Not yet: wrong word order' };
-}
-function drawGoal() {
-  const lv = L(), el = document.getElementById('goal'), c = check();
-  const text = lv.kind === 'sentence' ? `${lv.words.map(w => w[0]).join(' ')} : ${lv.goal}`
-    : lv.kind === 'free' ? `${lv.goal.str.join(' ')} : ${lv.goal.cat}`
-    : `one object in WS, every node labeled, the interface conditions met, pronounced “${lv.target.join(' ')}”`;
-  el.className = 'goal' + (c.cls ? ' ' + c.cls : '');
-  el.innerHTML = `<b>Goal</b><span>${esc(text)}</span><span class="st">${esc(c.st)}</span>`;
-}
-function drawMsgs() {
-  const lv = L();
-  const prose = t => esc(t).replace(/\*([^*]+)\*/g, '<i>$1</i>');
-  let m = st.msgs.map(x => `<div class="msg ${x.k}">${x.k === 'p' ? prose(x.t) : esc(x.t)}</div>`).join('');
-  if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${prose(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
-  document.getElementById('msgs').innerHTML = m;
-  document.getElementById('nextLevel').hidden = !((st.closed || lv.impossible) && !playing && cur < LEVELS.length - 1);
-  document.getElementById('undo').disabled = !st.hist.length || playing;
-  document.getElementById('reset').disabled = playing;
-  const sb = document.getElementById('solve'); sb.hidden = !lv.solution; sb.disabled = playing;
-  document.querySelectorAll('.tab').forEach((b, i) => { b.setAttribute('aria-selected', i === cur); b.querySelector('.tick').textContent = solved.has(i) ? '✓' : ''; });
-}
-function draw() { drawPic(); drawGoal(); drawMsgs(); }
-function showLevel(i) {
-  cur = i; st = initState(L());
-  document.getElementById('lead').innerHTML = L().lead;
-  try { history.replaceState(null, '', '#' + L().id); } catch (e) {}
-  draw();
-}
+      <div class="env example">
+        <p><span class="rh">Example 3.3.</span> Let <var>G</var> have the lexicon ⟨<span class="obj">Kim</span>, NP⟩, ⟨<span class="obj">Lee</span>, NP⟩, ⟨<span class="obj">laughed</span>, VP⟩, ⟨<span class="obj">cried</span>, VP⟩ and a single generating function <var>f</var>, defined on pairs of an NP and a VP, with <span class="m nowrap"><var>f</var>(⟨<var>u</var>, NP⟩, ⟨<var>v</var>, VP⟩) = ⟨<var>u v</var>, S⟩</span>. The map σ that exchanges <span class="obj">Kim</span> and <span class="obj">Lee</span>, and accordingly the sentences built from them, is an automorphism. Writing each expression by its string,</p>
+        <p class="display">σ(<var>f</var>(<span class="obj">Kim</span>, <span class="obj">laughed</span>)) = <var>f</var>(σ(<span class="obj">Kim</span>), σ(<span class="obj">laughed</span>)) = <var>f</var>(<span class="obj">Lee</span>, <span class="obj">laughed</span>).</p>
+        <p>No automorphism, by contrast, can send <span class="obj">Kim</span> to <span class="obj">laughed</span>: <span class="obj">Kim</span> occurs as the first argument of <var>f</var>, and <span class="obj">laughed</span> never does. In <var>G</var>, membership in a category is invariant; being the particular word <span class="obj">Kim</span> is not.</p>
+      </div>
 
-/* ---------- events ---------- */
-document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab${lv.impossible ? ' gray' : ''}" role="tab" type="button" data-i="${i}" aria-label="Level ${i + 1}${lv.impossible ? ', cannot be cleared' : ''}">${i + 1}<span class="tick" aria-hidden="true"></span></button>`).join('');
-document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b && !playing) showLevel(+b.dataset.i); });
-function toggleSel(k, max) {
-  if (off()) return;
-  const i = st.sel.indexOf(k);
-  if (i >= 0) st.sel.splice(i, 1); else { st.sel.push(k); if (max && st.sel.length > max) st.sel.shift(); }
-  st.msgs = []; draw();
-}
-document.getElementById('pic').addEventListener('click', e => {
-  const b = e.target.closest('button');
-  if (b) {
-    if (off()) return;
-    if (b.dataset.e !== undefined) toggleSel(b.dataset.e, 2);
-    else if (b.dataset.r !== undefined) (L().kind === 'sentence' ? applySentence : applyFree)(+b.dataset.r);
-    else if (b.dataset.li !== undefined) selectLI(b.dataset.li);
-    else if (b.id === 'mergeBtn') doMerge();
-    return;
-  }
-  const g = e.target.closest('[data-k]'); if (!g) return;
-  const k = g.dataset.k, kind = L().kind;
-  if (kind === 'sentence') toggleSel(+k.slice(1)); else toggleSel(k, 2);
-});
-document.getElementById('pic').addEventListener('keydown', e => {
-  const g = e.target.closest && e.target.closest('[data-k]');
-  if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); g.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
-});
-document.getElementById('msgs').addEventListener('click', e => {
-  if (e.target.id === 'whyBtn') { st.showWhy = true; drawMsgs(); }
-});
-document.getElementById('undo').addEventListener('click', () => { if (!st.hist.length) return; const h = st.hist.slice(0, -1), prev = JSON.parse(st.hist[st.hist.length - 1]); st = { ...prev, hist: h, msgs: [] }; draw(); });
-document.getElementById('reset').addEventListener('click', () => { st = initState(L()); draw(); });
-document.getElementById('solve').addEventListener('click', solve);
-document.getElementById('nextLevel').addEventListener('click', () => { if (cur < LEVELS.length - 1) { showLevel(cur + 1); document.getElementById('tabs').scrollIntoView({ block: 'nearest' }); } });
-let lastW = 0;
-new ResizeObserver(() => { const w = document.getElementById('pic').clientWidth; if (Math.abs(w - lastW) > 8) { lastW = w; drawPic(); } }).observe(document.getElementById('pic'));
-const start = LEVELS.findIndex(lv => '#' + lv.id === location.hash);
-showLevel(start >= 0 ? start : 0);
-window.addEventListener('hashchange', () => { const i = LEVELS.findIndex(lv => '#' + lv.id === location.hash); if (i >= 0 && i !== cur && !playing) showLevel(i); });
-}
-</script>
+      <figure aria-labelledby="f3-cap">
+        <svg class="fig-svg" viewBox="0 0 460 206" role="img" aria-labelledby="f3-title">
+          <title id="f3-title">The four sentences of G arranged in a square. Sigma exchanges Kim and Lee horizontally; tau exchanges laughed and cried vertically.</title>
+          <defs>
+            <marker id="ah3" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+              <path class="head" d="M2,1.6 L8.6,5 L2,8.4"/>
+            </marker>
+          </defs>
+          <g font-size="21" class="it">
+            <text x="105" y="58" text-anchor="middle" class="it">Kim laughed</text>
+            <text x="355" y="58" text-anchor="middle" class="it">Lee laughed</text>
+            <text x="105" y="164" text-anchor="middle" class="it">Kim cried</text>
+            <text x="355" y="164" text-anchor="middle" class="it">Lee cried</text>
+          </g>
+          <line class="arr" x1="170" y1="51" x2="290" y2="51" marker-start="url(#ah3)" marker-end="url(#ah3)"/>
+          <line class="arr" x1="160" y1="157" x2="300" y2="157" marker-start="url(#ah3)" marker-end="url(#ah3)"/>
+          <line class="arr" x1="105" y1="74" x2="105" y2="138" marker-start="url(#ah3)" marker-end="url(#ah3)"/>
+          <line class="arr" x1="355" y1="74" x2="355" y2="138" marker-start="url(#ah3)" marker-end="url(#ah3)"/>
+          <g font-size="20" class="accent">
+            <text x="230" y="40" text-anchor="middle" class="accent">σ</text>
+            <text x="230" y="146" text-anchor="middle" class="accent">σ</text>
+            <text x="92" y="112" text-anchor="end" class="accent">τ</text>
+            <text x="368" y="112" class="accent">τ</text>
+          </g>
+        </svg>
+        <figcaption id="f3-cap"><b>Figure 3.</b> The automorphism group acting on the sentences of <var>G</var>. σ exchanges <span class="obj">Kim</span> and <span class="obj">Lee</span>; τ exchanges <span class="obj">laughed</span> and <span class="obj">cried</span>. With the identity and στ they make up <span class="m nowrap">Aut(<var>G</var>) ≅ ℤ<sub>2</sub> × ℤ<sub>2</sub></span>. Its orbits are {<span class="obj">Kim</span>, <span class="obj">Lee</span>}, {<span class="obj">laughed</span>, <span class="obj">cried</span>} and the four sentences, which in this grammar coincide with the categories NP, VP and S.</figcaption>
+      </figure>
+
+      <p>Now let <span class="m"><var>G</var><sub>list</sub></span> be the grammar whose lexicon lists the four sentences of <var>G</var> as expressions of category S, with no generating functions. Its expressions of category S are exactly those of <var>G</var>, so no criterion based on the sentences generated can tell the two grammars apart. Their automorphism groups can. In <var>G</var>, the relation ‘<var>x</var> and <var>y</var> have the same subject’ is invariant. In <span class="m"><var>G</var><sub>list</sub></span>, every one of the 24 permutations of the four sentences is an automorphism, including the one that exchanges <span class="obj">Kim laughed</span> with <span class="obj">Lee laughed</span> and fixes the rest, and that permutation does not preserve the relation. The overlexicalized grammar generates the same sentences while drawing no structural distinctions among them.</p>
+      <p>This is the sense in which automorphisms may help separate a grammar that captures a generalization from one that lists its instances. Whether invariance-based conditions can do work that weak generative criteria cannot, in grammars of realistic size, is what this direction sets out to investigate.</p>
+
+      <div class="env open">
+        <p><span class="rh">Question 3.4.</span> How do overlexicalization and rule redundancy affect the automorphism group of a grammar? The lexical redundancy of Figure 2 changes neither the language nor the generating functions, so whether it is visible to <span class="m">Aut(<var>G</var>)</span> at all depends on whether automorphisms are also required to preserve the lexicon.</p>
+      </div>
+      <div class="env open">
+        <p><span class="rh">Question 3.5.</span> Which notions that syntactic theories treat as primitive, such as category, head, constituent and c-command, are invariant in grammars of a given kind, and which depend on the particular representation?</p>
+      </div>
+      <div class="env open">
+        <p><span class="rh">Question 3.6.</span> When two models represent different kinds of syntactic objects, for instance trees with ordered daughters and sets built by MERGE, what is the appropriate notion of structure-preserving map between them, so that their invariants can be compared? This links the present direction to <a href="#expressive-power">§4</a>.</p>
+      </div>
+      <div class="env">
+        <p><span class="rh">Remark 3.7.</span> This direction is exploratory. The examples above are expository. No new group-theoretic characterization of grammatical properties, no classification theorem, and no formal comparison of automorphism groups is claimed. Relevant prior work includes Keenan and Stabler (2003) and Holder (2010). A small Lean-checked instance of symmetry reasoning appears in <a href="#obs-4-4">Observation 4.4</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §4 Expressive power ============================== -->
+<section class="section" id="expressive-power" aria-labelledby="h-exp">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§4</p>
+    <div class="sec-body">
+      <h2 id="h-exp"><span class="vh">§4 </span>Expressive Power of Syntactic Models</h2>
+      <p class="question">What can one syntactic model express that another cannot, and which theoretical assumptions account for the difference?</p>
+      <p>This is the project’s main long-term aim: to investigate the expressive capabilities and limitations of formal syntactic models, potentially including X-bar theory, Bare Phrase Structure and Minimalist approaches. The question becomes precise only once it is settled what is being compared, and by which observations. These comparisons are easily conflated:</p>
+
+      <figure aria-labelledby="f4-cap">
+        <div class="table-scroll">
+          <table class="grid-table">
+            <thead>
+              <tr><td></td><th scope="col">Compared by strings</th><th scope="col">Compared by structures</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Two specific grammars</th>
+                <td data-label="Compared by strings"><span class="ask">Do <var>G</var><sub>1</sub> and <var>G</var><sub>2</sub> generate the same strings of a given category?</span><span class="req">A separating string shows only that these two grammars differ. Requires aligned vocabularies and categories.</span></td>
+                <td data-label="Compared by structures"><span class="ask">Do <var>G</var><sub>1</sub> and <var>G</var><sub>2</sub> assign corresponding structures?</span><span class="req">Weakly equivalent grammars may assign different structures. Requires a common domain of structural descriptions, or a structure-preserving translation.</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Classes of grammatical systems</th>
+                <td data-label="Compared by strings"><span class="ask">Which families of string languages can each class define?</span><span class="req">Requires the lexical resources, rule schemata, features and operations of each class to be fixed in advance.</span></td>
+                <td data-label="Compared by structures"><span class="ask">Which structural descriptions can each class assign?</span><span class="req">The setting of strong-equivalence results such as Schiffer and Maletti (2021) for TAG and CCG.</span></td>
+              </tr>
+              <tr class="span-row">
+                <th scope="row">Assumptions</th>
+                <td colspan="2"><span class="ask">For any property found, which assumptions are needed to obtain it?</span><span class="req">For example, ordered or unordered combination, endocentric projection, labeling, and the treatment of copies.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption id="f4-cap"><b>Figure 4.</b> What is compared, and by which observations. A result in one cell does not transfer to another without further argument.</figcaption>
+      </figure>
+
+      <p>Two methodological consequences follow. A string that one grammar generates and another does not separates those two grammars, not the theories in which they were written. And grammars written in different frameworks have to be compared over a shared lexical inventory: setting the project’s Turkish X-bar fragment beside its Swahili Minimalist fragment, for example, would confound differences between theories with differences between lexicons.</p>
+
+      <h3 id="pilot">A first Lean-checked pilot</h3>
+      <p>In November 2026 the project began testing these distinctions on its own implemented grammars. The facts below concern specific objects in the current Lean model, and each is checked by Lean; the proof file and research notes are listed in <a href="#sources">§7</a>.</p>
+
+      <div class="env checked">
+        <p><span class="rh">Observation 4.1</span> <i>(checked in Lean)</i><span class="rh">.</span> In the Minimalist fragment, the constructor that represents MERGE records the order of its arguments: <code>set a b ≠ set b a</code> for two distinct roots, and the MERGE rule produces both orders from the same workspace. The definition being modelled, <span class="m nowrap">MERGE(<var>P</var>, <var>Q</var>) = {<var>P</var>, <var>Q</var>}</span>, describes an unordered set; the representation does not yet match it.</p>
+      </div>
+      <div class="env checked">
+        <p><span class="rh">Observation 4.2</span> <i>(checked in Lean)</i><span class="rh">.</span> For the Swahili sentence <span class="obj">mtoto atalala</span> ‘the child will sleep’, there are two distinct objects <span class="m nowrap"><var>r</var><sub>1</sub> ≠ <var>r</var><sub>2</sub></span> that differ only in the order of the daughters of nP. Both are fully labeled, both satisfy the fragment’s conditions at the conceptual–intentional interface, both externalize as <span class="obj">mtoto atalala</span>, and both are reached by complete derivations. Uniqueness of the convergent object therefore fails under raw equality of objects. Uniqueness up to the order of MERGE is a different claim, and it is unproved.</p>
+      </div>
+
+      <figure aria-labelledby="f5-cap">
+        <div class="trees">
+          <div>
+            <p class="tree-label"><span class="m"><var>r</var><sub>1</sub></span>, with nP = <code>set m toto</code></p>
+            <svg viewBox="0 0 356 236" role="img" aria-label="Object r1: the root combines nP with a phrase containing ata and a lower copy of nP with vP. nP is m followed by toto.">
+              <rect class="hl" x="26" y="50" width="108" height="84" rx="3"/>
+              <rect class="hl" x="186" y="148" width="86" height="78" rx="3"/>
+              <g class="ln">
+                <line x1="165" y1="18" x2="82" y2="56"/><line x1="165" y1="18" x2="230" y2="64"/>
+                <line x1="78" y1="78" x2="52" y2="108"/><line x1="82" y1="78" x2="108" y2="108"/>
+                <line x1="230" y1="64" x2="192" y2="108"/><line x1="230" y1="64" x2="265" y2="112"/>
+                <line x1="265" y1="112" x2="230" y2="150"/><line x1="265" y1="112" x2="314" y2="160"/>
+                <line x1="314" y1="160" x2="298" y2="198"/><line x1="314" y1="160" x2="336" y2="198"/>
+              </g>
+              <g class="ln-muted">
+                <line x1="226" y1="172" x2="207" y2="198"/><line x1="230" y1="172" x2="250" y2="198"/>
+              </g>
+              <circle class="node" cx="165" cy="18" r="2.6"/><circle class="node" cx="230" cy="64" r="2.6"/>
+              <circle class="node" cx="265" cy="112" r="2.6"/><circle class="node" cx="314" cy="160" r="2.6"/>
+              <g font-size="16">
+                <text x="80" y="73" text-anchor="middle">nP</text>
+                <text x="228" y="167" text-anchor="middle" class="muted">nP</text>
+              </g>
+              <g font-size="18">
+                <text x="50" y="125" text-anchor="middle" class="it">m</text>
+                <text x="110" y="125" text-anchor="middle" class="it">toto</text>
+                <text x="190" y="125" text-anchor="middle" class="it">ata</text>
+                <text x="205" y="215" text-anchor="middle" class="it muted">m</text>
+                <text x="252" y="215" text-anchor="middle" class="it muted">toto</text>
+                <text x="298" y="215" text-anchor="middle" class="it">v</text>
+                <text x="336" y="215" text-anchor="middle" class="it">lala</text>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <p class="tree-label"><span class="m"><var>r</var><sub>2</sub></span>, with nP = <code>set toto m</code></p>
+            <svg viewBox="0 0 356 236" role="img" aria-label="Object r2: identical to r1 except that in both occurrences of nP, toto precedes m.">
+              <rect class="hl" x="26" y="50" width="108" height="84" rx="3"/>
+              <rect class="hl" x="186" y="148" width="86" height="78" rx="3"/>
+              <g class="ln">
+                <line x1="165" y1="18" x2="82" y2="56"/><line x1="165" y1="18" x2="230" y2="64"/>
+                <line x1="78" y1="78" x2="52" y2="108"/><line x1="82" y1="78" x2="108" y2="108"/>
+                <line x1="230" y1="64" x2="192" y2="108"/><line x1="230" y1="64" x2="265" y2="112"/>
+                <line x1="265" y1="112" x2="230" y2="150"/><line x1="265" y1="112" x2="314" y2="160"/>
+                <line x1="314" y1="160" x2="298" y2="198"/><line x1="314" y1="160" x2="336" y2="198"/>
+              </g>
+              <g class="ln-muted">
+                <line x1="226" y1="172" x2="207" y2="198"/><line x1="230" y1="172" x2="250" y2="198"/>
+              </g>
+              <circle class="node" cx="165" cy="18" r="2.6"/><circle class="node" cx="230" cy="64" r="2.6"/>
+              <circle class="node" cx="265" cy="112" r="2.6"/><circle class="node" cx="314" cy="160" r="2.6"/>
+              <g font-size="16">
+                <text x="80" y="73" text-anchor="middle">nP</text>
+                <text x="228" y="167" text-anchor="middle" class="muted">nP</text>
+              </g>
+              <g font-size="18">
+                <text x="50" y="125" text-anchor="middle" class="it">toto</text>
+                <text x="110" y="125" text-anchor="middle" class="it">m</text>
+                <text x="190" y="125" text-anchor="middle" class="it">ata</text>
+                <text x="205" y="215" text-anchor="middle" class="it muted">toto</text>
+                <text x="252" y="215" text-anchor="middle" class="it muted">m</text>
+                <text x="298" y="215" text-anchor="middle" class="it">v</text>
+                <text x="336" y="215" text-anchor="middle" class="it">lala</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <p class="ext-line">Both externalize as <span class="obj">mtoto atalala</span>: <span class="m nowrap">ext(<var>r</var><sub>1</sub>) = ext(<var>r</var><sub>2</sub>)</span>.</p>
+        <figcaption id="f5-cap"><b>Figure 5.</b> Two raw objects in the current Lean model of the Swahili fragment (<span class="obj">m-</span> class-1 prefix, √<span class="obj">toto</span> ‘child’, <span class="obj">a-ta-</span> subject marker and future, silent <span class="obj">v</span>, √<span class="obj">lala</span> ‘sleep’). They differ only in the order of the daughters of nP, consistently in both of its occurrences; the lower occurrence (grey) is a copy and is not pronounced. Lean checks that the objects are distinct, that both are fully labeled and satisfy the interface conditions, and that both externalize identically.</figcaption>
+      </figure>
+
+      <div class="env checked">
+        <p><span class="rh">Observation 4.3</span> <i>(checked in Lean)</i><span class="rh">.</span> The general Lean definition of a Bare Grammar admits rules whose domain is given by a condition and which take an unrestricted argument. A grammar with a single such rule, whose argument is simply the output string, generates every string. This is a statement about one permissive instance of the general definition, not about the Minimalist fragment. Its point is methodological: comparing unrestricted grammars by string yield cannot distinguish the intended syntactic operations, so restrictions on lexical resources, rule arguments and observations have to be fixed first.</p>
+      </div>
+      <div class="env checked" id="obs-4-4">
+        <p><span class="rh">Observation 4.4</span> <i>(checked in Lean)</i><span class="rh">.</span> Consider an unordered pair of two atoms that nothing else distinguishes. Exchanging the atoms leaves the pair unchanged but reverses each of its two linear enumerations; hence no ordering function that lists both atoms can be invariant under the exchange. The result is conditional. It says nothing about linearization in actual Minimalist grammars, where features, labels or interface conditions may break the symmetry. The difficulty itself has a substantial prior literature, and no novelty is claimed.</p>
+      </div>
+
+      <div class="env open">
+        <p><span class="rh">Question 4.5.</span> Under explicitly stated interface conditions, does every convergent structure built by unordered MERGE admit a linearization that preserves the required word order, labels and occurrence relations? If not, what is a minimal counterexample; if so, exactly which features break the symmetry?</p>
+      </div>
+      <div class="env open">
+        <p><span class="rh">Question 4.6.</span> For two small grammars written in different frameworks over the same lexical inventory, can an inclusion, an equivalence or a separation be proved for a shared set of observations, such as strings, categorial projections, and movement and copy relations?</p>
+      </div>
+      <div class="env">
+        <p><span class="rh">Remark 4.7.</span> This research is at an early stage. No general equivalence or separation between X-bar theory, Bare Phrase Structure and Minimalist grammars is claimed. There is substantial prior work on the formalization and formal properties of minimalist and related grammars, for example Michaelis (2001), Collins and Stabler (2016) and Schiffer and Maletti (2021), with which the project’s questions have to be connected.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §5 Lean ============================== -->
+<section class="section" id="lean" aria-labelledby="h-lean">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§5</p>
+    <div class="sec-body">
+      <h2 id="h-lean"><span class="vh">§5 </span>Formalization in Lean 4</h2>
+      <p class="lead">Lean&nbsp;4 is a proof assistant: definitions are written in a typed language, and a statement counts as established only when Lean accepts a proof of it. The project uses Lean to state grammatical definitions exactly and to check claims about small grammars.</p>
+
+      <h3>Grammars as data</h3>
+      <p>The Bare Grammar library follows Keenan and Stabler’s format. An expression pairs a string with a category; a grammar is a lexicon and a table of rules; a derivation is an inductively defined object; and an expression belongs to the language exactly when a derivation of it exists.</p>
+<pre class="lean" tabindex="0" aria-label="Lean code: Bare Grammar definitions, abridged"><code><span class="kw">abbrev</span> Expr (Cat : Type) := List String × Cat      <span class="cm">-- a string paired with a category</span>
+
+<span class="kw">structure</span> BareGrammar <span class="kw">where</span>
+  Cat     : Type
+  lexicon : List (Expr Cat)
+  rules   : List (Rule Cat)
+  …
+
+<span class="kw">inductive</span> Deriv (G : BareGrammar) : Expr G.Cat → Type <span class="kw">where</span>
+  | lex : e ∈ G.lexicon → Deriv G e
+  | app : r ∈ G.rules → DerivList G inputs →
+          applyRule G r inputs = some out → Deriv G out
+  …
+
+<span class="kw">def</span> CanYield (G : BareGrammar) (s : List String) (C : G.Cat) : Prop :=
+  Nonempty (Deriv G (s, C))                       <span class="cm">-- a derivation exists</span></code></pre>
+      <p class="src">Abridged from <a href="https://github.com/scpsyche123/syntax-game-v2-demo/blob/main/BareSyntax/Basic.lean"><code>BareSyntax/Basic.lean</code></a>; implicit arguments are omitted. The ellipses stand for further fields and constructors, including a second form of rule whose domain is a decidable condition rather than a list of categories, needed when a category is itself a structured object such as a workspace.</p>
+      <p>Grammars from three periods of generative syntax are instances of this one definition: linear grammars; the X-bar schema with Government-and-Binding conditions (c-selection, Case, the EPP, θ-roles and Move&nbsp;α), produced from parameters, with Turkish setting the head parameter to final; and workspace-based MERGE with a labeling algorithm and interface conditions, for Swahili.</p>
+
+      <h3>Endocentricity: a theorem, or a type</h3>
+      <p>In X-bar theory a phrase has the category of its head. An earlier version of the X-bar formalization stated this as a property of trees and proved it. The current version builds it into the representation: trees are indexed by bar level and category, and the type of the function that returns a tree’s head states the property.</p>
+<pre class="lean" tabindex="0" aria-label="Lean code: X-bar trees and the head function"><code><span class="kw">inductive</span> XTree : Bar → Pos → Type <span class="kw">where</span>
+  | word     : (e : LexicalEntry c) → Lexicon c e.word → XTree .zero c
+  | adjunctL : XTree .two d → XTree .one c → XTree .one c
+  | adjunctR : XTree .one c → XTree .two d → XTree .one c
+  | compl    : XTree .zero c → XTree .two d → Selects c d → XTree .one c
+  | bareX0   : XTree .zero c → XTree .one c
+  | bareX1   : XTree .one c → XTree .two c
+  | Spec     : XTree .two d → XTree .one c → XTree .two c
+
+<span class="kw">def</span> Head : XTree b c → LexicalEntry c</code></pre>
+      <p class="src">From <a href="https://github.com/scpsyche123/syntax-game/blob/main/XSyntax/Tree.lean"><code>XSyntax/Tree.lean</code></a> and <a href="https://github.com/scpsyche123/syntax-game/blob/main/XSyntax/Operations.lean"><code>XSyntax/Operations.lean</code></a> in the earlier X-bar repository.</p>
+      <p><code>XTree b c</code> is the type of trees of bar level <var>b</var> and category <var>c</var>. A complement can be attached only with evidence <code>Selects c d</code> that a head of category <var>c</var> selects a phrase of category <var>d</var>, and a word can be placed only with evidence that the lexicon licenses it in category <var>c</var>. <code>Head</code> assigns to every tree of category <var>c</var> a lexical entry of the same category <var>c</var>; that Lean accepts this definition is the endocentricity property.</p>
+      <div class="env">
+        <p><span class="rh">Remark 5.1.</span> The two versions differ in kind. In the first, endocentricity is a theorem about a general representation, one that could in principle have failed for some tree. In the second, an exocentric tree cannot be written down at all: violations are unrepresentable rather than refuted. This suits a teaching tool, but it matters for comparison, since a principle built into the types can no longer be varied, or its consequences measured, within the same representation. Which principles should be types and which should be theorems is a methodological question for <a href="#expressive-power">§4</a>.</p>
+      </div>
+
+      <figure aria-labelledby="t1-cap">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr><td></td><th scope="col">X-bar trees (<code>XSyntax</code>)</th><th scope="col">Minimalist fragment (<code>BareSyntax/MP</code>)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Syntactic object</th><td data-label="X-bar trees">A tree <code>XTree b c</code>, indexed by bar level and category</td><td data-label="Minimalist fragment">A lexical item, or a two-member object <code>set a b</code> standing for {<var>a</var>, <var>b</var>}</td></tr>
+              <tr><th scope="row">Category</th><td data-label="X-bar trees">A type index, carried by every node</td><td data-label="Minimalist fragment">Computed on the finished object by a labeling algorithm after Chomsky (2013); {XP, YP} may be labeled ⟨φ, φ⟩</td></tr>
+              <tr><th scope="row">Bar levels</th><td data-label="X-bar trees">X<sup>0</sup>, X′ and XP are primitive</td><td data-label="Minimalist fragment">None</td></tr>
+              <tr><th scope="row">Endocentricity</th><td data-label="X-bar trees">Guaranteed by the type of <code>Head</code></td><td data-label="Minimalist fragment">Not built in; a ⟨φ, φ⟩ label is shared by two phrases, not projected from a head</td></tr>
+              <tr><th scope="row">Selection</th><td data-label="X-bar trees">Evidence <code>Selects c d</code> required to attach a complement</td><td data-label="Minimalist fragment">A condition checked at the interface, e.g. T takes vP; n and v take a root</td></tr>
+              <tr><th scope="row">Linear order</th><td data-label="X-bar trees">Fixed by the constructors: specifiers and left adjuncts precede, complements follow the head</td><td data-label="Minimalist fragment">Meant to be absent from narrow syntax and supplied by externalization; the representation nonetheless records order (Observation 4.1)</td></tr>
+              <tr><th scope="row">Ill-formed objects</th><td data-label="X-bar trees">Unrepresentable: no tree of the type exists</td><td data-label="Minimalist fragment">Constructible by free MERGE, then filtered at the interfaces</td></tr>
+              <tr><th scope="row">Displacement</th><td data-label="X-bar trees">Not represented</td><td data-label="Minimalist fragment">Internal MERGE; two occurrences of the same object count as copies</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption id="t1-cap"><b>Table 1.</b> Structural assumptions in the project’s two Lean representations of phrase structure, as currently implemented.</figcaption>
+      </figure>
+
+      <h3>What has been checked</h3>
+      <ul>
+        <li>X-bar trees: well-formedness by construction, selection and lexical licensing as required evidence, and endocentricity by the type of <code>Head</code> (earlier repository).</li>
+        <li>Proofs that particular strings are not generated by a small linear grammar, for example <span class="obj">a very good day</span> in a grammar in which <span class="obj">very</span> can never be the input to a rule (earlier repository).</li>
+        <li>The Bare Grammar library, with linear, X-bar/GB and Minimalist grammars as instances. Each level of the Lean version of the game states its goal together with a solution, so building the project checks that the level can be completed.</li>
+        <li>The four observations of <a href="#pilot">§4</a>. The proof file contains no <code>sorry</code> or <code>admit</code> and builds with the pinned toolchain, Lean&nbsp;4.23.0.</li>
+        <li>The browser demo’s JavaScript transcription of the grammars, compared with Lean’s output case by case.</li>
+      </ul>
+
+      <h3 id="lean-open">Open questions in the formalization</h3>
+      <div class="env open">
+        <p><span class="rh">Question 5.2.</span> How can MERGE be represented as genuinely unordered, as a quotient of the current objects or otherwise, without collapsing the distinct occurrences that Internal MERGE and copies require? A plain finite-set representation would identify the two copies of a displaced phrase.</p>
+      </div>
+      <div class="env open">
+        <p><span class="rh">Question 5.3.</span> On convergent objects, does externalization factor through the identification of <code>set a b</code> with <code>set b a</code>? On arbitrary objects it does not; for the two known convergent objects of Figure 5 the outputs coincide, so the question remains open.</p>
+      </div>
+      <div class="env open">
+        <p><span class="rh">Question 5.4.</span> Which restrictions on condition-domain rules, such as bounded arguments, a stated provenance for outputs, and an observation function fixed independently of the theory under test, make comparisons by yield informative?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §6 Game ============================== -->
+<section class="section" id="game" aria-labelledby="h-game">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§6</p>
+    <div class="sec-body">
+      <h2 id="h-game"><span class="vh">§6 </span>Interactive Syntax Game</h2>
+      <p>The syntax game is a pedagogical application of the formalization. In five short levels the player builds derivations by choosing rules and their inputs; strings, trees and workspaces are computed by the rules and never typed by the player. Each level’s grammar is a Bare Grammar defined in Lean.</p>
+      <ol class="levels">
+        <li><span class="lvname">A linear grammar.</span> <span class="obj">a very good day</span> as an expression of category D, in three steps.</li>
+        <li><span class="lvname">Not in the language.</span> <span class="obj">a very day</span> cannot be derived; every move is rejected.</li>
+        <li><span class="lvname">Too strong.</span> With the added rule D N → N (and the words <span class="obj">the</span>, <span class="obj">this</span>, <span class="obj">dog</span>), the grammar derives <span class="obj">a a the this dog</span> as an N.</li>
+        <li><span class="lvname">X-bar theory with GB.</span> Turkish <span class="obj">kedi köpeği görüyor</span> ‘the cat sees the dog’, with the head parameter set to final, Case, the EPP and Move&nbsp;α.</li>
+        <li><span class="lvname">Minimalist Program.</span> Swahili <span class="obj">mtoto atalala</span> ‘the child will sleep’, with workspace MERGE, labeling and interface conditions.</li>
+      </ol>
+      <p>The browser page cannot run Lean. It runs a JavaScript transcription of the Lean definitions, checked against Lean’s output case by case. A version that runs in Lean itself is in development.</p>
+      <p><a class="btn-outline" href="game/">Play the demo</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §7 Sources ============================== -->
+<section class="section" id="sources" aria-labelledby="h-src">
+  <div class="wrap">
+    <p class="sec-no" aria-hidden="true">§7</p>
+    <div class="sec-body">
+      <h2 id="h-src"><span class="vh">§7 </span>Sources and Project Materials</h2>
+      <dl class="sources">
+        <div>
+          <dt>Lean 4 source code</dt>
+          <dd><a href="https://github.com/scpsyche123/syntax-game-v2-demo/blob/main/playground/Expressivity.lean"><code>playground/Expressivity.lean</code></a>, the proofs for §4
+            <small>The Bare Grammar library and its three grammars are in <a href="https://github.com/scpsyche123/syntax-game-v2-demo/tree/main/BareSyntax"><code>BareSyntax/</code></a>.</small></dd>
+        </div>
+        <div>
+          <dt>Research notes</dt>
+          <dd><a href="https://github.com/scpsyche123/syntax-game-v2-demo/blob/main/docs/research/expressive-power-2026-11-21.md">Comparing syntactic models’ expressive power: initial investigation</a>
+            <small>21 November 2026. The distinctions of Figure 4, the checked findings, their limits and next steps.</small></dd>
+        </div>
+        <div>
+          <dt>Earlier X-bar project</dt>
+          <dd><a href="https://github.com/scpsyche123/syntax-game">github.com/scpsyche123/syntax-game</a>
+            <small>X-bar trees in Lean&nbsp;4 (<code>XSyntax/</code>), the first Bare Grammar library and the non-derivability proofs.</small></dd>
+        </div>
+        <div>
+          <dt>Interactive demo</dt>
+          <dd><a href="game/">The syntax game</a>
+            <small>Five levels in the browser; nothing to install.</small></dd>
+        </div>
+        <div>
+          <dt>Main repository</dt>
+          <dd><a href="https://github.com/scpsyche123/syntax-game-v2-demo">github.com/scpsyche123/syntax-game-v2-demo</a>
+            <small>Lean sources, the game, this page and the research notes.</small></dd>
+        </div>
+      </dl>
+
+      <h3>Works cited</h3>
+      <ul class="refs">
+        <li>Chomsky, N. (2013). Problems of projection. <em>Lingua</em> 130, 33–49.</li>
+        <li>Collins, C. and E. P. Stabler (2016). <a href="https://onlinelibrary.wiley.com/doi/10.1111/synt.12117">A formalization of minimalist syntax</a>. <em>Syntax</em> 19(1), 43–78.</li>
+        <li>Holder, T. (2010). <a href="https://link.springer.com/chapter/10.1007/978-3-642-14322-9_8">Sortal equivalence of bare grammars</a>. In C. Ebert, G. Jäger and J. Michaelis (eds.), <em>The Mathematics of Language</em>, LNCS 6149, 88–102. Springer.</li>
+        <li>Keenan, E. L. and E. P. Stabler (2003). <a href="https://web.stanford.edu/group/cslipublications/cslipublications/site/1575861887.shtml"><em>Bare Grammar: A Study of Language Invariants</em></a>. Stanford Monographs in Linguistics. CSLI Publications.</li>
+        <li>Michaelis, J. (2001). <a href="https://wwwhomes.uni-bielefeld.de/~jmichaelis/papers/Mich-98.html">Derivational minimalism is mildly context-sensitive</a>. In M. Moortgat (ed.), <em>Logical Aspects of Computational Linguistics</em>, LNAI 2014, 179–198. Springer.</li>
+        <li>Rogers, J. (1996). <a href="https://aclanthology.org/P96-1002/">A model-theoretic framework for theories of syntax</a>. In <em>Proceedings of the 34th Annual Meeting of the Association for Computational Linguistics</em>, 10–16.</li>
+        <li>Schiffer, L. K. and A. Maletti (2021). <a href="https://aclanthology.org/2021.tacl-1.43/">Strong equivalence of TAG and CCG</a>. <em>Transactions of the Association for Computational Linguistics</em> 9, 707–720.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p>This page is <code>docs/index.html</code> in the repository <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>; the game is <code>docs/game/index.html</code>. Last updated November 2026.</p>
+    <p>Set in STIX Two, Instrument Sans and JetBrains Mono, under the SIL Open Font License.</p>
+  </div>
+</footer>
 </body>
 </html>
