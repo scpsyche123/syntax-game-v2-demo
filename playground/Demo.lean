@@ -42,16 +42,16 @@ example (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
 
 /-! ## Overgeneration — `linear₂` adds Rule 4: N → D N
 
-It now derives a string no speaker accepts. -/
+With Rule 4 alone it derives a string no speaker accepts, as an N. -/
 example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
     (the : (["the"], Linear1Cat.D) ∈ linear₂.lexicon)
     (this : (["this"], Linear1Cat.D) ∈ linear₂.lexicon)
     (dog : (["dog"], Linear1Cat.N) ∈ linear₂.lexicon) :
-    CanYield linear₂ ["a", "a", "the", "this", "dog"] .D := by
+    CanYield linear₂ ["a", "a", "the", "this", "dog"] .N := by
   rule "N -> D N" this dog
   rule "N -> D N" the this_dog_N
   rule "N -> D N" a the_this_dog_N
-  rule "D -> D N" a a_the_this_dog_N
+  rule "N -> D N" a a_the_this_dog_N
 
 /-! ## Level 2 — X-bar theory with GB
 

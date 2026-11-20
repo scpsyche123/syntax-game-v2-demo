@@ -70,6 +70,19 @@ msgstr ""
 msgid "intermediate goal solved! 🎉"
 msgstr ""
 
+#. §0: `linear₂`
+#. §1: `D → D N`
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "The proof went through, and that is the problem. *a a the this dog* is not an expression of\n"
+"English, yet §0 derives it, so the rule is too strong. Rule 4 takes an N and returns an N,\n"
+"so it can apply again and again.\n"
+"\n"
+"Suppose instead we keep only Rule 3, §1, and set the goal to D. Then *this dog* becomes a D,\n"
+"no rule applies after that, and ⟨a a the this dog, D⟩ cannot be derived. That is the result we want.\n"
+"Failing to derive is also a good result: a good model should not allow more than the natural\n"
+"language does."
+msgstr ""
+
 #. §0: `rule \"NAME\" x y …`
 #. §1: `the_cat_DP`
 #. §2: `\"D' -> D0 NP\"`
@@ -196,13 +209,6 @@ msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
 "The rule computes the result and names it (§7); you only choose the rule and its inputs."
 msgstr ""
 
-#. §0: `linear₂`
-#: Game.Levels.Demo.L02_Overgeneration
-msgid "The proof went through, and that is the problem: *a a the this dog* is not English, but\n"
-"§0 generates it. Rule 4 feeds itself, so determiners stack without limit.\n"
-"The error is in the grammar, and Lean finds it by deriving the string."
-msgstr ""
-
 #: Game
 msgid "Syntax Game v2 · Bare Grammar demo"
 msgstr ""
@@ -257,6 +263,10 @@ msgstr ""
 msgid "Build ⟨a very good day, D⟩ in the linear grammar."
 msgstr ""
 
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "Build ⟨a a the this dog, N⟩ with Rule 4."
+msgstr ""
+
 #. §0: `very`
 #. §1: `good`
 #. §2: `rule \"A -> Adv A\" very good`
@@ -268,10 +278,6 @@ msgstr ""
 msgid "A linear grammar"
 msgstr ""
 
-#: Game.Levels.Demo.L02_Overgeneration
-msgid "Build ⟨a a the this dog, D⟩ with the extra rule."
-msgstr ""
-
 #. §0: `rule \"T' -> T0 VP\" s see_the_dog_VP`
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Now T: §0. Watch what happens to *see*."
@@ -279,21 +285,15 @@ msgstr ""
 
 #. §0: `linear₂`
 #. §1: `linear₁`
-#. §2: `A → Adv A`
-#. §3: `N → A N`
-#. §4: `D → D N`
-#. §5: `N → D N`
+#. §2: `N → D N`
 #: Game.Levels.Demo.L02_Overgeneration
 msgid "§0 is §1 with three more words (the : D, this : D, dog : N) and one more rule:\n"
 "\n"
-"- Rule 1: §2\n"
-"- Rule 2: §3\n"
-"- Rule 3: §4\n"
-"- Rule 4: §5\n"
+"- Rule 4: §2\n"
 "\n"
 "Rule 4 looks harmless. But its output is an N, and Rule 4 also takes an N.\n"
 "\n"
-"**Goal:** show that ⟨a a the this dog, D⟩ ∈ L(linear₂)."
+"**Goal:** show that ⟨a a the this dog, N⟩ ∈ L(linear₂), using only Rule 4."
 msgstr ""
 
 #: Game.Levels.Demo.L03_XBarGB

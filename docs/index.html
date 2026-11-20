@@ -318,13 +318,14 @@ const LEVELS = [
  { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Cannot be cleared', impossible: true,
    words: [['a', 'D'], ['very', 'Adv'], ['day', 'N']], goal: 'D',
    lead: '<h2>Not in the language</h2><p>Same grammar. Try to build <i>a very day</i> as a D. This level cannot be cleared: every grouping of neighbours, with every rule, is rejected.</p>',
-   why: 'very is an Adv. The only rule that takes an Adv is Rule 1, A → Adv A, and it needs an A right after it; here very is followed by day, an N. No rule takes D and Adv either. So very can never join anything, and a very day is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
+   why: '*very* is an Adv. The only rule that takes an Adv is Rule 1, A → Adv A, and it needs an A right after it; here *very* is followed by *day*, an N. No rule takes D and Adv either. So *very* can never join anything, and *a very day* is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
    done: '' },
- { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration', rules: [2, 3],
-   words: [['a', 'D'], ['a', 'D'], ['the', 'D'], ['this', 'D'], ['dog', 'N']], goal: 'D',
-   lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: N → D N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as a D.</p>',
-   solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [2, ['a', 'a the this dog']]],
-   done: 'Cleared, and that is the problem: a a the this dog is not English, but linear₂ generates it. Rule 4 feeds itself, so determiners stack without limit. The error is in the grammar, and deriving the string shows it.' },
+ { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration', rules: [3],
+   words: [['a', 'D'], ['a', 'D'], ['the', 'D'], ['this', 'D'], ['dog', 'N']], goal: 'N',
+   lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: N → D N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as an N, using only Rule 4.</p>',
+   solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [3, ['a', 'a the this dog']]],
+   done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
+     'Suppose instead we keep only Rule 3, D → D N, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
    lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'TP' },
    lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rule table is produced by a function, the X-bar schema, from GB data: c-selection decides which complements exist; only Case positions take a DP, so the Case Filter is a property of the table; there is no TP → T′ (EPP). T′ → T⁰ VP does not concatenate: it lowers the affix onto the verb. Lexical items are never used up. Click inputs in order (words in the lexicon or nodes in the trees), then a rule.</p>',
@@ -350,7 +351,7 @@ function initState(lv) {
 }
 const snapshot = () => JSON.stringify({ ...st, hist: [], msgs: [] });
 function push() { st.hist.push(snapshot()); }
-function finish() { st.closed = true; solved.add(cur); if (L().done) st.msgs.push({ t: L().done, k: 'p' }); }
+function finish() { st.closed = true; solved.add(cur); [].concat(L().done || []).forEach(t => st.msgs.push({ t, k: 'p' })); }
 
 /* ---------- actions ---------- */
 function applySentence(ri) {
@@ -549,8 +550,9 @@ function drawGoal() {
 }
 function drawMsgs() {
   const lv = L();
-  let m = st.msgs.map(x => `<div class="msg ${x.k}">${esc(x.t)}</div>`).join('');
-  if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${esc(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
+  const prose = t => esc(t).replace(/\*([^*]+)\*/g, '<i>$1</i>');
+  let m = st.msgs.map(x => `<div class="msg ${x.k}">${x.k === 'p' ? prose(x.t) : esc(x.t)}</div>`).join('');
+  if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${prose(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
   if ((st.closed || lv.impossible) && !playing && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level: ${esc(LEVELS[cur + 1].name)}</button>`;
   document.getElementById('msgs').innerHTML = m;
   document.getElementById('undo').disabled = !st.hist.length || playing;

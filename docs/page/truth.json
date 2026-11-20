@@ -420,7 +420,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"D -> D N\" a a_the_this_dog_N",
+    "cmd": "rule \"N -> D N\" a a_the_this_dog_N",
     "before": [
      [
       "a",
@@ -481,8 +481,8 @@
       "⟨a the this dog, N⟩"
      ],
      [
-      "a_a_the_this_dog_D",
-      "⟨a a the this dog, D⟩"
+      "a_a_the_this_dog_N",
+      "⟨a a the this dog, N⟩"
      ]
     ],
     "messages": [],
