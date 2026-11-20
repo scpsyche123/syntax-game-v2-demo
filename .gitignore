@@ -1,0 +1,10 @@
+build/
+lake-packages/
+.lake/
+**/.DS_Store
+.i18n/**/*.mo
+
+.history/
+
+# Claude Code worktrees (multi-window parallel work, see docs/WORKFLOW.md)
+.claude/worktrees/

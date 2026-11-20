@@ -1,0 +1,311 @@
+msgid ""
+msgstr "Project-Id-Version: Game v4.23.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-20\n"
+"Last-Translator: \n"
+"Language-Team: none\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+#: Game.Levels.Demo.L01_Linear
+msgid "Build ⟨a good day, N⟩ in the linear grammar."
+msgstr ""
+
+#: GameServer.RpcHandlers
+msgid "level completed! 🎉"
+msgstr ""
+
+#. §0: `rule \"N' -> N0\" cat`
+#. §1: `rule \"NP -> N'\" cat_N'`
+#: Game.Levels.Demo.L02_XBarGB
+msgid "Start with a noun: §0, then §1."
+msgstr ""
+
+#. §0: `N′ → N⁰`
+#. §1: `NP → N′`
+#. §2: `D′ → D⁰ NP`
+#. §3: `DP → D′`
+#. §4: `V′ → V⁰ DP`
+#. §5: `VP → V′`
+#. §6: `T′ → T⁰ VP`
+#. §7: `TP → DP T′`
+#. §8: `rule \"N' -> N0\" cat`
+#. §9: `cat_N'`
+#. §10: `cat_NP`
+#: Game.Levels.Demo.L02_XBarGB
+msgid "Same language, a different grammar.\n"
+"\n"
+"Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
+"The rule table is not written by hand. A function — the **X-bar schema** — produces it\n"
+"from GB's lexical information:\n"
+"\n"
+"- **X-bar schema:** X′ → X⁰ (YP), XP → (YP) X′.\n"
+"- **c-selection:** D selects NP, V selects DP, T selects VP.\n"
+"- **Case:** a DP may only stand where Case is assigned: as the complement of V (accusative)\n"
+"  or the specifier of finite T (nominative). No other rule accepts a DP,\n"
+"  so the Case Filter is a property of the rule table.\n"
+"- **EPP:** there is no rule TP → T′.\n"
+"- **Infl lowering:** T′ → T⁰ VP does not just concatenate. It attaches the affix in T⁰ to\n"
+"  the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,\n"
+"  not only concatenation.\n"
+"\n"
+"The rules this produces:\n"
+"\n"
+"§0 · §1 · §2 · §3 · §4 · §5 · §6 · §7\n"
+"\n"
+"**Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).\n"
+"\n"
+"Build from the bottom up, for example §8. Each result gets a name you can\n"
+"use in the next step (§9, then §10, …).\n"
+"The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs."
+msgstr ""
+
+#. §0: `select the n cat will v sleep`
+#: Game.Levels.Demo.L03_MP
+msgid "Begin by drawing the lexical items into the workspace: §0."
+msgstr ""
+
+#: Game.Levels.Demo.L03_MP
+msgid "Narrow syntax for *the cat will sleep*."
+msgstr ""
+
+#: GameServer.RpcHandlers
+msgid "intermediate goal solved! 🎉"
+msgstr ""
+
+#. §0: `rule \"NAME\" x y …`
+#. §1: `the_cat_DP`
+#. §2: `\"D' -> D0 NP\"`
+#. §3: `\"D′ → D⁰ NP\"`
+#. §4: `as NAME`
+#: Game.Metadata
+msgid "§0 applies the rule NAME to the expressions x, y, … in\n"
+"your hypotheses. The rule computes the result, which appears as a new\n"
+"hypothesis with a readable name (for example §1). If the rule is not\n"
+"defined on those inputs, it is rejected.\n"
+"\n"
+"Rule names may be typed with ASCII: §2 means §3.\n"
+"Add §4 at the end to choose the name of the result yourself."
+msgstr ""
+
+#: Game.Levels.Demo.L03_MP
+msgid "Look at the last step. Before Internal MERGE, {DP, vP} had no label: neither D nor v\n"
+"shares a feature with the other. After it, the lower DP is a copy, the labeling algorithm\n"
+"sees only vP, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ.\n"
+"Externalization pronounced only the higher copy: *the cat will sleep*.\n"
+"\n"
+"Three levels, three generations of generative syntax, one language.\n"
+"In each, a grammar is categories, a lexicon and rules — data — and Lean checks every step."
+msgstr ""
+
+#: Game
+msgid "This demo shows one formal language expressing grammars from three eras of generative syntax:\n"
+"\n"
+"1. a linear grammar,\n"
+"2. X-bar theory with GB modules (c-selection, Case, EPP, Infl lowering),\n"
+"3. the Minimalist Program of the workspace era (MERGE on workspaces, labeling).\n"
+"\n"
+"The language is Bare Grammar (Keenan & Stabler 2003), implemented in Lean 4. A grammar is\n"
+"data — categories, a lexicon, rules — and an expression belongs to the language when there is\n"
+"a derivation of it. Every step you take is checked by Lean's kernel."
+msgstr ""
+
+#: Game.Levels.Demo.L02_XBarGB
+msgid "Build ⟨the cat sees the dog, TP⟩ in X-bar theory with GB modules."
+msgstr ""
+
+#. §0: `?`
+#. §1: `copy(…)`
+#. §2: `select the n cat will v sleep`
+#. §3: `merge P Q`
+#. §4: `the`
+#. §5: `cat`
+#. §6: `DP`
+#. §7: `vP`
+#. §8: `TP`
+#. §9: `{DP, vP}`
+#: Game.Levels.Demo.L03_MP
+msgid "Same language, a grammar from a later era. Here **an expression is a workspace**.\n"
+"Following Chomsky (2020, *UCLA Lectures*):\n"
+"\n"
+"  MERGE(P, Q, WS) = [{P, Q}, …] = WS′\n"
+"\n"
+"MERGE replaces P and Q by the set {P, Q}. If P and Q are both members of WS, this is\n"
+"External MERGE, and WS loses one member. If P is a term of Q, it is Internal MERGE,\n"
+"and WS keeps its size. One operation, not two.\n"
+"\n"
+"In Bare Grammar terms: the lexicon has one expression, the empty workspace.\n"
+"Select and MERGE are rules whose domain is a decidable condition rather than a list\n"
+"of categories.\n"
+"\n"
+"MERGE neither labels nor linearizes. Labels come from a labeling algorithm (after Chomsky 2013):\n"
+"\n"
+"- {H, XP}: H labels.\n"
+"- {n, √root}, {v, √root}: a root cannot label, so n or v does.\n"
+"- {XP, YP}: labeled ⟨φ,φ⟩ if both heads carry φ; otherwise no label —\n"
+"  unless one of the two is a lower copy, which the algorithm does not see.\n"
+"\n"
+"Unlabeled nodes show as §0, lower copies as §1.\n"
+"\n"
+"**Goal:** a workspace with one object, every node labeled. Externalization — word order,\n"
+"which copy is pronounced — is checked automatically. You only do narrow syntax.\n"
+"\n"
+"**Commands:**\n"
+"\n"
+"- §2 draws lexical items into WS.\n"
+"- §3, where P and Q are lexical items (§4, §5), phrases named by their label\n"
+"  (§6, §7, §8), or a set of two such names (§9).\n"
+"\n"
+"*Simplifications:* two occurrences of the same object count as copies;\n"
+"Agree is not modeled (T's φ counts as valued); no phases."
+msgstr ""
+
+#: Game.Levels.Demo.L02_XBarGB
+msgid "Twelve rule applications, all with the command from level 1.\n"
+"\n"
+"GB's modules entered as data — what the schema generates, which positions accept a DP,\n"
+"which rule lowers the affix — not as new machinery in the language."
+msgstr ""
+
+#. §0: `linear₁`
+#. §1: `N → D N`
+#. §2: `N → D A N`
+#. §3: `rule \"N → D A N\" a good day`
+#. §4: `rule \"N -> D A N\" a good day`
+#: Game.Levels.Demo.L01_Linear
+msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
+"\n"
+"- a set of **categories**,\n"
+"- a **lexicon** of expressions, where an expression is a pair ⟨string, category⟩,\n"
+"- a set of **rules**, each a partial function from expressions to an expression.\n"
+"\n"
+"The language L(G) is everything that can be built from the lexicon with the rules.\n"
+"\n"
+"The grammar of this level is §0:\n"
+"\n"
+"- Lexicon: ⟨a, D⟩, ⟨very, Adv⟩, ⟨good, A⟩, ⟨day, N⟩\n"
+"- Rules: §1, §2\n"
+"\n"
+"**Goal:** show that ⟨a good day, N⟩ ∈ L(linear₁).\n"
+"\n"
+"**Command:** §3 applies a rule to expressions in your hypotheses.\n"
+"The rule computes the result; you only choose the rule and its inputs.\n"
+"ASCII works too: §4."
+msgstr ""
+
+#: Game
+msgid "Syntax Game v2 · Bare Grammar demo"
+msgstr ""
+
+#: Game.Levels.Demo.L03_MP
+msgid "One object is left, but {DP, vP} has no label. What can MERGE do that makes the DP inside invisible there?"
+msgstr ""
+
+#: Game.Levels.Demo.L02_XBarGB
+msgid "X-bar theory with GB"
+msgstr ""
+
+#. §0: `merge n cat`
+#: Game.Levels.Demo.L03_MP
+msgid "Build the noun first: §0."
+msgstr ""
+
+#: GameServer.RpcHandlers
+msgid "level completed with warnings… 🎭"
+msgstr ""
+
+#. §0: `merge P Q`
+#. §1: `the`
+#. §2: `n`
+#. §3: `cat`
+#. §4: `will`
+#. §5: `v`
+#. §6: `sleep`
+#. §7: `DP`
+#. §8: `nP`
+#. §9: `vP`
+#. §10: `TP`
+#. §11: `{DP, vP}`
+#: Game.Metadata
+msgid "§0 performs MERGE(P, Q, WS): it replaces P and Q by {P, Q}.\n"
+"\n"
+"P and Q can be written as\n"
+"* a lexical item: §1, §2, §3, §4, §5, §6;\n"
+"* a phrase named by its label: §7, §8, §9, §10;\n"
+"* a set of two such names: §11.\n"
+"\n"
+"External MERGE: P and Q are both members of WS. Internal MERGE: one is a term\n"
+"of the other. Anything else is rejected."
+msgstr ""
+
+#: Game.Levels.Demo
+msgid "Three levels, three grammars from three eras of generative syntax, written in one formal\n"
+"language. Each grammar is data: categories, a lexicon, rules. The same derivation relation,\n"
+"checked by Lean, decides what each grammar generates."
+msgstr ""
+
+#: Game.Levels.Demo.L01_Linear
+msgid "A linear grammar"
+msgstr ""
+
+#. §0: `rule \"T' -> T0 VP\" s see_the_dog_VP`
+#: Game.Levels.Demo.L02_XBarGB
+msgid "Now T: §0. Watch what happens to *see*."
+msgstr ""
+
+#: Game.Levels.Demo.L01_Linear
+msgid "One rule, one step.\n"
+"\n"
+"The same command — choose a rule, give it its inputs — runs every level of this demo.\n"
+"What changes from level to level is only the grammar: its categories, its lexicon, its rules.\n"
+"Nothing about linear grammar is built into the language."
+msgstr ""
+
+#. §0: `rule \"N -> D A N\" a good day`
+#: Game.Levels.Demo.L01_Linear
+msgid "Which rule has three inputs: a D, an A and an N? Try §0."
+msgstr ""
+
+#. §0: `select x y …`
+#. §1: `the`
+#. §2: `n`
+#. §3: `cat`
+#. §4: `will`
+#. §5: `v`
+#. §6: `sleep`
+#: Game.Metadata
+msgid "§0 draws lexical items into the workspace WS (rule Select).\n"
+"The lexicon of this grammar: §1, §2, §3, §4, §5, §6."
+msgstr ""
+
+#: Game.Levels.Demo
+msgid "One language, three theories"
+msgstr ""
+
+#. §0: `BareSyntax/Basic.lean`
+#. §1: `Deriv`
+#. §2: `CanYield`
+#. §3: `{{BUILD_VERSION}}`
+#: Game
+msgid "**The language.** §0: expressions ⟨string, category⟩, rules as partial\n"
+"functions, the derivation relation §1, grammaticality §2. Rules come in two forms:\n"
+"a domain given as a list of categories (levels 1–2), or a domain given as a decidable condition\n"
+"(level 3, where categories are workspaces).\n"
+"\n"
+"**References.**\n"
+"Keenan, E. & Stabler, E. (2003). *Bare Grammar: Lectures on Linguistic Invariants.* CSLI.\n"
+"Chomsky, N. (2013). Problems of projection. *Lingua* 130.\n"
+"Chomsky, N. (2020). *The UCLA Lectures.*\n"
+"Pan, V. J. *Lecture 10: The Minimalist Program* (\\§9).\n"
+"\n"
+"Source: https://github.com/scpsyche123/syntax-game-v2-demo\n"
+"\n"
+"---\n"
+"\n"
+"*Build: §3*"
+msgstr ""
+
+#: Game.Levels.Demo.L03_MP
+msgid "The Minimalist Program: MERGE on workspaces"
+msgstr ""
