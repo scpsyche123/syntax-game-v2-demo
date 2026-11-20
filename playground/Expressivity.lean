@@ -28,6 +28,46 @@ theorem merge_yields_different_order :
     MP.ext (MP.SO.set b a) (MP.SO.set b a) 0 = ["lala", "toto"] := by
   decide
 
+-- The prescribed Swahili fragment also admits distinct *convergent* raw
+-- structures when the two daughters of nP are reversed consistently.
+private def nP₁ : MP.SO := .set (.li .m) (.li .toto)
+private def nP₂ : MP.SO := .set (.li .toto) (.li .m)
+private def vP : MP.SO := .set (.li .v) (.li .lala)
+private def r₁ : MP.SO := .set nP₁ (.set (.li .ata) (.set nP₁ vP))
+private def r₂ : MP.SO := .set nP₂ (.set (.li .ata) (.set nP₂ vP))
+
+theorem distinct_narrow_syntax_objects : r₁ ≠ r₂ := by
+  decide
+
+theorem both_satisfy_interface :
+    MP.allLabeled r₁ r₁ 0 = true ∧ MP.ciOK r₁ = true ∧
+    MP.allLabeled r₂ r₂ 0 = true ∧ MP.ciOK r₂ = true := by
+  decide
+
+theorem same_surface_string :
+    MP.ext r₁ r₁ 0 = ["mtoto", "atalala"] ∧
+    MP.ext r₂ r₂ 0 = ["mtoto", "atalala"] := by
+  decide
+
+-- Both merge orders can be used in a full successful proof of Converges.
+-- These two goals are extensionally the same proposition, but the named
+-- merge sequence constructs distinct underlying SO values r₁ and r₂.
+theorem standard_subject_order_converges : MP.Converges ["mtoto", "atalala"] := by
+  select m toto ata v lala
+  merge m toto
+  merge v lala
+  merge nP vP
+  merge ata {nP, vP}
+  merge nP TP
+
+theorem reversed_subject_order_converges : MP.Converges ["mtoto", "atalala"] := by
+  select m toto ata v lala
+  merge toto m
+  merge v lala
+  merge nP vP
+  merge ata {nP, vP}
+  merge nP TP
+
 -- The ambient FRule definition places no bound on Arg or output provenance.
 def unrestrictedRule : FRule Unit (List String) where
   name := "unrestricted generator"
