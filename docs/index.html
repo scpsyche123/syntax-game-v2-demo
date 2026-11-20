@@ -39,10 +39,10 @@ header p.note{margin-bottom:20px;font-style:italic;color:#c9d4f0}
 .tab.gray{color:#aab5d0;border-style:dashed;border-color:rgba(255,255,255,.4)}
 .tab.gray[aria-selected=true]{background:#d7dbe4;border-color:#d7dbe4;border-style:solid;color:#3d4250}
 button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-/* the stage: board (trees + rules in one box, goal strip under it) left; level text and messages right */
-.stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);grid-template-areas:"play lead" "play msgs";grid-template-rows:auto 1fr;column-gap:28px;align-items:start}
-.play{grid-area:play}.lead{grid-area:lead}.msgs{grid-area:msgs}
-@media(max-width:1000px){.stage{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "play" "msgs";grid-template-rows:auto}}
+/* the stage: board, goal, controls and messages on the left; level text on the right */
+.stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);grid-template-areas:"play lead";column-gap:28px;align-items:start}
+.play{grid-area:play}.lead{grid-area:lead}
+@media(max-width:1000px){.stage{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "play"}}
 .lead{max-width:72ch;margin:0 0 14px}
 .lead h2{font-size:clamp(26px,3vw,34px);line-height:1.1;margin:0 0 8px;font-weight:600}
 .lead p{margin:0 0 8px}
@@ -67,6 +67,9 @@ svg .str{font-size:12.5px;fill:var(--acc)}
 svg .lower{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-dasharray:5 3}
 svg .ahead{fill:var(--blue)}
 svg .lowlab{fill:var(--blue);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+svg .move{stroke:var(--acc);stroke-width:1.4;fill:none;stroke-dasharray:6 3}
+svg .mhead{fill:var(--acc)}
+svg .movelab{fill:var(--acc);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
 svg .edge{stroke:var(--muted);stroke-width:1.2;fill:none}
 svg .q{fill:var(--acc);font-weight:600}
 svg .copy{fill:var(--muted)}
@@ -100,8 +103,7 @@ svg .bracket{stroke:var(--ink);stroke-width:1.6;fill:none}
 .btn.solid{background:var(--blue);color:var(--bg)}
 .btn:disabled{opacity:.4;cursor:default}
 .btn[hidden]{display:none}
-.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
-@media(max-width:1000px){.msgs{margin-top:14px}}
+.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:14px}
 .msg{font:13.5px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:9px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .msg.i{background:var(--okbg);border-left:3px solid var(--blue)}
 .msg.e{background:var(--accbg);border-left:3px solid var(--acc)}
@@ -135,9 +137,9 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
     <button class="btn" id="reset" type="button">Start over</button>
     <button class="btn" id="solve" type="button">Solution</button>
   </div>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
 </div>
 <div class="lead" id="lead"></div>
-<div class="msgs" id="msgs" aria-live="polite"></div>
 </div></main>
 
 <footer class="band"><div class="wrap cols">
@@ -588,18 +590,31 @@ function drawForest(trees, o) {
     t.kids.forEach(node);
   };
   trees.forEach(node);
-  if (o.arrow) {
+  if (o.arrows && o.arrows.length) {
     const all = [], walk = t => { all.push(t); t.kids.forEach(walk); }; trees.forEach(walk);
-    const A = all.find(t => t.cat === o.arrow.from), B = all.find(t => t.cat === o.arrow.to);
-    if (A && B) {
-      /* from T⁰ down past its suffix, then along V⁰'s row, under the trace */
-      /* from T⁰ down past its own suffix, then into V⁰ from the side facing T⁰ */
+    const pick = (spec, side) => all.find(t => {
+      if (spec[side + 'Cat'] !== undefined && t.cat === spec[side + 'Cat']) return true;
+      if (spec[side + 'Word'] !== undefined && t.word === spec[side + 'Word']) return true;
+      if (spec[side + 'CatSuffix'] !== undefined && t.cat && t.cat.endsWith(spec[side + 'CatSuffix'])) return true;
+      return false;
+    });
+    g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker><marker id="mh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="mhead" d="M0 0 L10 5 L0 10z"/></marker></defs>`;
+    o.arrows.forEach(spec => {
+      const A = pick(spec, 'from'), B = pick(spec, 'to');
+      if (!A || !B) return;
       const dir = B.x >= A.x ? 1 : -1;
-      const x1 = A.x + 12 * dir, y1 = A.y * ROW + 22, x2 = B.x - 16 * dir, y2 = B.y * ROW + 16;
-      g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker></defs>` +
-        `<path class="lower" d="M${x1} ${y1} C ${A.x + 30 * dir} ${(A.y + 1) * ROW + 14}, ${x2 - 30 * dir} ${y2 - 4}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
-        `<text class="lowlab" x="${B.x - 20 * dir}" y="${y2 + 22}" text-anchor="${dir > 0 ? 'end' : 'start'}">${esc(o.arrow.label)}</text>`;
-    }
+      if (spec.kind === 'move') {
+        const x1 = A.x + 10 * dir, y1 = A.y * ROW + 12, x2 = B.x - 10 * dir, y2 = B.y * ROW + 2;
+        const cx1 = x1 + 26 * dir, cy1 = y1 - 34, cx2 = x2 - 26 * dir, cy2 = y2 + 26;
+        const lx = (x1 + x2) / 2, ly = Math.min(y1, y2) - 14;
+        g += `<path class="move" d="M${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}" marker-end="url(#mh)"/>` +
+          `<text class="movelab" x="${lx}" y="${ly}" text-anchor="middle">${esc(spec.label)}</text>`;
+      } else {
+        const x1 = A.x + 12 * dir, y1 = A.y * ROW + 22, x2 = B.x - 16 * dir, y2 = B.y * ROW + 16;
+        g += `<path class="lower" d="M${x1} ${y1} C ${A.x + 30 * dir} ${(A.y + 1) * ROW + 14}, ${x2 - 30 * dir} ${y2 - 4}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
+          `<text class="lowlab" x="${B.x - 20 * dir}" y="${y2 + 22}" text-anchor="${dir > 0 ? 'end' : 'start'}">${esc(spec.label)}</text>`;
+      }
+    });
   }
   if (o.ws) g += `<path class="bracket" d="M10 4 h-6 v${H - 8} h6 M${W - 10} 4 h6 v${H - 8} h-6"/>`;
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(o.aria)}">${g}</svg>`;
@@ -643,12 +658,15 @@ function drawPic() {
         (moved && x === moved && e.mover && j === 0 && e.ri === 2) ? { word: 'tᵢ', kids: [] } : build(find(x), id + '.' + j, moved)) };
     };
     const roots = rootsOf().map((d, i) => build(d, 'T' + i));
+    const treeHas = (t, pred) => pred(t) || t.kids.some(c => treeHas(c, pred));
+    const arrows = [];
+    if (roots.some(t => treeHas(t, n => n.cat === 'T⁰') && treeHas(t, n => n.cat === 'V⁰'))) arrows.push({ kind: 'lower', fromCat: 'T⁰', toCat: 'V⁰', label: 'suffix lowering' });
+    if (roots.some(t => treeHas(t, n => n.word === 'tᵢ') && treeHas(t, n => n.cat && n.cat.endsWith('ᵢ')))) arrows.push({ kind: 'move', fromWord: 'tᵢ', toCatSuffix: 'ᵢ', label: 'Move α' });
     h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
       lv.lexicon.map(([w, c, gloss]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
         return `<button class="item lexeme" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}><span class="lex-main">${esc(w || '∅')} <span class="c">${esc(c)}</span></span><span class="lex-gloss">${esc(gloss)}</span></button>`; }).join('') +
       `</div>` + rulesRow(lv, dis) +
-      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees',
-        arrow: st.closed && lv.arrow ? lv.arrow : null })}</div>`
+      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees', arrows })}</div>`
         : `<div class="empty">Nothing built yet. Click an item in the lexicon, then a rule.</div>`);
   } else {
     const items = st.ws.map((R, i) => mpTree(R, R, 0, [i]));
@@ -656,7 +674,7 @@ function drawPic() {
     h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
       '<div class="tools"><span class="lab">Select</span>' +
       ['m', 'toto', 'ata', 'v', 'lala'].map(x => `<button class="item lexeme" type="button" data-li="${x}"${dis}><span class="lex-main">${esc(E.liText(x))}</span><span class="lex-gloss">${esc(lv.glosses[x])}</span></button>`).join('') +
-      `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS) <small>replaces P and Q by {P, Q}</small></button></div>` +
+      `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS)</button></div>` +
       (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
   }
   box.innerHTML = h;
