@@ -34,6 +34,12 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
   the player chooses rules and inputs, never types an output.
 - Level 4 asks only for narrow syntax: one object in the workspace, every node labeled.
   Externalization (order, pronouncing the highest copy) is computed and checked by Lean.
+- MERGE is free; the finished object is filtered at CI by selection (D takes nP, T takes
+  vP, n and v take a root), the θ-criterion (the subject first merges with vP) and a chain
+  condition (only the subject moves, once, to the specifier of T). These are checked
+  automatically with externalization. Without them, a search of all derivations with at
+  most two Internal MERGEs found 1784 objects pronounced "the cat will sleep" with every
+  node labeled; with them, exactly one.
 - MERGE follows Chomsky (2020, *UCLA Lectures*) as quoted in V. J. Pan, *Lecture 10: The
   Minimalist Program*, §9: MERGE replaces P and Q by {P, Q}. Pan & Du's rendering
   [{P, Q}, P, Q, …] is not used.

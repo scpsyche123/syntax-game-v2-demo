@@ -26,6 +26,18 @@ How this sits in Bare Grammar:
     - {XP, YP}: labeled ⟨φ,φ⟩ if both labeling heads carry φ; otherwise
       unlabeled, unless one of them is a lower copy, which is invisible.
 
+MERGE is free; what it builds is filtered at the interfaces. Conditions at CI,
+checked on the finished object:
+* Selection: D takes an nP, T takes a vP, n and v each take a root, and every
+  root is categorized by n or v.
+* θ-criterion: the DP is first merged as the sister of vP {v, √}, where v
+  assigns its θ-role, and that vP has such a DP.
+* Chains (Last Resort): only a DP is merged twice — from its θ-position to the
+  specifier of T — and nothing else moves.
+Without these, free MERGE plus labeling and word order accepts many other
+objects for "the cat will sleep" (a search of all derivations with at most two
+Internal MERGEs found 1784); with them, exactly one.
+
 Simplifications (stated, not hidden):
 * Copy vs. repetition: two occurrences of the same object count as copies; the
   one closer to the root is the higher copy. (Form Copy is not modeled.)
@@ -169,10 +181,90 @@ def mpWS : BareGrammar where
   Arg     := Arg
   frules  := [selectRule, mergeRule]
 
+/-! ## Interface conditions (CI) -/
+
+/-- Every occurrence below the root: (object, its sister, its depth, its mother). -/
+def occs : SO → Nat → List (SO × SO × Nat × SO)
+  | .li _, _ => []
+  | s@(.set a b), d => (a, b, d+1, s) :: (b, a, d+1, s) :: (occs a (d+1) ++ occs b (d+1))
+
+def labelIs (R s : SO) (d : Nat) (f : Feat) : Bool :=
+  match labelAt R s d with
+  | some (.cat g, _) => g == f
+  | _ => false
+
+def isRoot : SO → Bool
+  | .li x => x.feat == .root
+  | _ => false
+
+def isSet : SO → Bool
+  | .set _ _ => true
+  | _ => false
+
+/-- What a head takes as its sister. -/
+def selects (R : SO) (h : LI) (X : SO) (d : Nat) : Bool :=
+  match h.feat with
+  | .D => isSet X && labelIs R X d .n
+  | .T => isSet X && labelIs R X d .v
+  | .n | .v => isRoot X
+  | .root => true
+
+/-- Selection: every head occurrence has the sister it selects, and every root
+    is the sister of n or v. -/
+def selectionOK (R : SO) : Bool :=
+  (occs R 0).all fun (x, y, d, _) => match x with
+    | .li h =>
+      if h.feat == .root then (match y with | .li g => g.feat == .n || g.feat == .v | _ => false)
+      else selects R h y d
+    | _ => true
+
+/-- The minimal vP: v with its root. -/
+def minVP : SO → Bool
+  | .set a b => (a == .li .v && isRoot b) || (b == .li .v && isRoot a)
+  | _ => false
+
+/-- The occurrence with the greatest (`low`) or smallest depth; ties keep the first. -/
+def pick (low : Bool) (xs : List (SO × SO × Nat × SO)) : Option (SO × SO × Nat × SO) :=
+  xs.foldl (fun acc o => match acc with
+    | none => some o
+    | some m => if (if low then o.2.2.1 > m.2.2.1 else o.2.2.1 < m.2.2.1) then some o else some m) none
+
+/-- θ-criterion: a DP's lowest occurrence is the sister of the minimal vP, and
+    the minimal vP has a DP sister. -/
+def thetaOK (R : SO) : Bool :=
+  R.terms.all fun X =>
+    let mine := (occs R 0).filter (·.1 == X)
+    (match mine with
+     | [] => true
+     | (_, _, d₀, _) :: _ =>
+       if isSet X && labelIs R X d₀ .D then
+         match pick true mine with
+         | some (_, sis, _, _) => minVP sis
+         | none => false
+       else true) &&
+    (!minVP X || mine.any fun (_, sis, d, _) => isSet sis && labelIs R sis d .D)
+
+def dedupSO (xs : List SO) : List SO :=
+  xs.foldl (fun acc x => if acc.contains x then acc else acc ++ [x]) []
+
+/-- Chains (Last Resort): an object that occurs under two different mothers was
+    merged twice. Only a DP may be, exactly twice, its higher copy in the
+    specifier of T. -/
+def chainsOK (R : SO) : Bool :=
+  R.terms.all fun X =>
+    let mine := (occs R 0).filter (·.1 == X)
+    if (dedupSO (mine.map (·.2.2.2))).length < 2 then true
+    else match pick false mine with
+      | some (_, sis, d, _) => isSet X && labelIs R X d .D && mine.length == 2 && isSet sis && labelIs R sis d .T
+      | none => true
+
+def ciOK (R : SO) : Bool := selectionOK R && thetaOK R && chainsOK R
+
 /-- The level goal. Narrow syntax: derive a workspace holding exactly one
-    object, every node of which is labeled. Then externalization must give `s`
-    — this part is checked automatically. -/
+    object, every node of which is labeled. Then the interface conditions at CI
+    must hold and externalization must give `s` — this part is checked
+    automatically. -/
 def Converges (s : List String) : Prop :=
-  ∃ R : SO, Nonempty (Deriv mpWS ([], ⟨[R]⟩)) ∧ allLabeled R R 0 = true ∧ ext R R 0 = s
+  ∃ R : SO, Nonempty (Deriv mpWS ([], ⟨[R]⟩)) ∧ allLabeled R R 0 = true ∧ ciOK R = true ∧ ext R R 0 = s
 
 end BareSyntax.MP

@@ -352,6 +352,15 @@ elab_rules : tactic
         if !(MP.allLabeled R R 0) then
           logInfo m!"The workspace holds one object, but some node is still unlabeled (shown as ?)."
           return
+        if !(MP.selectionOK R) then
+          logInfo m!"Narrow syntax is done, but a selection requirement fails: D takes an nP, T takes a vP, n and v take a root, and every root needs n or v."
+          return
+        if !(MP.thetaOK R) then
+          logInfo m!"Narrow syntax is done, but the θ-criterion fails: the DP must first merge with vP, where v assigns its θ-role."
+          return
+        if !(MP.chainsOK R) then
+          logInfo m!"Narrow syntax is done, but a chain is ill-formed: only the DP moves, once, from its θ-position to the specifier of T (Last Resort)."
+          return
         let out := MP.ext R R 0
         if out != target then
           logInfo m!"Narrow syntax is done, but externalization gives “{" ".intercalate out}”, not “{" ".intercalate target}”."
@@ -359,12 +368,13 @@ elab_rules : tactic
         let some wsDecl := (← getLCtx).findFromUserName? `WS | return
         let hlab ← mkDecideProof (← mkEq (mkApp3 (mkConst ``MP.allLabeled) (soExpr R) (soExpr R)
           (mkNatLit 0)) (mkConst ``Bool.true))
+        let hci ← mkDecideProof (← mkEq (mkApp (mkConst ``MP.ciOK) (soExpr R)) (mkConst ``Bool.true))
         let hext ← mkDecideProof (← mkEq (mkApp3 (mkConst ``MP.ext) (soExpr R) (soExpr R)
           (mkNatLit 0)) (gty.getArg! 0))
         let ne ← mkAppM ``Nonempty.intro #[wsDecl.toExpr]
         let ex ← whnfD gty   -- unfold `Converges` to its ∃
         let pf ← mkAppOptM ``Exists.intro #[mkConst ``MP.SO,
-          ex.getArg! 1, soExpr R, ← mkAppM ``And.intro #[ne, ← mkAppM ``And.intro #[hlab, hext]]]
+          ex.getArg! 1, soExpr R, ← mkAppM ``And.intro #[ne, ← mkAppM ``And.intro #[hlab, ← mkAppM ``And.intro #[hci, hext]]]]
         (← getMainGoal).assign pf
         replaceMainGoal []
         logInfo m!"Converged. Externalization: “{" ".intercalate out}”."

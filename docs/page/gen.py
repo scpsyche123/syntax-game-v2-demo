@@ -61,7 +61,13 @@ LEVELS = {
   'mp': dict(G=None, lex=[], goal='MP.Converges ["the", "cat", "will", "sleep"]',
              steps=['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep',
                     'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
-             wrong=[(5, 'merge will vP'), (6, 'merge DP vP'), (1, 'merge cat sleep')]),
+             wrong=[(5, 'merge will vP'), (6, 'merge DP vP'), (1, 'merge cat sleep'),
+                    # the subject never enters vP: merged straight into the specifier of T (θ-criterion)
+                    (4, ['merge will vP', 'merge DP TP']),
+                    # no n, no v: D and T take roots (selection)
+                    (0, ['select the cat will sleep', 'merge the cat', 'merge will sleep', 'merge DP TP']),
+                    # T's head is merged again (chains)
+                    (6, ['merge TP will', 'merge DP {{will, {DP, vP}}, will}'])]),
 }
 
 def statement(L, goal):
@@ -109,8 +115,10 @@ for key, L in LEVELS.items():
         assert c['ok'], (key, st, c['messages'])
         entry['steps'].append(c)
     for n, cmd in L['wrong']:
-        c = case(L, L['steps'][:n], cmd, goal=L['goal'] if key == 'mp' else None)
+        cmds = cmd if isinstance(cmd, list) else [cmd]
+        c = case(L, L['steps'][:n] + cmds[:-1], cmds[-1], goal=L['goal'] if key == 'mp' else None)
         c['after_step'] = n
+        c['extra'] = cmds[:-1]
         entry['wrong'].append(c)
     truth[key] = entry
 

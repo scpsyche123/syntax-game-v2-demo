@@ -190,7 +190,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    },
    {
     "cmd": "rule \"D N -> D\" a very",
@@ -220,7 +221,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    },
    {
     "cmd": "rule \"D N -> D\" a very_good_A",
@@ -254,7 +256,8 @@
      }
     ],
     "ok": false,
-    "after_step": 1
+    "after_step": 1,
+    "extra": []
    }
   ]
  },
@@ -518,7 +521,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    },
    {
     "cmd": "rule \"D N -> D\" this the",
@@ -548,7 +552,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    }
   ]
  },
@@ -2182,7 +2187,8 @@
      }
     ],
     "ok": false,
-    "after_step": 2
+    "after_step": 2,
+    "extra": []
    },
    {
     "cmd": "rule \"X' -> XP\" sees_the_dog_T'_DP",
@@ -2264,7 +2270,8 @@
      }
     ],
     "ok": false,
-    "after_step": 11
+    "after_step": 11,
+    "extra": []
    },
    {
     "cmd": "rule \"X0 YP -> X'\" see dog_NP",
@@ -2334,7 +2341,8 @@
      }
     ],
     "ok": false,
-    "after_step": 8
+    "after_step": 8,
+    "extra": []
    },
    {
     "cmd": "rule \"X0 -> X'\" the",
@@ -2372,7 +2380,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    },
    {
     "cmd": "rule \"X0 -> X'\" c",
@@ -2410,7 +2419,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    },
    {
     "cmd": "rule \"X' YP -> X'\" cat_N' the_cat_DP",
@@ -2464,7 +2474,8 @@
      }
     ],
     "ok": false,
-    "after_step": 4
+    "after_step": 4,
+    "extra": []
    },
    {
     "cmd": "rule \"YP X' -> XP\" the_cat_DP the_dog_D'",
@@ -2534,7 +2545,8 @@
      }
     ],
     "ok": false,
-    "after_step": 8
+    "after_step": 8,
+    "extra": []
    },
    {
     "cmd": "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
@@ -2616,7 +2628,8 @@
      }
     ],
     "ok": false,
-    "after_step": 11
+    "after_step": 11,
+    "extra": []
    },
    {
     "cmd": "rule \"Move α: YP X' -> XP\" the_dog_DP sees_the_dog_T'_DP",
@@ -2698,7 +2711,8 @@
      }
     ],
     "ok": false,
-    "after_step": 11
+    "after_step": 11,
+    "extra": []
    },
    {
     "cmd": "rule \"Move α: YP X' -> XP\" the_cat_DP see_the_dog_V'",
@@ -2772,7 +2786,8 @@
      }
     ],
     "ok": false,
-    "after_step": 9
+    "after_step": 9,
+    "extra": []
    },
    {
     "cmd": "rule \"X0 YP -> X'\" c sees_the_dog_T'_DP",
@@ -2858,7 +2873,8 @@
      }
     ],
     "ok": false,
-    "after_step": 12
+    "after_step": 12,
+    "extra": []
    },
    {
     "cmd": "rule \"N' -> N0\" cat",
@@ -2896,7 +2912,8 @@
      }
     ],
     "ok": false,
-    "after_step": 0
+    "after_step": 0,
+    "extra": []
    }
   ]
  },
@@ -3044,7 +3061,8 @@
      }
     ],
     "ok": false,
-    "after_step": 5
+    "after_step": 5,
+    "extra": []
    },
    {
     "cmd": "merge DP vP",
@@ -3062,7 +3080,8 @@
      }
     ],
     "ok": false,
-    "after_step": 6
+    "after_step": 6,
+    "extra": []
    },
    {
     "cmd": "merge cat sleep",
@@ -3080,7 +3099,88 @@
     ],
     "messages": [],
     "ok": true,
-    "after_step": 1
+    "after_step": 1,
+    "extra": []
+   },
+   {
+    "cmd": "merge DP TP",
+    "before": [
+     [
+      "WS",
+      "[T:{will, v:{v, √sleep}}, D:{the, n:{n, √cat}}]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[⟨φ,φ⟩:{D:{the, n:{n, √cat}}, T:{will, v:{v, √sleep}}}]"
+     ]
+    ],
+    "messages": [
+     {
+      "severity": "information",
+      "text": "Narrow syntax is done, but the θ-criterion fails: the DP must first merge with vP, where v assigns its θ-role."
+     }
+    ],
+    "ok": true,
+    "after_step": 4,
+    "extra": [
+     "merge will vP"
+    ]
+   },
+   {
+    "cmd": "merge DP TP",
+    "before": [
+     [
+      "WS",
+      "[T:{will, √sleep}, D:{the, √cat}]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[⟨φ,φ⟩:{D:{the, √cat}, T:{will, √sleep}}]"
+     ]
+    ],
+    "messages": [
+     {
+      "severity": "information",
+      "text": "Narrow syntax is done, but a selection requirement fails: D takes an nP, T takes a vP, n and v take a root, and every root needs n or v."
+     }
+    ],
+    "ok": true,
+    "after_step": 0,
+    "extra": [
+     "select the cat will sleep",
+     "merge the cat",
+     "merge will sleep"
+    ]
+   },
+   {
+    "cmd": "merge DP {{will, {DP, vP}}, will}",
+    "before": [
+     [
+      "WS",
+      "[T:{?:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}, will}]"
+     ]
+    ],
+    "after": [
+     [
+      "WS",
+      "[⟨φ,φ⟩:{D:{the, n:{n, √cat}}, T:{v:{will, v:{copy(D), v:{v, √sleep}}}, will}}]"
+     ]
+    ],
+    "messages": [
+     {
+      "severity": "information",
+      "text": "Narrow syntax is done, but a chain is ill-formed: only the DP moves, once, from its θ-position to the specifier of T (Last Resort)."
+     }
+    ],
+    "ok": true,
+    "after_step": 6,
+    "extra": [
+     "merge TP will"
+    ]
    }
   ]
  },

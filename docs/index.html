@@ -275,6 +275,37 @@ const Engine = (() => {
     if (isDP(R, b, d + 1) && !isDP(R, a, d + 1)) return [...ext(R, b, d + 1), ...ext(R, a, d + 1)];
     return [...ext(R, a, d + 1), ...ext(R, b, d + 1)];
   }
+  /* ---- interface conditions at CI (MP.lean: selectionOK, thetaOK, chainsOK) ---- */
+  function occs(s, d) {
+    if (s.li !== undefined) return [];
+    const [a, b] = s.set;
+    return [[a, b, d + 1, s], [b, a, d + 1, s], ...occs(a, d + 1), ...occs(b, d + 1)];
+  }
+  const labelIs = (R, s, d, f) => { const l = labelAt(R, s, d); return !!l && l.lab === f; };
+  const isRoot = s => s.li !== undefined && feat(s) === 'root';
+  const isSet = s => s.set !== undefined;
+  const selects = (R, h, X, d) => ({ D: () => isSet(X) && labelIs(R, X, d, 'n'), T: () => isSet(X) && labelIs(R, X, d, 'v'),
+    n: () => isRoot(X), v: () => isRoot(X), root: () => true })[LI[h].feat]();
+  const selectionOK = R => occs(R, 0).every(([x, y, d]) => x.li === undefined ? true
+    : LI[x.li].feat === 'root' ? (y.li !== undefined && (feat(y) === 'n' || feat(y) === 'v')) : selects(R, x.li, y, d));
+  const minVP = s => isSet(s) && ((eq(s.set[0], li('v')) && isRoot(s.set[1])) || (eq(s.set[1], li('v')) && isRoot(s.set[0])));
+  const pick = (low, xs) => xs.reduce((m, o) => m === null ? o : ((low ? o[2] > m[2] : o[2] < m[2]) ? o : m), null);
+  const thetaOK = R => terms(R).every(X => {
+    const mine = occs(R, 0).filter(o => eq(o[0], X));
+    const first = !mine.length ? true : (isSet(X) && labelIs(R, X, mine[0][2], 'D')) ? (() => { const lo = pick(true, mine); return lo ? minVP(lo[1]) : false; })() : true;
+    return first && (!minVP(X) || mine.some(([, sis, d]) => isSet(sis) && labelIs(R, sis, d, 'D')));
+  });
+  const chainsOK = R => terms(R).every(X => {
+    const mine = occs(R, 0).filter(o => eq(o[0], X));
+    if (new Set(mine.map(o => key(o[3]))).size < 2) return true;
+    const hi = pick(false, mine);
+    return !hi || (isSet(X) && labelIs(R, X, hi[2], 'D') && mine.length === 2 && isSet(hi[1]) && labelIs(R, hi[1], hi[2], 'T'));
+  });
+  const ciMsgs = {
+    selection: 'Narrow syntax is done, but a selection requirement fails: D takes an nP, T takes a vP, n and v take a root, and every root needs n or v.',
+    theta: 'Narrow syntax is done, but the θ-criterion fails: the DP must first merge with vP, where v assigns its θ-role.',
+    chain: 'Narrow syntax is done, but a chain is ill-formed: only the DP moves, once, from its θ-position to the specifier of T (Last Resort).' };
+  const ciFail = R => !selectionOK(R) ? 'selection' : !thetaOK(R) ? 'theta' : !chainsOK(R) ? 'chain' : null;
   const labText = l => l === null ? '?' : (l.lab === 'root' ? '√' : l.lab);
   const liText = x => LI[x].feat === 'root' ? '√' + x : x;
   function render(R, s, d) {
@@ -296,6 +327,8 @@ const Engine = (() => {
     if (ws.length !== 1) return { closed: false, msgs: [] };
     const R = ws[0];
     if (!allLabeled(R, R, 0)) return { closed: false, msgs: ['The workspace holds one object, but some node is still unlabeled (shown as ?).'] };
+    const ci = ciFail(R);
+    if (ci) return { closed: false, msgs: [ciMsgs[ci]] };
     const out = ext(R, R, 0);
     if (out.join(' ') !== target.join(' ')) return { closed: false, msgs: [`Narrow syntax is done, but externalization gives “${out.join(' ')}”, not “${target.join(' ')}”.`] };
     return { closed: true, msgs: [`Converged. Externalization: “${out.join(' ')}”.`] };
@@ -345,7 +378,7 @@ const Engine = (() => {
     return { ok: true, ws: ws2, msgs: a.msgs, closed: a.closed };
   }
   return { grammars, findRule, applyRule, exprText, normRuleName, LI, li, set, eq, key, terms, labelAt, lowerCopy,
-    labText, liText, render, renderWS, mergeWS, undefinedMsg, afterMerge, resolve, parseRef, mpCommand, ext, allLabeled, isHead, isDP };
+    labText, liText, render, renderWS, mergeWS, undefinedMsg, afterMerge, resolve, parseRef, mpCommand, ext, allLabeled, isHead, isDP, ciFail };
 })();
 if (typeof module !== 'undefined') module.exports = Engine;
 </script>
@@ -383,9 +416,9 @@ const LEVELS = [
    done: ['Fourteen rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ.',
      'The arrow shows suffix lowering: the suffix *-s* in T⁰ attaches to the verb in V⁰. This is not the only analysis. In Chomsky (1957) the same effect is Affix Hopping, a transformation. Emonds (1978) and Pollock (1989) have the finite verb raise to T in French, while in English only auxiliaries raise. In Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T, so nothing lowers. Bobaljik (1995) has English tense and the verb join under adjacency at PF, and in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here lowering is a property of one rule: a different analysis changes that rule, not the language.'] },
  { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['the', 'cat', 'will', 'sleep'],
-   lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
+   lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. MERGE is free, but the finished object must meet conditions at the interface: selection (D takes nP, T takes vP, n and v take a root), the θ-criterion (the subject first merges with vP), and chains (only the subject moves, once, to the specifier of T). Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
    solution: ['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep', 'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
-   done: 'Before Internal MERGE, {DP, vP} had no label: D carries φ, v does not. Afterwards the lower DP is a copy, invisible to labeling, so that node is labeled v, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ. Only the higher copy is pronounced.' }
+   done: 'The subject has to start in vP (θ-criterion), but there {DP, vP} has no label: D carries φ, v does not. Internal MERGE to the specifier of T solves it: the lower DP is a copy, invisible to labeling, so that node is labeled v, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ. Only the higher copy is pronounced.' }
 ];
 
 let cur = 0, st = null, playing = false;
@@ -609,13 +642,16 @@ function check() {
   const n = st.ws.length;
   if (!n) return { st: 'Not yet: WS is empty' };
   if (n > 1) return { st: `Not yet: ${n} objects in WS` };
-  return { st: E.allLabeled(st.ws[0], st.ws[0], 0) ? 'Not yet: wrong word order' : 'Not yet: a node has no label' };
+  const R = st.ws[0];
+  if (!E.allLabeled(R, R, 0)) return { st: 'Not yet: a node has no label' };
+  const ci = E.ciFail(R);
+  return { st: ci ? 'Not yet: ' + { selection: 'selection fails', theta: 'θ-criterion fails', chain: 'a chain is ill-formed' }[ci] : 'Not yet: wrong word order' };
 }
 function drawGoal() {
   const lv = L(), el = document.getElementById('goal'), c = check();
   const text = lv.kind === 'sentence' ? `${lv.words.map(w => w[0]).join(' ')} : ${lv.goal}`
     : lv.kind === 'free' ? `${lv.goal.str.join(' ')} : ${lv.goal.cat}`
-    : `one object in WS, every node labeled, pronounced “${lv.target.join(' ')}”`;
+    : `one object in WS, every node labeled, the interface conditions met, pronounced “${lv.target.join(' ')}”`;
   el.className = 'goal' + (c.cls ? ' ' + c.cls : '');
   el.innerHTML = `<b>Goal</b><span>${esc(text)}</span><span class="st">${esc(c.st)}</span>`;
 }

@@ -67,10 +67,11 @@ T.mp.steps.forEach((c, i) => {
 });
 T.mp.wrong.forEach(c => {
   let w = [];
-  mpSteps.slice(0, c.after_step).forEach(s => { w = E.mpCommand(w, s, target).ws; });
+  [...mpSteps.slice(0, c.after_step), ...(c.extra || [])].forEach(s => { w = E.mpCommand(w, s, target).ws; });
   const r = E.mpCommand(w, c.cmd, target);
-  if (!r.ok) check(`mp wrong: ${c.cmd}`, [r.msg], errText(c));
-  else check(`mp wrong: ${c.cmd}`, [c.ok, E.renderWS(r.ws)], [true, c.after[0][1]]);
+  const label = `mp wrong: ${[...(c.extra || []), c.cmd].join(' ; ')}`;
+  if (!r.ok) check(label, [r.msg], errText(c));
+  else check(label, [c.ok, E.renderWS(r.ws), r.msgs], [true, c.after[0][1], info(c)]);
 });
 const n = ['lin1', 'over', 'xbar', 'mp'].reduce((a, k) => a + T[k].steps.length + T[k].wrong.length, 0) + T.impossible.cases.length;
 console.log(`${pass} checks passed, ${fail} failed (${n} Lean cases + 3 rule tables)`);
