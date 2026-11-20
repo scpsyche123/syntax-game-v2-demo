@@ -19,13 +19,13 @@ The language L(G) is everything that can be built from the lexicon with the rule
 The grammar of this level is `linear₁`:
 
 - Lexicon: a : D, very : Adv, good : A, day : N
-- Rule 1: `A → Adv A`
-- Rule 2: `N → A N`
-- Rule 3: `D → D N`
+- Rule 1: `Adv A → A`
+- Rule 2: `A N → N`
+- Rule 3: `D N → D`
 
 **Goal:** show that ⟨a very good day, D⟩ ∈ L(linear₁).
 
-**Command:** `rule \"A -> Adv A\" very good` applies Rule 1 to the expressions `very` and `good`.
+**Command:** `rule \"Adv A -> A\" very good` applies Rule 1 to the expressions `very` and `good`.
 The rule computes the result and names it (`very_good_A`); you only choose the rule and its inputs.
 "
 
@@ -35,10 +35,10 @@ Statement (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
     (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon)
     (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
     CanYield linear₁ ["a", "very", "good", "day"] .D := by
-  Hint "Start inside: which rule can take `very` and `good`? Try `rule \"A -> Adv A\" very good`."
-  rule "A -> Adv A" very good
-  rule "N -> A N" very_good_A day
-  rule "D -> D N" a very_good_day_N
+  Hint "Start inside: which rule can take `very` and `good`? Try `rule \"Adv A -> A\" very good`."
+  rule "Adv A -> A" very good
+  rule "A N -> N" very_good_A day
+  rule "D N -> D" a very_good_day_N
 
 Conclusion "
 Three rule applications. The same command — choose a rule, give it its inputs — runs every level.

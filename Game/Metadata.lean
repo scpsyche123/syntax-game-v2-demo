@@ -8,7 +8,7 @@ your hypotheses. The rule computes the result, which appears as a new
 hypothesis with a readable name (for example `the_cat_DP`). If the rule is not
 defined on those inputs, it is rejected.
 
-Rule names may be typed with ASCII: `"D' -> D0 NP"` means `"D′ → D⁰ NP"`.
+Rule names may be typed with ASCII: `"X0 YP -> X'"` means `"X⁰ YP → X′"`.
 Add `as NAME` at the end to choose the name of the result yourself. -/
 TacticDoc rule
 

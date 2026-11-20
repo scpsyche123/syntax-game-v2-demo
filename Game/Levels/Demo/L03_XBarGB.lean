@@ -12,14 +12,14 @@ Same language, a different grammar.
 
 Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.
 The rules are the **X-bar schema**: five rules with variables X and Y, which range over
-head categories. Each rule's domain is fixed by the pattern on its right-hand side and by a
+head categories. Each rule's domain is fixed by the pattern on its left-hand side and by a
 condition stated with GB's lexical information:
 
-- Rule 1: `X′ → X⁰`. X takes no complement.
-- Rule 2: `XP → X′`. X needs no specifier (EPP: T needs one).
-- Rule 3: `XP → YP X′`. YP is the specifier of X; a DP needs Case from X.
-- Rule 4: `X′ → X⁰ YP`. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.
-- Rule 5: `X′ → X′ YP`. YP is an adjunct of X.
+- Rule 1: `X⁰ → X′`. X takes no complement.
+- Rule 2: `X′ → XP`. X needs no specifier (EPP: T needs one).
+- Rule 3: `YP X′ → XP`. YP is the specifier of X; a DP needs Case from X.
+- Rule 4: `X⁰ YP → X′`. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.
+- Rule 5: `X′ YP → X′`. YP is an adjunct of X.
 
 GB's lexical information:
 
@@ -35,7 +35,7 @@ GB's lexical information:
 
 **Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).
 
-Build from the bottom up, for example `rule \"X' -> X0\" cat`. Each result gets a name you can
+Build from the bottom up, for example `rule \"X0 -> X'\" cat`. Each result gets a name you can
 use in the next step (`cat_N'`, then `cat_NP`, …).
 The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs.
 "
@@ -47,20 +47,20 @@ Statement (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
     (see : (["see"], x0 .V) ∈ xbarGB.lexicon)
     (s : (["-s"], x0 .T) ∈ xbarGB.lexicon) :
     CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T) := by
-  Hint "Start with a noun: `rule \"X' -> X0\" cat`, then `rule \"XP -> X'\" cat_N'`."
-  rule "X' -> X0" cat
-  rule "XP -> X'" cat_N'
-  rule "X' -> X0 YP" the cat_NP
-  rule "XP -> X'" the_cat_D'
-  rule "X' -> X0" dog
-  rule "XP -> X'" dog_N'
-  rule "X' -> X0 YP" the dog_NP
-  rule "XP -> X'" the_dog_D'
-  rule "X' -> X0 YP" see the_dog_DP
-  rule "XP -> X'" see_the_dog_V'
-  Hint "Now T: `rule \"X' -> X0 YP\" s see_the_dog_VP`. Watch what happens to *see*."
-  rule "X' -> X0 YP" s see_the_dog_VP
-  rule "XP -> YP X'" the_cat_DP sees_the_dog_T'
+  Hint "Start with a noun: `rule \"X0 -> X'\" cat`, then `rule \"X' -> XP\" cat_N'`."
+  rule "X0 -> X'" cat
+  rule "X' -> XP" cat_N'
+  rule "X0 YP -> X'" the cat_NP
+  rule "X' -> XP" the_cat_D'
+  rule "X0 -> X'" dog
+  rule "X' -> XP" dog_N'
+  rule "X0 YP -> X'" the dog_NP
+  rule "X' -> XP" the_dog_D'
+  rule "X0 YP -> X'" see the_dog_DP
+  rule "X' -> XP" see_the_dog_V'
+  Hint "Now T: `rule \"X0 YP -> X'\" s see_the_dog_VP`. Watch what happens to *see*."
+  rule "X0 YP -> X'" s see_the_dog_VP
+  rule "YP X' -> XP" the_cat_DP sees_the_dog_T'
 
 Conclusion "
 Twelve applications of four schema rules, all with the command from levels 1 and 2.

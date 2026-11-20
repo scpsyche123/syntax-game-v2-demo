@@ -13,7 +13,7 @@
    PICTURE the derivation (or the workspace) drawn as trees that grow as you apply rules; selected and new nodes marked
    COLOUR white paper, ink, one deep Lean-blue for structure and the header band, vermilion for selection, change and failure
    TYPE Source Serif 4 for prose and titles, IBM Plex Sans for controls, IBM Plex Mono for rules and the goal
-   LAYOUT blue band with title and five levels as tabs; left: one box with trees and the rules under them, goal strip with the automatic check; right: level text and messages */
+   LAYOUT blue band with title, a note that this is a demo, and five numbered round level buttons; left: one box with trees and the rules under them, goal strip with the automatic check; right: level text and messages */
 :root{color-scheme:light dark;
 --bg:light-dark(#ffffff,#14161b);--ink:light-dark(#1a1c22,#e6e7eb);--muted:light-dark(#5b6070,#9ba1ae);
 --blue:light-dark(#1d3f8f,#93b2ff);--band:#1d3f8f;--panel:light-dark(#f2f4f9,#1c1f26);--line:light-dark(#d8dce6,#2e323c);
@@ -28,18 +28,16 @@ a{color:var(--blue)}
 .wrap{max-width:1240px;margin:0 auto}
 header{background:var(--band);color:#fff}
 header h1{font-weight:600;font-size:clamp(32px,4.6vw,50px);line-height:1.05;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
-header p{max-width:66ch;margin:0 0 20px;color:#dfe6f7}
-.tabs{display:flex;flex-wrap:wrap;gap:8px}
-.tab{font:500 15px/1.2 "IBM Plex Sans",system-ui,sans-serif;min-height:44px;padding:9px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;text-align:left}
-.tab small{display:block;font-weight:400;color:#c9d4f0;font-size:13px;margin-top:2px}
+header p{max-width:66ch;margin:0 0 12px;color:#dfe6f7}
+header p.note{margin-bottom:20px;font-style:italic;color:#c9d4f0}
+.tabs{display:flex;flex-wrap:wrap;gap:12px}
+.tab{position:relative;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);background:transparent;color:#fff;font:600 19px/1 "IBM Plex Sans",system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;padding:0}
+.tab:hover{border-color:#fff}
 .tab[aria-selected=true]{background:#fff;color:#14234d;border-color:#fff}
-.tab[aria-selected=true] small{color:#4a5675}
-.tab .tick{color:#9fe0b0;margin-left:4px}
-.tab[aria-selected=true] .tick{color:#1b7a3c}
-.tab.gray{color:#b9c2d8;border-style:dashed}
-.tab.gray small{color:#9eaacb}
-.tab.gray[aria-selected=true]{background:#d7dbe4;border-color:#d7dbe4;color:#3d4250}
-.tab.gray[aria-selected=true] small{color:#5b6070}
+.tab .tick{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#2f9e5a;color:#fff;font:700 12px/20px "IBM Plex Sans",sans-serif;text-align:center;box-shadow:0 0 0 2px var(--band)}
+.tab .tick:empty{display:none}
+.tab.gray{color:#aab5d0;border-style:dashed;border-color:rgba(255,255,255,.4)}
+.tab.gray[aria-selected=true]{background:#d7dbe4;border-color:#d7dbe4;border-style:solid;color:#3d4250}
 button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 /* the stage: board (trees + rules in one box, goal strip under it) left; level text and messages right */
 .stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);grid-template-areas:"play lead" "play msgs";grid-template-rows:auto 1fr;column-gap:28px;align-items:start}
@@ -117,6 +115,7 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <header class="band"><div class="wrap">
 <h1>One language, many grammars</h1>
 <p>Bare Grammar (Keenan &amp; Stabler 2003) treats a grammar as data: categories, a lexicon and rules. In this Lean 4 implementation the same language states a linear grammar, X-bar theory with GB modules, and the workspace-era Minimalist Program. Each level below is playable: pick inputs, pick a rule, and the grammar accepts or rejects the step.</p>
+<p class="note">This is a five-level demo that shows the basic capabilities of the system. The full game has not been built yet.</p>
 <div class="tabs" role="tablist" id="tabs"></div>
 </div></header>
 
@@ -152,10 +151,10 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 /* A transcription of BareSyntax (Linear.lean, XBarGB.lean, MP.lean, Tactics.lean messages). */
 const Engine = (() => {
   const R = (name, posCat, result, build = 'flat') => ({ name, posCat, result, build });
-  const lin = [R('A → Adv A', ['Adv', 'A'], 'A'), R('N → A N', ['A', 'N'], 'N'), R('D → D N', ['D', 'N'], 'D')];
+  const lin = [R('Adv A → A', ['Adv', 'A'], 'A'), R('A N → N', ['A', 'N'], 'N'), R('D N → D', ['D', 'N'], 'D')];
   const grammars = {
     'linear₁': { rules: lin },
-    'linear₂': { rules: [...lin, R('N → D N', ['D', 'N'], 'N')] },
+    'linear₂': { rules: [...lin, R('D N → N', ['D', 'N'], 'N')] },
     'xbarGB': { rules: [] }
   };
   /* X-bar schema: five rules with variables X, Y over head categories; GB data as conditions */
@@ -169,13 +168,13 @@ const Engine = (() => {
   const two = (ins, b1, b2, ok, build, cat) => { if (ins.length !== 2) return null; const [p, q] = [pc(ins[0].cat), pc(ins[1].cat)];
     return p[1] === b1 && q[1] === b2 && ok(p[0], q[0]) ? { str: build(p[0], q[0], ins[0].str, ins[1].str), cat: cat(p[0], q[0]) } : null; };
   grammars.xbarGB.rules = [
-    S('X′ → X⁰  [X takes no complement]', ins => one(ins, '⁰', x => !cSel.some(([h]) => h === x), x => x + '′')),
-    S('XP → X′  [X needs no specifier (EPP)]', ins => one(ins, '′', x => !epp.includes(x), x => x + 'P')),
-    S('XP → YP X′  [YP is the specifier of X; a DP needs Case from X]',
+    S('X⁰ → X′  [X takes no complement]', ins => one(ins, '⁰', x => !cSel.some(([h]) => h === x), x => x + '′')),
+    S('X′ → XP  [X needs no specifier (EPP)]', ins => one(ins, '′', x => !epp.includes(x), x => x + 'P')),
+    S('YP X′ → XP  [YP is the specifier of X; a DP needs Case from X]',
       ins => two(ins, 'P', '′', (y, x) => has2(specs, x, y) && caseOK(caseS, x, y), (y, x, s1, s2) => [...s1, ...s2], (y, x) => x + 'P')),
-    S("X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
+    S("X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
       ins => two(ins, '⁰', 'P', (x, y) => has2(cSel, x, y) && caseOK(caseC, x, y), (x, y, s1, s2) => x === 'T' ? builds.lower([s1, s2]) : [...s1, ...s2], x => x + '′')),
-    S('X′ → X′ YP  [YP is an adjunct of X]',
+    S('X′ YP → X′  [YP is an adjunct of X]',
       ins => two(ins, '′', 'P', (x, y) => has2(adjuncts, x, y), (x, y, s1, s2) => [...s1, ...s2], x => x + '′'))
   ];
   const attachAffix = (v, a) => (v === 'see' && a === '-s') ? 'sees' : v + 's';
@@ -198,11 +197,11 @@ const Engine = (() => {
     const cats = inputs.map(e => e.cat);
     if (rule.schema) {
       const out = rule.apply(inputs);
-      if (!out) return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the pattern on its right-hand side and by its condition: ${ruleCond(rule.name)}.` };
+      if (!out) return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the pattern on its left-hand side and by its condition: ${ruleCond(rule.name)}.` };
       return { ok: true, out };
     }
     if (cats.length !== rule.posCat.length || cats.some((c, i) => c !== rule.posCat[i]))
-      return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the categories on its right-hand side.` };
+      return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the categories on its left-hand side.` };
     return { ok: true, out: { str: builds[rule.build](inputs.map(e => e.str)), cat: rule.result } };
   }
 
@@ -340,14 +339,14 @@ const LEVELS = [
  { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Cannot be cleared', impossible: true,
    words: [['a', 'D'], ['very', 'Adv'], ['day', 'N']], goal: 'D',
    lead: '<h2>Not in the language</h2><p>Same grammar. Try to build <i>a very day</i> as a D. This level cannot be cleared: every grouping of neighbours, with every rule, is rejected.</p>',
-   why: '*very* is an Adv. The only rule that takes an Adv is Rule 1, A → Adv A, and it needs an A right after it; here *very* is followed by *day*, an N. No rule takes D and Adv either. So *very* can never join anything, and *a very day* is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
+   why: '*very* is an Adv. The only rule that takes an Adv is Rule 1, Adv A → A, and it needs an A right after it; here *very* is followed by *day*, an N. No rule takes D and Adv either. So *very* can never join anything, and *a very day* is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
    done: '' },
  { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration', rules: [3],
    words: [['a', 'D'], ['a', 'D'], ['the', 'D'], ['this', 'D'], ['dog', 'N']], goal: 'N',
-   lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: N → D N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as an N, using only Rule 4.</p>',
+   lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: D N → N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as an N, using only Rule 4.</p>',
    solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [3, ['a', 'a the this dog']]],
    done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
-     'Suppose instead we keep only Rule 3, D → D N, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
+     'Suppose instead we keep only Rule 3, D N → D, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
    lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'TP' },
    lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema: five rules with variables X and Y, which range over head categories. GB enters as conditions on their domains: c-selection (D selects NP, V selects DP, T selects VP); Case (V assigns accusative to its complement, finite T nominative to its specifier), so a DP stands only where it gets Case; EPP (T needs a specifier). When X is T, Rule 4 lowers the affix onto the verb instead of concatenating. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>Lexical items are never used up. Click inputs in order (words in the lexicon or nodes in the trees), then a rule.</p>',
@@ -575,7 +574,7 @@ function drawMsgs() {
   const prose = t => esc(t).replace(/\*([^*]+)\*/g, '<i>$1</i>');
   let m = st.msgs.map(x => `<div class="msg ${x.k}">${x.k === 'p' ? prose(x.t) : esc(x.t)}</div>`).join('');
   if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${prose(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
-  if ((st.closed || lv.impossible) && !playing && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level: ${esc(LEVELS[cur + 1].name)}</button>`;
+  if ((st.closed || lv.impossible) && !playing && cur < LEVELS.length - 1) m += `<button class="btn solid" type="button" id="nextLevel">Next level</button>`;
   document.getElementById('msgs').innerHTML = m;
   document.getElementById('undo').disabled = !st.hist.length || playing;
   document.getElementById('reset').disabled = playing;
@@ -591,7 +590,7 @@ function showLevel(i) {
 }
 
 /* ---------- events ---------- */
-document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab${lv.impossible ? ' gray' : ''}" role="tab" type="button" data-i="${i}">${esc(lv.name)}<span class="tick"></span><small>${esc(lv.era)}</small></button>`).join('');
+document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab${lv.impossible ? ' gray' : ''}" role="tab" type="button" data-i="${i}" aria-label="Level ${i + 1}${lv.impossible ? ', cannot be cleared' : ''}">${i + 1}<span class="tick" aria-hidden="true"></span></button>`).join('');
 document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b && !playing) showLevel(+b.dataset.i); });
 function toggleSel(k, max) {
   if (off()) return;

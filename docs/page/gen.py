@@ -34,23 +34,23 @@ XB_LEX = [('the', 'the', 'x0 .D'), ('cat', 'cat', 'x0 .N'), ('dog', 'dog', 'x0 .
 
 LEVELS = {
   'lin1': dict(G='linear₁', lex=LIN1_LEX, goal='CanYield linear₁ ["a", "very", "good", "day"] .D',
-               steps=['rule "A -> Adv A" very good', 'rule "N -> A N" very_good_A day',
-                      'rule "D -> D N" a very_good_day_N'],
-               wrong=[(0, 'rule "N -> A N" very good'), (0, 'rule "D -> D N" a very'),
-                      (1, 'rule "D -> D N" a very_good_A')]),
+               steps=['rule "Adv A -> A" very good', 'rule "A N -> N" very_good_A day',
+                      'rule "D N -> D" a very_good_day_N'],
+               wrong=[(0, 'rule "A N -> N" very good'), (0, 'rule "D N -> D" a very'),
+                      (1, 'rule "D N -> D" a very_good_A')]),
   'over': dict(G='linear₂', lex=LIN2_LEX, goal='CanYield linear₂ ["a", "a", "the", "this", "dog"] .N',
-               steps=['rule "N -> D N" this dog', 'rule "N -> D N" the this_dog_N',
-                      'rule "N -> D N" a the_this_dog_N', 'rule "N -> D N" a a_the_this_dog_N'],
-               wrong=[(0, 'rule "A -> Adv A" the dog'), (0, 'rule "D -> D N" this the')]),
+               steps=['rule "D N -> N" this dog', 'rule "D N -> N" the this_dog_N',
+                      'rule "D N -> N" a the_this_dog_N', 'rule "D N -> N" a a_the_this_dog_N'],
+               wrong=[(0, 'rule "Adv A -> A" the dog'), (0, 'rule "D N -> D" this the')]),
   'xbar': dict(G='xbarGB', lex=XB_LEX, goal='CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T)',
-               steps=['rule "X\' -> X0" cat', 'rule "XP -> X\'" cat_N\'', 'rule "X\' -> X0 YP" the cat_NP',
-                      'rule "XP -> X\'" the_cat_D\'', 'rule "X\' -> X0" dog', 'rule "XP -> X\'" dog_N\'',
-                      'rule "X\' -> X0 YP" the dog_NP', 'rule "XP -> X\'" the_dog_D\'',
-                      'rule "X\' -> X0 YP" see the_dog_DP', 'rule "XP -> X\'" see_the_dog_V\'',
-                      'rule "X\' -> X0 YP" s see_the_dog_VP', 'rule "XP -> YP X\'" the_cat_DP sees_the_dog_T\''],
-               wrong=[(2, 'rule "X\' -> X0 YP" the cat_N\''), (11, 'rule "XP -> X\'" sees_the_dog_T\''),
-                      (8, 'rule "X\' -> X0 YP" see dog_NP'), (0, 'rule "X\' -> X0" the'),
-                      (4, 'rule "X\' -> X\' YP" cat_N\' the_cat_DP'), (8, 'rule "XP -> YP X\'" the_cat_DP the_dog_D\''),
+               steps=['rule "X0 -> X\'" cat', 'rule "X\' -> XP" cat_N\'', 'rule "X0 YP -> X\'" the cat_NP',
+                      'rule "X\' -> XP" the_cat_D\'', 'rule "X0 -> X\'" dog', 'rule "X\' -> XP" dog_N\'',
+                      'rule "X0 YP -> X\'" the dog_NP', 'rule "X\' -> XP" the_dog_D\'',
+                      'rule "X0 YP -> X\'" see the_dog_DP', 'rule "X\' -> XP" see_the_dog_V\'',
+                      'rule "X0 YP -> X\'" s see_the_dog_VP', 'rule "YP X\' -> XP" the_cat_DP sees_the_dog_T\''],
+               wrong=[(2, 'rule "X0 YP -> X\'" the cat_N\''), (11, 'rule "X\' -> XP" sees_the_dog_T\''),
+                      (8, 'rule "X0 YP -> X\'" see dog_NP'), (0, 'rule "X0 -> X\'" the'),
+                      (4, 'rule "X\' YP -> X\'" cat_N\' the_cat_DP'), (8, 'rule "YP X\' -> XP" the_cat_DP the_dog_D\''),
                       (0, 'rule "N\' -> N0" cat')]),
   'mp': dict(G=None, lex=[], goal='MP.Converges ["the", "cat", "will", "sleep"]',
              steps=['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep',
@@ -112,7 +112,7 @@ for key, L in LEVELS.items():
 IMP = dict(G='linear₁', lex=[('a', 'a', 'Linear1Cat.D'), ('very', 'very', 'Linear1Cat.Adv'),
                             ('day', 'day', 'Linear1Cat.N')])
 words = ['a', 'very', 'day']
-rules = ['A -> Adv A', 'N -> A N', 'D -> D N']
+rules = ['Adv A -> A', 'A N -> N', 'D N -> D']
 imp = []
 for i in range(3):
     for j in range(i + 2, 4):

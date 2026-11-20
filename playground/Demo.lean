@@ -16,15 +16,15 @@ open BareSyntax
 /-! ## Level 1 — a linear grammar
 
 `linear₁`: lexicon a : D, very : Adv, good : A, day : N;
-Rule 1: A → Adv A, Rule 2: N → A N, Rule 3: D → D N. -/
+Rule 1: Adv A → A, Rule 2: A N → N, Rule 3: D N → D. -/
 example (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
     (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
     (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon)
     (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
     CanYield linear₁ ["a", "very", "good", "day"] .D := by
-  rule "A -> Adv A" very good
-  rule "N -> A N" very_good_A day
-  rule "D -> D N" a very_good_day_N
+  rule "Adv A -> A" very good
+  rule "A N -> N" very_good_A day
+  rule "D N -> D" a very_good_day_N
 
 /-! ## Not in the language: ⟨a very day, D⟩
 
@@ -35,12 +35,12 @@ example (a : (["a"], Linear1Cat.D) ∈ linear₁.lexicon)
     (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
     (day : (["day"], Linear1Cat.N) ∈ linear₁.lexicon) :
     CanYield linear₁ ["a", "very", "day"] .D := by
-  -- rule "A -> Adv A" very day
-  -- rule "N -> A N" very day
-  -- rule "D -> D N" a very
+  -- rule "Adv A -> A" very day
+  -- rule "A N -> N" very day
+  -- rule "D N -> D" a very
   sorry
 
-/-! ## Overgeneration — `linear₂` adds Rule 4: N → D N
+/-! ## Overgeneration — `linear₂` adds Rule 4: D N → N
 
 With Rule 4 alone it derives a string no speaker accepts, as an N. -/
 example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
@@ -48,15 +48,15 @@ example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
     (this : (["this"], Linear1Cat.D) ∈ linear₂.lexicon)
     (dog : (["dog"], Linear1Cat.N) ∈ linear₂.lexicon) :
     CanYield linear₂ ["a", "a", "the", "this", "dog"] .N := by
-  rule "N -> D N" this dog
-  rule "N -> D N" the this_dog_N
-  rule "N -> D N" a the_this_dog_N
-  rule "N -> D N" a a_the_this_dog_N
+  rule "D N -> N" this dog
+  rule "D N -> N" the this_dog_N
+  rule "D N -> N" a the_this_dog_N
+  rule "D N -> N" a a_the_this_dog_N
 
 /-! ## Level 2 — X-bar theory with GB
 
 The rules are the X-bar schema, five rules with variables X and Y; GB's data
-(c-selection, Case, EPP) are conditions on their domains. With X = T, X′ → X⁰ YP
+(c-selection, Case, EPP) are conditions on their domains. With X = T, X⁰ YP → X′
 lowers the affix: see + -s = sees. -/
 example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
     (cat : (["cat"], x0 .N) ∈ xbarGB.lexicon)
@@ -64,18 +64,18 @@ example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
     (see : (["see"], x0 .V) ∈ xbarGB.lexicon)
     (s : (["-s"], x0 .T) ∈ xbarGB.lexicon) :
     CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T) := by
-  rule "X' -> X0" cat
-  rule "XP -> X'" cat_N'
-  rule "X' -> X0 YP" the cat_NP
-  rule "XP -> X'" the_cat_D'
-  rule "X' -> X0" dog
-  rule "XP -> X'" dog_N'
-  rule "X' -> X0 YP" the dog_NP
-  rule "XP -> X'" the_dog_D'
-  rule "X' -> X0 YP" see the_dog_DP
-  rule "XP -> X'" see_the_dog_V'
-  rule "X' -> X0 YP" s see_the_dog_VP
-  rule "XP -> YP X'" the_cat_DP sees_the_dog_T'
+  rule "X0 -> X'" cat
+  rule "X' -> XP" cat_N'
+  rule "X0 YP -> X'" the cat_NP
+  rule "X' -> XP" the_cat_D'
+  rule "X0 -> X'" dog
+  rule "X' -> XP" dog_N'
+  rule "X0 YP -> X'" the dog_NP
+  rule "X' -> XP" the_dog_D'
+  rule "X0 YP -> X'" see the_dog_DP
+  rule "X' -> XP" see_the_dog_V'
+  rule "X0 YP -> X'" s see_the_dog_VP
+  rule "YP X' -> XP" the_cat_DP sees_the_dog_T'
 
 /-! ## Level 3 — the Minimalist Program, workspace era
 
@@ -97,5 +97,5 @@ Uncomment the first line to see how the grammar rejects a step. -/
 example (very : (["very"], Linear1Cat.Adv) ∈ linear₁.lexicon)
     (good : (["good"], Linear1Cat.A) ∈ linear₁.lexicon) :
     CanYield linear₁ ["very", "good"] .A := by
-  -- rule "N -> A N" very good        -- Rule 2 needs an A and an N
-  rule "A -> Adv A" very good
+  -- rule "A N -> N" very good        -- Rule 2 needs an A and an N
+  rule "Adv A -> A" very good

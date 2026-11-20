@@ -1,12 +1,12 @@
 /-
 Player commands.
 
-* `rule "N → A N" good day` — apply a rule to expressions in the hypothesis
+* `rule "A N → N" good day` — apply a rule to expressions in the hypothesis
   panel: a data-domain rule (the linear levels) or a condition-domain rule
-  without an argument (the X-bar schema, `rule "X' -> X0 YP" the cat_NP`). The result is COMPUTED by the rule and
+  without an argument (the X-bar schema, `rule "X0 YP -> X'" the cat_NP`). The result is COMPUTED by the rule and
   added as a new hypothesis; the player never types the output. When the
   result is the goal expression, the level closes.
-  Rule names may be typed in ASCII: `"D' -> D0 NP"` = `"D′ → D⁰ NP"`.
+  Rule names may be typed in ASCII: `"X0 YP -> X'"` = `"X⁰ YP → X′"`.
 * `select the n cat will v sleep` — draw lexical items into the workspace
   (level 3, rule `Select`).
 * `merge P Q` — MERGE(P, Q, WS) (level 3). P and Q are written as lexical
@@ -133,7 +133,7 @@ elab_rules : tactic
       -- compute the output string; reject if the rule is undefined on these inputs
       let some outStr ← evalOptStrList (mkApp3 (mkConst ``applyRuleStr) G rE inputsE)
         | throwError m!"The rule \"{ruleMain ruleName}\" is not defined on inputs of category " ++
-            m!"{← givenCats}. Its domain is fixed by the categories on its right-hand side."
+            m!"{← givenCats}. Its domain is fixed by the categories on its left-hand side."
       let outCat ← reduce (← mkAppM ``Rule.result #[rE])
       let outE ← mkAppM ``Prod.mk #[mkStrList outStr, outCat]
       let hmem ← mkAppOptM ``List.get_mem #[ruleTy, rulesE, finE]
@@ -159,7 +159,7 @@ elab_rules : tactic
         let rE ← mkAppOptM ``List.get #[fruleTy, frulesE, finE]
         let some outStr ← evalOptStrList (mkApp4 (mkConst ``fapplyStr) G rE unitE inputsE)
           | throwError m!"The rule \"{ruleMain ruleName}\" is not defined on inputs of category " ++
-              m!"{← givenCats}. Its domain is fixed by the pattern on its right-hand side " ++
+              m!"{← givenCats}. Its domain is fixed by the pattern on its left-hand side " ++
               m!"and by its condition: {ruleCondition ruleName}."
         let outCat := (← reduce (mkApp4 (mkConst ``fapplyCat) G rE unitE inputsE)).getArg! 1
         let outE ← mkAppM ``Prod.mk #[mkStrList outStr, outCat]

@@ -2,7 +2,7 @@
  "lin1": {
   "steps": [
    {
-    "cmd": "rule \"A -> Adv A\" very good",
+    "cmd": "rule \"Adv A -> A\" very good",
     "before": [
      [
       "a",
@@ -47,7 +47,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"N -> A N\" very_good_A day",
+    "cmd": "rule \"A N -> N\" very_good_A day",
     "before": [
      [
       "a",
@@ -100,7 +100,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"D -> D N\" a very_good_day_N",
+    "cmd": "rule \"D N -> D\" a very_good_day_N",
     "before": [
      [
       "a",
@@ -163,7 +163,7 @@
   ],
   "wrong": [
    {
-    "cmd": "rule \"N -> A N\" very good",
+    "cmd": "rule \"A N -> N\" very good",
     "before": [
      [
       "a",
@@ -186,14 +186,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"N → A N\" is not defined on inputs of category Adv, A. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"A N → N\" is not defined on inputs of category Adv, A. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false,
     "after_step": 0
    },
    {
-    "cmd": "rule \"D -> D N\" a very",
+    "cmd": "rule \"D N -> D\" a very",
     "before": [
      [
       "a",
@@ -216,14 +216,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D → D N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"D N → D\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false,
     "after_step": 0
    },
    {
-    "cmd": "rule \"D -> D N\" a very_good_A",
+    "cmd": "rule \"D N -> D\" a very_good_A",
     "before": [
      [
       "a",
@@ -250,7 +250,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D → D N\" is not defined on inputs of category D, A. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"D N → D\" is not defined on inputs of category D, A. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false,
@@ -261,7 +261,7 @@
  "over": {
   "steps": [
    {
-    "cmd": "rule \"N -> D N\" this dog",
+    "cmd": "rule \"D N -> N\" this dog",
     "before": [
      [
       "a",
@@ -306,7 +306,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"N -> D N\" the this_dog_N",
+    "cmd": "rule \"D N -> N\" the this_dog_N",
     "before": [
      [
       "a",
@@ -359,7 +359,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"N -> D N\" a the_this_dog_N",
+    "cmd": "rule \"D N -> N\" a the_this_dog_N",
     "before": [
      [
       "a",
@@ -420,7 +420,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"N -> D N\" a a_the_this_dog_N",
+    "cmd": "rule \"D N -> N\" a a_the_this_dog_N",
     "before": [
      [
       "a",
@@ -491,7 +491,7 @@
   ],
   "wrong": [
    {
-    "cmd": "rule \"A -> Adv A\" the dog",
+    "cmd": "rule \"Adv A -> A\" the dog",
     "before": [
      [
       "a",
@@ -514,14 +514,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"A → Adv A\" is not defined on inputs of category D, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"Adv A → A\" is not defined on inputs of category D, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false,
     "after_step": 0
    },
    {
-    "cmd": "rule \"D -> D N\" this the",
+    "cmd": "rule \"D N -> D\" this the",
     "before": [
      [
       "a",
@@ -544,7 +544,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D → D N\" is not defined on inputs of category D, D. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"D N → D\" is not defined on inputs of category D, D. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false,
@@ -555,7 +555,7 @@
  "xbar": {
   "steps": [
    {
-    "cmd": "rule \"X' -> X0\" cat",
+    "cmd": "rule \"X0 -> X'\" cat",
     "before": [
      [
       "the",
@@ -608,7 +608,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"XP -> X'\" cat_N'",
+    "cmd": "rule \"X' -> XP\" cat_N'",
     "before": [
      [
       "the",
@@ -669,7 +669,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> X0 YP\" the cat_NP",
+    "cmd": "rule \"X0 YP -> X'\" the cat_NP",
     "before": [
      [
       "the",
@@ -738,7 +738,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"XP -> X'\" the_cat_D'",
+    "cmd": "rule \"X' -> XP\" the_cat_D'",
     "before": [
      [
       "the",
@@ -815,7 +815,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> X0\" dog",
+    "cmd": "rule \"X0 -> X'\" dog",
     "before": [
      [
       "the",
@@ -900,7 +900,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"XP -> X'\" dog_N'",
+    "cmd": "rule \"X' -> XP\" dog_N'",
     "before": [
      [
       "the",
@@ -993,7 +993,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> X0 YP\" the dog_NP",
+    "cmd": "rule \"X0 YP -> X'\" the dog_NP",
     "before": [
      [
       "the",
@@ -1094,7 +1094,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"XP -> X'\" the_dog_D'",
+    "cmd": "rule \"X' -> XP\" the_dog_D'",
     "before": [
      [
       "the",
@@ -1203,7 +1203,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> X0 YP\" see the_dog_DP",
+    "cmd": "rule \"X0 YP -> X'\" see the_dog_DP",
     "before": [
      [
       "the",
@@ -1320,7 +1320,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"XP -> X'\" see_the_dog_V'",
+    "cmd": "rule \"X' -> XP\" see_the_dog_V'",
     "before": [
      [
       "the",
@@ -1445,7 +1445,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> X0 YP\" s see_the_dog_VP",
+    "cmd": "rule \"X0 YP -> X'\" s see_the_dog_VP",
     "before": [
      [
       "the",
@@ -1578,7 +1578,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"XP -> YP X'\" the_cat_DP sees_the_dog_T'",
+    "cmd": "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'",
     "before": [
      [
       "the",
@@ -1721,7 +1721,7 @@
   ],
   "wrong": [
    {
-    "cmd": "rule \"X' -> X0 YP\" the cat_N'",
+    "cmd": "rule \"X0 YP -> X'\" the cat_N'",
     "before": [
      [
       "the",
@@ -1756,14 +1756,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ → X⁰ YP\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the pattern on its right-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
+      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
      }
     ],
     "ok": false,
     "after_step": 2
    },
    {
-    "cmd": "rule \"XP -> X'\" sees_the_dog_T'",
+    "cmd": "rule \"X' -> XP\" sees_the_dog_T'",
     "before": [
      [
       "the",
@@ -1834,14 +1834,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"XP → X′\" is not defined on inputs of category T′. Its domain is fixed by the pattern on its right-hand side and by its condition: X needs no specifier (EPP)."
+      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP)."
      }
     ],
     "ok": false,
     "after_step": 11
    },
    {
-    "cmd": "rule \"X' -> X0 YP\" see dog_NP",
+    "cmd": "rule \"X0 YP -> X'\" see dog_NP",
     "before": [
      [
       "the",
@@ -1900,14 +1900,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ → X⁰ YP\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its right-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
+      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
      }
     ],
     "ok": false,
     "after_step": 8
    },
    {
-    "cmd": "rule \"X' -> X0\" the",
+    "cmd": "rule \"X0 -> X'\" the",
     "before": [
      [
       "the",
@@ -1934,14 +1934,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ → X⁰\" is not defined on inputs of category D⁰. Its domain is fixed by the pattern on its right-hand side and by its condition: X takes no complement."
+      "text": "The rule \"X⁰ → X′\" is not defined on inputs of category D⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X takes no complement."
      }
     ],
     "ok": false,
     "after_step": 0
    },
    {
-    "cmd": "rule \"X' -> X' YP\" cat_N' the_cat_DP",
+    "cmd": "rule \"X' YP -> X'\" cat_N' the_cat_DP",
     "before": [
      [
       "the",
@@ -1984,14 +1984,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ → X′ YP\" is not defined on inputs of category N′, DP. Its domain is fixed by the pattern on its right-hand side and by its condition: YP is an adjunct of X."
+      "text": "The rule \"X′ YP → X′\" is not defined on inputs of category N′, DP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is an adjunct of X."
      }
     ],
     "ok": false,
     "after_step": 4
    },
    {
-    "cmd": "rule \"XP -> YP X'\" the_cat_DP the_dog_D'",
+    "cmd": "rule \"YP X' -> XP\" the_cat_DP the_dog_D'",
     "before": [
      [
       "the",
@@ -2050,7 +2050,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"XP → YP X′\" is not defined on inputs of category DP, D′. Its domain is fixed by the pattern on its right-hand side and by its condition: YP is the specifier of X; a DP needs Case from X."
+      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category DP, D′. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; a DP needs Case from X."
      }
     ],
     "ok": false,
@@ -2084,7 +2084,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X′ → X⁰  [X takes no complement]\n  XP → X′  [X needs no specifier (EPP)]\n  XP → YP X′  [YP is the specifier of X; a DP needs Case from X]\n  X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]\n  X′ → X′ YP  [YP is an adjunct of X]"
+      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP)]\n  YP X′ → XP  [YP is the specifier of X; a DP needs Case from X]\n  X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]\n  X′ YP → X′  [YP is an adjunct of X]"
      }
     ],
     "ok": false,
@@ -2279,7 +2279,7 @@
  "impossible": {
   "cases": [
    {
-    "cmd": "rule \"A -> Adv A\" a very",
+    "cmd": "rule \"Adv A -> A\" a very",
     "before": [
      [
       "a",
@@ -2298,13 +2298,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"A → Adv A\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"Adv A → A\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"N -> A N\" a very",
+    "cmd": "rule \"A N -> N\" a very",
     "before": [
      [
       "a",
@@ -2323,13 +2323,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"N → A N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"A N → N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"D -> D N\" a very",
+    "cmd": "rule \"D N -> D\" a very",
     "before": [
      [
       "a",
@@ -2348,13 +2348,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D → D N\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"D N → D\" is not defined on inputs of category D, Adv. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"A -> Adv A\" a very day",
+    "cmd": "rule \"Adv A -> A\" a very day",
     "before": [
      [
       "a",
@@ -2373,13 +2373,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"A → Adv A\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"Adv A → A\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"N -> A N\" a very day",
+    "cmd": "rule \"A N -> N\" a very day",
     "before": [
      [
       "a",
@@ -2398,13 +2398,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"N → A N\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"A N → N\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"D -> D N\" a very day",
+    "cmd": "rule \"D N -> D\" a very day",
     "before": [
      [
       "a",
@@ -2423,13 +2423,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D → D N\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"D N → D\" is not defined on inputs of category D, Adv, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"A -> Adv A\" very day",
+    "cmd": "rule \"Adv A -> A\" very day",
     "before": [
      [
       "a",
@@ -2448,13 +2448,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"A → Adv A\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"Adv A → A\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"N -> A N\" very day",
+    "cmd": "rule \"A N -> N\" very day",
     "before": [
      [
       "a",
@@ -2473,13 +2473,13 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"N → A N\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"A N → N\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
    },
    {
-    "cmd": "rule \"D -> D N\" very day",
+    "cmd": "rule \"D N -> D\" very day",
     "before": [
      [
       "a",
@@ -2498,7 +2498,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"D → D N\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its right-hand side."
+      "text": "The rule \"D N → D\" is not defined on inputs of category Adv, N. Its domain is fixed by the categories on its left-hand side."
      }
     ],
     "ok": false
@@ -2507,22 +2507,22 @@
  },
  "rules": {
   "linear₁": [
-   "A → Adv A",
-   "N → A N",
-   "D → D N"
+   "Adv A → A",
+   "A N → N",
+   "D N → D"
   ],
   "linear₂": [
-   "A → Adv A",
-   "N → A N",
-   "D → D N",
-   "N → D N"
+   "Adv A → A",
+   "A N → N",
+   "D N → D",
+   "D N → N"
   ],
   "xbarGB": [
-   "X′ → X⁰  [X takes no complement]",
-   "XP → X′  [X needs no specifier (EPP)]",
-   "XP → YP X′  [YP is the specifier of X; a DP needs Case from X]",
-   "X′ → X⁰ YP  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
-   "X′ → X′ YP  [YP is an adjunct of X]"
+   "X⁰ → X′  [X takes no complement]",
+   "X′ → XP  [X needs no specifier (EPP)]",
+   "YP X′ → XP  [YP is the specifier of X; a DP needs Case from X]",
+   "X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
+   "X′ YP → X′  [YP is an adjunct of X]"
   ]
  }
 }

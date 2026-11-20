@@ -12,8 +12,8 @@ msgstr "Project-Id-Version: Game v4.23.0\n"
 msgid "level completed! 🎉"
 msgstr ""
 
-#. §0: `rule \"X' -> X0\" cat`
-#. §1: `rule \"XP -> X'\" cat_N'`
+#. §0: `rule \"X0 -> X'\" cat`
+#. §1: `rule \"X' -> XP\" cat_N'`
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Start with a noun: §0, then §1."
 msgstr ""
@@ -32,7 +32,7 @@ msgid "intermediate goal solved! 🎉"
 msgstr ""
 
 #. §0: `linear₂`
-#. §1: `D → D N`
+#. §1: `D N → D`
 #: Game.Levels.Demo.L02_Overgeneration
 msgid "The proof went through, and that is the problem. *a a the this dog* is not an expression of\n"
 "English, yet §0 derives it, so the rule is too strong. Rule 4 takes an N and returns an N,\n"
@@ -46,8 +46,8 @@ msgstr ""
 
 #. §0: `rule \"NAME\" x y …`
 #. §1: `the_cat_DP`
-#. §2: `\"D' -> D0 NP\"`
-#. §3: `\"D′ → D⁰ NP\"`
+#. §2: `\"X0 YP -> X'\"`
+#. §3: `\"X⁰ YP → X′\"`
 #. §4: `as NAME`
 #: Game.Metadata
 msgid "§0 applies the rule NAME to the expressions x, y, … in\n"
@@ -149,10 +149,10 @@ msgid "A grammar that says too much"
 msgstr ""
 
 #. §0: `linear₁`
-#. §1: `A → Adv A`
-#. §2: `N → A N`
-#. §3: `D → D N`
-#. §4: `rule \"A -> Adv A\" very good`
+#. §1: `Adv A → A`
+#. §2: `A N → N`
+#. §3: `D N → D`
+#. §4: `rule \"Adv A -> A\" very good`
 #. §5: `very`
 #. §6: `good`
 #. §7: `very_good_A`
@@ -178,6 +178,47 @@ msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
 "The rule computes the result and names it (§7); you only choose the rule and its inputs."
 msgstr ""
 
+#. §0: `X⁰ → X′`
+#. §1: `X′ → XP`
+#. §2: `YP X′ → XP`
+#. §3: `X⁰ YP → X′`
+#. §4: `X′ YP → X′`
+#. §5: `rule \"X0 -> X'\" cat`
+#. §6: `cat_N'`
+#. §7: `cat_NP`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Same language, a different grammar.\n"
+"\n"
+"Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
+"The rules are the **X-bar schema**: five rules with variables X and Y, which range over\n"
+"head categories. Each rule's domain is fixed by the pattern on its left-hand side and by a\n"
+"condition stated with GB's lexical information:\n"
+"\n"
+"- Rule 1: §0. X takes no complement.\n"
+"- Rule 2: §1. X needs no specifier (EPP: T needs one).\n"
+"- Rule 3: §2. YP is the specifier of X; a DP needs Case from X.\n"
+"- Rule 4: §3. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.\n"
+"- Rule 5: §4. YP is an adjunct of X.\n"
+"\n"
+"GB's lexical information:\n"
+"\n"
+"- **c-selection:** D selects NP, V selects DP, T selects VP.\n"
+"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
+"  specifier. A DP is accepted only where Case is assigned, so the Case Filter is a\n"
+"  property of the rules' domains.\n"
+"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′.\n"
+"- **Infl lowering:** when X is T, Rule 4 does not just concatenate. It attaches the affix in\n"
+"  T⁰ to the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,\n"
+"  not only concatenation.\n"
+"- **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
+"\n"
+"**Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).\n"
+"\n"
+"Build from the bottom up, for example §5. Each result gets a name you can\n"
+"use in the next step (§6, then §7, …).\n"
+"The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs."
+msgstr ""
+
 #: Game
 msgid "Syntax Game v2 · Bare Grammar demo"
 msgstr ""
@@ -199,7 +240,7 @@ msgstr ""
 msgid "level completed with warnings… 🎭"
 msgstr ""
 
-#. §0: `rule \"N -> D N\" this dog`
+#. §0: `rule \"D N -> N\" this dog`
 #: Game.Levels.Demo.L02_Overgeneration
 msgid "Start from the right: §0."
 msgstr ""
@@ -238,7 +279,7 @@ msgstr ""
 
 #. §0: `very`
 #. §1: `good`
-#. §2: `rule \"A -> Adv A\" very good`
+#. §2: `rule \"Adv A -> A\" very good`
 #: Game.Levels.Demo.L01_Linear
 msgid "Start inside: which rule can take §0 and §1? Try §2."
 msgstr ""
@@ -247,14 +288,14 @@ msgstr ""
 msgid "A linear grammar"
 msgstr ""
 
-#. §0: `rule \"X' -> X0 YP\" s see_the_dog_VP`
+#. §0: `rule \"X0 YP -> X'\" s see_the_dog_VP`
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Now T: §0. Watch what happens to *see*."
 msgstr ""
 
 #. §0: `linear₂`
 #. §1: `linear₁`
-#. §2: `N → D N`
+#. §2: `D N → N`
 #: Game.Levels.Demo.L02_Overgeneration
 msgid "§0 is §1 with three more words (the : D, this : D, dog : N) and one more rule:\n"
 "\n"
@@ -263,47 +304,6 @@ msgid "§0 is §1 with three more words (the : D, this : D, dog : N) and one mor
 "Rule 4 looks harmless. But its output is an N, and Rule 4 also takes an N.\n"
 "\n"
 "**Goal:** show that ⟨a a the this dog, N⟩ ∈ L(linear₂), using only Rule 4."
-msgstr ""
-
-#. §0: `X′ → X⁰`
-#. §1: `XP → X′`
-#. §2: `XP → YP X′`
-#. §3: `X′ → X⁰ YP`
-#. §4: `X′ → X′ YP`
-#. §5: `rule \"X' -> X0\" cat`
-#. §6: `cat_N'`
-#. §7: `cat_NP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Same language, a different grammar.\n"
-"\n"
-"Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
-"The rules are the **X-bar schema**: five rules with variables X and Y, which range over\n"
-"head categories. Each rule's domain is fixed by the pattern on its right-hand side and by a\n"
-"condition stated with GB's lexical information:\n"
-"\n"
-"- Rule 1: §0. X takes no complement.\n"
-"- Rule 2: §1. X needs no specifier (EPP: T needs one).\n"
-"- Rule 3: §2. YP is the specifier of X; a DP needs Case from X.\n"
-"- Rule 4: §3. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.\n"
-"- Rule 5: §4. YP is an adjunct of X.\n"
-"\n"
-"GB's lexical information:\n"
-"\n"
-"- **c-selection:** D selects NP, V selects DP, T selects VP.\n"
-"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
-"  specifier. A DP is accepted only where Case is assigned, so the Case Filter is a\n"
-"  property of the rules' domains.\n"
-"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′.\n"
-"- **Infl lowering:** when X is T, Rule 4 does not just concatenate. It attaches the affix in\n"
-"  T⁰ to the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,\n"
-"  not only concatenation.\n"
-"- **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
-"\n"
-"**Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).\n"
-"\n"
-"Build from the bottom up, for example §5. Each result gets a name you can\n"
-"use in the next step (§6, then §7, …).\n"
-"The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs."
 msgstr ""
 
 #. §0: `select x y …`
