@@ -1,6 +1,8 @@
 # Syntax Game v2 · Bare Grammar demo
 
-Play: https://adam.math.hhu.de/#/g/scpsyche123/syntax-game-v2-demo
+Step-through page: `docs/index.html` (self-contained; every state on it is real Lean output).
+
+Play (once the lean4game server import works): https://adam.math.hhu.de/#/g/scpsyche123/syntax-game-v2-demo
 
 Three short levels showing one formal language — Bare Grammar (Keenan & Stabler 2003),
 implemented in Lean 4 — expressing grammars from three eras of generative syntax:
