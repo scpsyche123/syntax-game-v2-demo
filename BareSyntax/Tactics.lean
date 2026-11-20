@@ -75,7 +75,7 @@ def mkStrList (xs : List String) : Lean.Expr :=
     (mkApp (mkConst ``List.nil [0]) (mkConst ``String))
 
 def asciiCat (s : String) : String :=
-  s.replace "⁰" "0" |>.replace "′" "'"
+  s.replace "⁰" "0" |>.replace "′" "'" |>.replace "/" "_"
 
 /-- Readable hypothesis name: words joined by `_`, then the category. -/
 def autoName (words : List String) (cat : String) : Name :=

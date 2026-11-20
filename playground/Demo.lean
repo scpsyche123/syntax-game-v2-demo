@@ -53,17 +53,19 @@ example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
   rule "D N -> N" a the_this_dog_N
   rule "D N -> N" a a_the_this_dog_N
 
-/-! ## Level 2 — X-bar theory with GB
+/-! ## Level 3 — X-bar theory with GB
 
-The rules are the X-bar schema, five rules with variables X and Y; GB's data
-(c-selection, Case, EPP) are conditions on their domains. With X = T, X⁰ YP → X′
-lowers the affix: see + -s = sees. -/
+The rules are the X-bar schema with variables X and Y, plus Move α; GB's data
+(c-selection, Case, EPP) are conditions on their domains. The subject is merged
+in Spec-VP, gets no Case there, waits (VP/DP), and Move α puts it in Spec-TP.
+With X = T, X⁰ YP → X′ lowers the suffix: see + -s = sees. C is empty. -/
 example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
     (cat : (["cat"], x0 .N) ∈ xbarGB.lexicon)
     (dog : (["dog"], x0 .N) ∈ xbarGB.lexicon)
     (see : (["see"], x0 .V) ∈ xbarGB.lexicon)
-    (s : (["-s"], x0 .T) ∈ xbarGB.lexicon) :
-    CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T) := by
+    (s : (["-s"], x0 .T) ∈ xbarGB.lexicon)
+    (c : (([] : List String), x0 .C) ∈ xbarGB.lexicon) :
+    CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .C) := by
   rule "X0 -> X'" cat
   rule "X' -> XP" cat_N'
   rule "X0 YP -> X'" the cat_NP
@@ -73,9 +75,11 @@ example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
   rule "X0 YP -> X'" the dog_NP
   rule "X' -> XP" the_dog_D'
   rule "X0 YP -> X'" see the_dog_DP
-  rule "X' -> XP" see_the_dog_V'
-  rule "X0 YP -> X'" s see_the_dog_VP
-  rule "YP X' -> XP" the_cat_DP sees_the_dog_T'
+  rule "YP X' -> XP" the_cat_DP see_the_dog_V'
+  rule "X0 YP -> X'" s see_the_dog_VP_DP
+  rule "Move α: YP X' -> XP" the_cat_DP sees_the_dog_T'_DP
+  rule "X0 YP -> X'" c the_cat_sees_the_dog_TP
+  rule "X' -> XP" the_cat_sees_the_dog_C'
 
 /-! ## Level 3 — the Minimalist Program, workspace era
 

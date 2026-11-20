@@ -81,18 +81,6 @@ msgid "This demo shows one formal language expressing grammars from three eras o
 "a derivation of it. Every step you take is checked by Lean's kernel."
 msgstr ""
 
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Build ⟨the cat sees the dog, TP⟩ in X-bar theory with GB modules."
-msgstr ""
-
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Twelve applications of four schema rules, all with the command from levels 1 and 2.\n"
-"\n"
-"GB's modules entered as conditions on the domains of the schema rules — which complement a\n"
-"head selects, where a DP gets Case, which head needs a specifier, which rule lowers the\n"
-"affix — not as new machinery in the language."
-msgstr ""
-
 #. §0: `?`
 #. §1: `copy(…)`
 #. §2: `select the n cat will v sleep`
@@ -144,6 +132,11 @@ msgid "Three rule applications. The same command — choose a rule, give it its 
 "What changes from level to level is only the grammar: its categories, its lexicon, its rules."
 msgstr ""
 
+#. §0: `rule \"Move α: YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "T′ cannot become TP by Rule 2 (EPP). Move the waiting DP: §0."
+msgstr ""
+
 #: Game.Levels.Demo.L02_Overgeneration
 msgid "A grammar that says too much"
 msgstr ""
@@ -178,47 +171,6 @@ msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
 "The rule computes the result and names it (§7); you only choose the rule and its inputs."
 msgstr ""
 
-#. §0: `X⁰ → X′`
-#. §1: `X′ → XP`
-#. §2: `YP X′ → XP`
-#. §3: `X⁰ YP → X′`
-#. §4: `X′ YP → X′`
-#. §5: `rule \"X0 -> X'\" cat`
-#. §6: `cat_N'`
-#. §7: `cat_NP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Same language, a different grammar.\n"
-"\n"
-"Categories are now pairs ⟨head, bar level⟩: N⁰, N′, NP, and so on.\n"
-"The rules are the **X-bar schema**: five rules with variables X and Y, which range over\n"
-"head categories. Each rule's domain is fixed by the pattern on its left-hand side and by a\n"
-"condition stated with GB's lexical information:\n"
-"\n"
-"- Rule 1: §0. X takes no complement.\n"
-"- Rule 2: §1. X needs no specifier (EPP: T needs one).\n"
-"- Rule 3: §2. YP is the specifier of X; a DP needs Case from X.\n"
-"- Rule 4: §3. X c-selects Y; a DP needs Case from X; T's affix lowers onto V.\n"
-"- Rule 5: §4. YP is an adjunct of X.\n"
-"\n"
-"GB's lexical information:\n"
-"\n"
-"- **c-selection:** D selects NP, V selects DP, T selects VP.\n"
-"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
-"  specifier. A DP is accepted only where Case is assigned, so the Case Filter is a\n"
-"  property of the rules' domains.\n"
-"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′.\n"
-"- **Infl lowering:** when X is T, Rule 4 does not just concatenate. It attaches the affix in\n"
-"  T⁰ to the verb: see + -s = sees. A rule in Bare Grammar can be any partial function,\n"
-"  not only concatenation.\n"
-"- **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
-"\n"
-"**Goal:** ⟨the cat sees the dog, TP⟩ ∈ L(xbarGB).\n"
-"\n"
-"Build from the bottom up, for example §5. Each result gets a name you can\n"
-"use in the next step (§6, then §7, …).\n"
-"The lexicon is not used up: the same ⟨the, D⁰⟩ can go into both DPs."
-msgstr ""
-
 #: Game
 msgid "Syntax Game v2 · Bare Grammar demo"
 msgstr ""
@@ -243,6 +195,25 @@ msgstr ""
 #. §0: `rule \"D N -> N\" this dog`
 #: Game.Levels.Demo.L02_Overgeneration
 msgid "Start from the right: §0."
+msgstr ""
+
+#. §0: `rule \"YP X' -> XP\" the_cat_DP see_the_dog_V'`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Merge the subject in Spec-VP: §0. It gets no Case there."
+msgstr ""
+
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Fourteen rule applications, one of them Move α: the subject was merged in Spec-VP, where V\n"
+"gives it no Case, and moved to Spec-TP, where finite T assigns nominative. It left a trace.\n"
+"\n"
+"Suffix lowering is not the only analysis of *sees*. In Chomsky (1957) the same effect is\n"
+"Affix Hopping, a transformation. Emonds (1978) and Pollock (1989) have the finite verb raise\n"
+"to T in French, while in English only auxiliaries raise. In Chomsky (1993) the verb comes from\n"
+"the lexicon already inflected and checks its features against T, so nothing lowers. Bobaljik\n"
+"(1995) treats English tense and the verb as joining under adjacency at PF, and in Distributed\n"
+"Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001).\n"
+"Here lowering is a property of one rule: a different analysis changes that rule, not the\n"
+"language."
 msgstr ""
 
 #. §0: `merge P Q`
@@ -288,11 +259,6 @@ msgstr ""
 msgid "A linear grammar"
 msgstr ""
 
-#. §0: `rule \"X0 YP -> X'\" s see_the_dog_VP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Now T: §0. Watch what happens to *see*."
-msgstr ""
-
 #. §0: `linear₂`
 #. §1: `linear₁`
 #. §2: `D N → N`
@@ -316,6 +282,53 @@ msgstr ""
 #: Game.Metadata
 msgid "§0 draws lexical items into the workspace WS (rule Select).\n"
 "The lexicon of this grammar: §1, §2, §3, §4, §5, §6."
+msgstr ""
+
+#. §0: `X⁰ → X′`
+#. §1: `X′ → XP`
+#. §2: `YP X′ → XP`
+#. §3: `X⁰ YP → X′`
+#. §4: `X′ YP → X′`
+#. §5: `Move α: YP X′ → XP`
+#. §6: `rule \"X0 -> X'\" cat`
+#. §7: `cat_N'`
+#. §8: `cat_NP`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Same language, a different grammar.\n"
+"\n"
+"Categories are now head and bar level: N⁰, N′, NP, and so on. A category can also carry a\n"
+"phrase that waits inside it to move: VP/DP is a VP with a waiting DP.\n"
+"\n"
+"The rules are the X-bar schema, five rules with variables X and Y over head categories,\n"
+"plus Move α:\n"
+"\n"
+"- Rule 1: §0\n"
+"- Rule 2: §1\n"
+"- Rule 3: §2\n"
+"- Rule 4: §3\n"
+"- Rule 5: §4\n"
+"- Rule 6: §5\n"
+"\n"
+"GB enters as conditions on their domains:\n"
+"\n"
+"- **c-selection:** C selects TP, T selects VP, V selects DP, D selects NP.\n"
+"- **VP-internal subject:** the subject is merged in Spec-VP (Rule 3). V assigns it no Case,\n"
+"  so it leaves a trace there and waits: the result is VP/DP.\n"
+"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
+"  specifier. **Move α** puts the waiting DP into Spec-TP.\n"
+"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′; only Move α makes TP.\n"
+"- **Suffix lowering:** when X is T, Rule 4 attaches the suffix in T⁰ to the verb:\n"
+"  see + -s = sees.\n"
+"- **C** is empty. **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
+"\n"
+"**Goal:** ⟨the cat sees the dog, CP⟩ ∈ L(xbarGB).\n"
+"\n"
+"Build from the bottom up, for example §6. Each result gets a name you can\n"
+"use in the next step (§7, then §8, …). The lexicon is not used up."
+msgstr ""
+
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Build ⟨the cat sees the dog, CP⟩ in X-bar theory with GB modules."
 msgstr ""
 
 #: Game.Levels.Demo

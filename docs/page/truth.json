@@ -576,6 +576,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ]
     ],
     "after": [
@@ -598,6 +602,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -631,6 +639,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ]
@@ -655,6 +667,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -692,6 +708,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -720,6 +740,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -761,6 +785,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -793,6 +821,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -838,6 +870,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -874,6 +910,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -923,6 +963,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -963,6 +1007,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1016,6 +1064,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1060,6 +1112,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1117,6 +1173,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1165,6 +1225,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1226,6 +1290,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1278,6 +1346,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1320,7 +1392,7 @@
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> XP\" see_the_dog_V'",
+    "cmd": "rule \"YP X' -> XP\" the_cat_DP see_the_dog_V'",
     "before": [
      [
       "the",
@@ -1341,6 +1413,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1401,6 +1477,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1437,15 +1517,15 @@
       "⟨see the dog, V′⟩"
      ],
      [
-      "see_the_dog_VP",
-      "⟨see the dog, VP⟩"
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X0 YP -> X'\" s see_the_dog_VP",
+    "cmd": "rule \"X0 YP -> X'\" s see_the_dog_VP_DP",
     "before": [
      [
       "the",
@@ -1466,6 +1546,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1504,8 +1588,8 @@
       "⟨see the dog, V′⟩"
      ],
      [
-      "see_the_dog_VP",
-      "⟨see the dog, VP⟩"
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
      ]
     ],
     "after": [
@@ -1530,6 +1614,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1566,19 +1654,19 @@
       "⟨see the dog, V′⟩"
      ],
      [
-      "see_the_dog_VP",
-      "⟨see the dog, VP⟩"
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
      ],
      [
-      "sees_the_dog_T'",
-      "⟨sees the dog, T′⟩"
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'",
+    "cmd": "rule \"Move α: YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
     "before": [
      [
       "the",
@@ -1599,6 +1687,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1637,12 +1729,12 @@
       "⟨see the dog, V′⟩"
      ],
      [
-      "see_the_dog_VP",
-      "⟨see the dog, VP⟩"
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
      ],
      [
-      "sees_the_dog_T'",
-      "⟨sees the dog, T′⟩"
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
      ]
     ],
     "after": [
@@ -1667,6 +1759,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1703,16 +1799,338 @@
       "⟨see the dog, V′⟩"
      ],
      [
-      "see_the_dog_VP",
-      "⟨see the dog, VP⟩"
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
      ],
      [
-      "sees_the_dog_T'",
-      "⟨sees the dog, T′⟩"
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
      ],
      [
       "the_cat_sees_the_dog_TP",
       "⟨the cat sees the dog, TP⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"X0 YP -> X'\" c the_cat_sees_the_dog_TP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_TP",
+      "⟨the cat sees the dog, TP⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_TP",
+      "⟨the cat sees the dog, TP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_C'",
+      "⟨the cat sees the dog, C′⟩"
+     ]
+    ],
+    "messages": [],
+    "ok": true
+   },
+   {
+    "cmd": "rule \"X' -> XP\" the_cat_sees_the_dog_C'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_TP",
+      "⟨the cat sees the dog, TP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_C'",
+      "⟨the cat sees the dog, C′⟩"
+     ]
+    ],
+    "after": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_TP",
+      "⟨the cat sees the dog, TP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_C'",
+      "⟨the cat sees the dog, C′⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_CP",
+      "⟨the cat sees the dog, CP⟩"
      ]
     ],
     "messages": [],
@@ -1744,6 +2162,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -1756,14 +2178,14 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
+      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's suffix lowers onto V."
      }
     ],
     "ok": false,
     "after_step": 2
    },
    {
-    "cmd": "rule \"X' -> XP\" sees_the_dog_T'",
+    "cmd": "rule \"X' -> XP\" sees_the_dog_T'_DP",
     "before": [
      [
       "the",
@@ -1784,6 +2206,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1822,19 +2248,19 @@
       "⟨see the dog, V′⟩"
      ],
      [
-      "see_the_dog_VP",
-      "⟨see the dog, VP⟩"
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
      ],
      [
-      "sees_the_dog_T'",
-      "⟨sees the dog, T′⟩"
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP)."
+      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP)."
      }
     ],
     "ok": false,
@@ -1862,6 +2288,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -1900,7 +2330,7 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's affix lowers onto V."
+      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's suffix lowers onto V."
      }
     ],
     "ok": false,
@@ -1928,6 +2358,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ]
     ],
     "after": null,
@@ -1935,6 +2369,44 @@
      {
       "severity": "error",
       "text": "The rule \"X⁰ → X′\" is not defined on inputs of category D⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X takes no complement."
+     }
+    ],
+    "ok": false,
+    "after_step": 0
+   },
+   {
+    "cmd": "rule \"X0 -> X'\" c",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"X⁰ → X′\" is not defined on inputs of category C⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X takes no complement."
      }
     ],
     "ok": false,
@@ -1962,6 +2434,10 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
       "cat_N'",
@@ -2014,6 +2490,10 @@
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
      ],
      [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
       "cat_N'",
       "⟨cat, N′⟩"
      ],
@@ -2050,11 +2530,335 @@
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category DP, D′. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; a DP needs Case from X."
+      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category DP, D′. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move."
      }
     ],
     "ok": false,
     "after_step": 8
+   },
+   {
+    "cmd": "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category DP, T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move."
+     }
+    ],
+    "ok": false,
+    "after_step": 11
+   },
+   {
+    "cmd": "rule \"Move α: YP X' -> XP\" the_dog_DP sees_the_dog_T'_DP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"Move α: YP X′ → XP\" is not defined on inputs of category DP, T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X."
+     }
+    ],
+    "ok": false,
+    "after_step": 11
+   },
+   {
+    "cmd": "rule \"Move α: YP X' -> XP\" the_cat_DP see_the_dog_V'",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"Move α: YP X′ → XP\" is not defined on inputs of category DP, V′. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X."
+     }
+    ],
+    "ok": false,
+    "after_step": 9
+   },
+   {
+    "cmd": "rule \"X0 YP -> X'\" c sees_the_dog_T'_DP",
+    "before": [
+     [
+      "the",
+      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat",
+      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "dog",
+      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "see",
+      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "s",
+      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "cat_N'",
+      "⟨cat, N′⟩"
+     ],
+     [
+      "cat_NP",
+      "⟨cat, NP⟩"
+     ],
+     [
+      "the_cat_D'",
+      "⟨the cat, D′⟩"
+     ],
+     [
+      "the_cat_DP",
+      "⟨the cat, DP⟩"
+     ],
+     [
+      "dog_N'",
+      "⟨dog, N′⟩"
+     ],
+     [
+      "dog_NP",
+      "⟨dog, NP⟩"
+     ],
+     [
+      "the_dog_D'",
+      "⟨the dog, D′⟩"
+     ],
+     [
+      "the_dog_DP",
+      "⟨the dog, DP⟩"
+     ],
+     [
+      "see_the_dog_V'",
+      "⟨see the dog, V′⟩"
+     ],
+     [
+      "see_the_dog_VP_DP",
+      "⟨see the dog, VP/DP⟩"
+     ],
+     [
+      "sees_the_dog_T'_DP",
+      "⟨sees the dog, T′/DP⟩"
+     ],
+     [
+      "the_cat_sees_the_dog_TP",
+      "⟨the cat sees the dog, TP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category C⁰, T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's suffix lowers onto V."
+     }
+    ],
+    "ok": false,
+    "after_step": 12
    },
    {
     "cmd": "rule \"N' -> N0\" cat",
@@ -2078,13 +2882,17 @@
      [
       "s",
       "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP)]\n  YP X′ → XP  [YP is the specifier of X; a DP needs Case from X]\n  X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]\n  X′ YP → X′  [YP is an adjunct of X]"
+      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP)]\n  YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]\n  X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]\n  X′ YP → X′  [YP is an adjunct of X]\n  Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]"
      }
     ],
     "ok": false,
@@ -2520,9 +3328,10 @@
   "xbarGB": [
    "X⁰ → X′  [X takes no complement]",
    "X′ → XP  [X needs no specifier (EPP)]",
-   "YP X′ → XP  [YP is the specifier of X; a DP needs Case from X]",
-   "X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
-   "X′ YP → X′  [YP is an adjunct of X]"
+   "YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]",
+   "X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]",
+   "X′ YP → X′  [YP is an adjunct of X]",
+   "Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]"
   ]
  }
 }

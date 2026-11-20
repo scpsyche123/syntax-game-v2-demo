@@ -64,6 +64,7 @@ def posText? (e : Lean.Expr) : Option String :=
   match e.constName? with
   | some ``Pos.N => some "N" | some ``Pos.D => some "D"
   | some ``Pos.V => some "V" | some ``Pos.T => some "T"
+  | some ``Pos.C => some "C"
   | _ => none
 
 def barText? (e : Lean.Expr) : Option String :=
@@ -74,8 +75,14 @@ def barText? (e : Lean.Expr) : Option String :=
 /-- Text of a category expression (after reduction). -/
 def catText (e : Lean.Expr) : MetaM String := do
   let e ← reduce (← instantiateMVars e)
-  if e.isAppOfArity ``XCat.mk 2 then
+  if e.isAppOfArity ``XCat.mk 3 then
     if let (some p, some b) := (posText? (e.getArg! 0), barText? (e.getArg! 1)) then
+      let m := e.getArg! 2
+      if m.isAppOfArity ``Option.some 2 then
+        let pr := m.getArg! 1
+        if pr.isAppOfArity ``Prod.mk 4 then
+          if let some q := posText? (pr.getArg! 3) then
+            return p ++ b ++ "/" ++ q ++ "P"
       return p ++ b
   if let some n := e.constName? then
     return nameLast n
@@ -122,6 +129,7 @@ def pairText (s C : Lean.Expr) : MetaM String := do
     return MP.renderWS ws
   let s ← reduce (← instantiateMVars s)
   let str := match strListOfExpr? s with
+    | some [] => "∅"
     | some ws => " ".intercalate ws
     | none => "…"
   return s!"⟨{str}, {← catText C}⟩"

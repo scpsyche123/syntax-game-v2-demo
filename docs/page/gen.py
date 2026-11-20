@@ -22,15 +22,16 @@ def run(src):
 HEAD = 'import BareSyntax\nset_option linter.unusedVariables false\nopen BareSyntax\n\n'
 
 def lexbind(G, items):
-    return '\n    '.join(f'({n} : ([{", ".join(chr(34)+w+chr(34) for w in s.split())}], {c}) ∈ {G}.lexicon)'
-                           for n, s, c in items)
+    def strs(s):
+        return '([] : List String)' if not s.split() else '[' + ', '.join(chr(34) + w + chr(34) for w in s.split()) + ']'
+    return '\n    '.join(f'({n} : ({strs(s)}, {c}) ∈ {G}.lexicon)' for n, s, c in items)
 
 LIN1_LEX = [('a', 'a', 'Linear1Cat.D'), ('very', 'very', 'Linear1Cat.Adv'),
             ('good', 'good', 'Linear1Cat.A'), ('day', 'day', 'Linear1Cat.N')]
 LIN2_LEX = [('a', 'a', 'Linear1Cat.D'), ('the', 'the', 'Linear1Cat.D'),
             ('this', 'this', 'Linear1Cat.D'), ('dog', 'dog', 'Linear1Cat.N')]
 XB_LEX = [('the', 'the', 'x0 .D'), ('cat', 'cat', 'x0 .N'), ('dog', 'dog', 'x0 .N'),
-          ('see', 'see', 'x0 .V'), ('s', '-s', 'x0 .T')]
+          ('see', 'see', 'x0 .V'), ('s', '-s', 'x0 .T'), ('c', '', 'x0 .C')]
 
 LEVELS = {
   'lin1': dict(G='linear₁', lex=LIN1_LEX, goal='CanYield linear₁ ["a", "very", "good", "day"] .D',
@@ -42,16 +43,21 @@ LEVELS = {
                steps=['rule "D N -> N" this dog', 'rule "D N -> N" the this_dog_N',
                       'rule "D N -> N" a the_this_dog_N', 'rule "D N -> N" a a_the_this_dog_N'],
                wrong=[(0, 'rule "Adv A -> A" the dog'), (0, 'rule "D N -> D" this the')]),
-  'xbar': dict(G='xbarGB', lex=XB_LEX, goal='CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .T)',
-               steps=['rule "X0 -> X\'" cat', 'rule "X\' -> XP" cat_N\'', 'rule "X0 YP -> X\'" the cat_NP',
-                      'rule "X\' -> XP" the_cat_D\'', 'rule "X0 -> X\'" dog', 'rule "X\' -> XP" dog_N\'',
-                      'rule "X0 YP -> X\'" the dog_NP', 'rule "X\' -> XP" the_dog_D\'',
-                      'rule "X0 YP -> X\'" see the_dog_DP', 'rule "X\' -> XP" see_the_dog_V\'',
-                      'rule "X0 YP -> X\'" s see_the_dog_VP', 'rule "YP X\' -> XP" the_cat_DP sees_the_dog_T\''],
-               wrong=[(2, 'rule "X0 YP -> X\'" the cat_N\''), (11, 'rule "X\' -> XP" sees_the_dog_T\''),
-                      (8, 'rule "X0 YP -> X\'" see dog_NP'), (0, 'rule "X0 -> X\'" the'),
-                      (4, 'rule "X\' YP -> X\'" cat_N\' the_cat_DP'), (8, 'rule "YP X\' -> XP" the_cat_DP the_dog_D\''),
-                      (0, 'rule "N\' -> N0" cat')]),
+  'xbar': dict(G='xbarGB', lex=XB_LEX, goal='CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .C)',
+               steps=["rule \"X0 -> X'\" cat", "rule \"X' -> XP\" cat_N'", "rule \"X0 YP -> X'\" the cat_NP",
+                      "rule \"X' -> XP\" the_cat_D'", "rule \"X0 -> X'\" dog", "rule \"X' -> XP\" dog_N'",
+                      "rule \"X0 YP -> X'\" the dog_NP", "rule \"X' -> XP\" the_dog_D'",
+                      "rule \"X0 YP -> X'\" see the_dog_DP", "rule \"YP X' -> XP\" the_cat_DP see_the_dog_V'",
+                      "rule \"X0 YP -> X'\" s see_the_dog_VP_DP", "rule \"Move α: YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
+                      "rule \"X0 YP -> X'\" c the_cat_sees_the_dog_TP", "rule \"X' -> XP\" the_cat_sees_the_dog_C'"],
+               wrong=[(2, "rule \"X0 YP -> X'\" the cat_N'"), (11, "rule \"X' -> XP\" sees_the_dog_T'_DP"),
+                      (8, "rule \"X0 YP -> X'\" see dog_NP"), (0, "rule \"X0 -> X'\" the"), (0, "rule \"X0 -> X'\" c"),
+                      (4, "rule \"X' YP -> X'\" cat_N' the_cat_DP"), (8, "rule \"YP X' -> XP\" the_cat_DP the_dog_D'"),
+                      (11, "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP"),
+                      (11, "rule \"Move α: YP X' -> XP\" the_dog_DP sees_the_dog_T'_DP"),
+                      (9, "rule \"Move α: YP X' -> XP\" the_cat_DP see_the_dog_V'"),
+                      (12, "rule \"X0 YP -> X'\" c sees_the_dog_T'_DP"),
+                      (0, "rule \"N' -> N0\" cat")]),
   'mp': dict(G=None, lex=[], goal='MP.Converges ["the", "cat", "will", "sleep"]',
              steps=['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep',
                     'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],

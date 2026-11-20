@@ -63,7 +63,9 @@ svg text{font-family:"IBM Plex Sans",sans-serif;font-size:14px;fill:var(--ink)}
 svg .cat{font-weight:600;fill:var(--blue)}
 svg .word{font-family:"Source Serif 4",serif;font-style:italic;font-size:15px}
 svg .str{font-size:12.5px;fill:var(--acc)}
-svg .strbg{fill:var(--bg)}
+svg .lower{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-dasharray:5 3}
+svg .ahead{fill:var(--blue)}
+svg .lowlab{fill:var(--blue);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
 svg .edge{stroke:var(--muted);stroke-width:1.2;fill:none}
 svg .q{fill:var(--acc);font-weight:600}
 svg .copy{fill:var(--muted)}
@@ -114,7 +116,7 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <header class="band"><div class="wrap">
 <h1>One language, many grammars</h1>
 <p>Bare Grammar (Keenan &amp; Stabler 2003) treats a grammar as data: categories, a lexicon and rules. In this Lean 4 implementation the same language states a linear grammar, X-bar theory with GB modules, and the workspace-era Minimalist Program. Each level below is playable: pick inputs, pick a rule, and the grammar accepts or rejects the step.</p>
-<p class="note">This is a five-level demo that shows the basic capabilities of the system. The full game has not been built yet.</p>
+<p class="note">This is a five-level demo that shows the basic capabilities of the system. The full game has not been built yet. If you would rather not play every step yourself, click Solution to see the result.</p>
 <div class="tabs" role="tablist" id="tabs"></div>
 </div></header>
 
@@ -140,9 +142,17 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 </div>
 <div>
 <h3>Sources</h3>
-<p>Keenan, E. &amp; Stabler, E. (2003). <i>Bare Grammar: Lectures on Linguistic Invariants.</i> CSLI.</p>
+<p>Bobaljik, J. D. (1995). <i>Morphosyntax: The Syntax of Verbal Inflection.</i> PhD thesis, MIT.</p>
+<p>Chomsky, N. (1957). <i>Syntactic Structures.</i> Mouton.</p>
+<p>Chomsky, N. (1993). A minimalist program for linguistic theory. In K. Hale &amp; S. J. Keyser (eds.), <i>The View from Building 20.</i> MIT Press.</p>
 <p>Chomsky, N. (2013). Problems of projection. <i>Lingua</i> 130.</p>
 <p>Chomsky, N. (2020). <i>The UCLA Lectures.</i> MERGE as quoted in V. J. Pan, <i>Lecture 10: The Minimalist Program</i>, §9.</p>
+<p>Embick, D. &amp; Noyer, R. (2001). Movement operations after syntax. <i>Linguistic Inquiry</i> 32.</p>
+<p>Emonds, J. (1978). The verbal complex V′–V in French. <i>Linguistic Inquiry</i> 9.</p>
+<p>Halle, M. &amp; Marantz, A. (1993). Distributed Morphology and the pieces of inflection. In <i>The View from Building 20.</i></p>
+<p>Keenan, E. &amp; Stabler, E. (2003). <i>Bare Grammar: Lectures on Linguistic Invariants.</i> CSLI.</p>
+<p>Koopman, H. &amp; Sportiche, D. (1991). The position of subjects. <i>Lingua</i> 85.</p>
+<p>Pollock, J.-Y. (1989). Verb movement, Universal Grammar, and the structure of IP. <i>Linguistic Inquiry</i> 20.</p>
 </div>
 </div></footer>
 
@@ -156,25 +166,41 @@ const Engine = (() => {
     'linear₂': { rules: [...lin, R('D N → N', ['D', 'N'], 'N')] },
     'xbarGB': { rules: [] }
   };
-  /* X-bar schema: five rules with variables X, Y over head categories; GB data as conditions */
-  const cSel = [['D', 'N'], ['V', 'D'], ['T', 'V']], specs = [['T', 'D']], epp = ['T'],
-    caseC = ['V'], caseS = ['T'], adjuncts = [];
+  /* X-bar schema (variables X, Y over head categories) plus Move α; GB data as conditions.
+     A category may carry a waiting phrase: VP/DP is a VP with a DP waiting to move. */
+  const cSel = [['C', 'T'], ['T', 'V'], ['V', 'D'], ['D', 'N']], specs = [['V', 'D']], landing = [['T', 'D']],
+    epp = ['T'], caseC = ['V'], caseS = ['T'], adjuncts = [];
   const has2 = (xs, x, y) => xs.some(([a, b]) => a === x && b === y);
   const caseOK = (as, x, y) => y !== 'D' || as.includes(x);
-  const pc = c => [c.slice(0, 1), c.slice(1)];
+  const P = e => { const m = /^([A-Z])(⁰|′|P)/.exec(e.cat); return { x: m[1], b: m[2], m: e.mover || null }; };
+  const out = (str, x, b, mover) => mover ? { str, cat: x + b + '/' + mover.pos + 'P', mover } : { str, cat: x + b };
+  const same = (a, b) => a.length === b.length && a.every((w, i) => w === b[i]);
   const S = (name, apply, arity) => ({ name, schema: true, apply, arity });
-  const one = (ins, bar, ok, cat) => { if (ins.length !== 1) return null; const [x, b] = pc(ins[0].cat); return b === bar && ok(x) ? { str: ins[0].str, cat: cat(x) } : null; };
-  const two = (ins, b1, b2, ok, build, cat) => { if (ins.length !== 2) return null; const [p, q] = [pc(ins[0].cat), pc(ins[1].cat)];
-    return p[1] === b1 && q[1] === b2 && ok(p[0], q[0]) ? { str: build(p[0], q[0], ins[0].str, ins[1].str), cat: cat(p[0], q[0]) } : null; };
   grammars.xbarGB.rules = [
-    S('X⁰ → X′  [X takes no complement]', ins => one(ins, '⁰', x => !cSel.some(([h]) => h === x), x => x + '′'), 1),
-    S('X′ → XP  [X needs no specifier (EPP)]', ins => one(ins, '′', x => !epp.includes(x), x => x + 'P'), 1),
-    S('YP X′ → XP  [YP is the specifier of X; a DP needs Case from X]',
-      ins => two(ins, 'P', '′', (y, x) => has2(specs, x, y) && caseOK(caseS, x, y), (y, x, s1, s2) => [...s1, ...s2], (y, x) => x + 'P'), 2),
-    S("X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's affix lowers onto V]",
-      ins => two(ins, '⁰', 'P', (x, y) => has2(cSel, x, y) && caseOK(caseC, x, y), (x, y, s1, s2) => x === 'T' ? builds.lower([s1, s2]) : [...s1, ...s2], x => x + '′'), 2),
-    S('X′ YP → X′  [YP is an adjunct of X]',
-      ins => two(ins, '′', 'P', (x, y) => has2(adjuncts, x, y), (x, y, s1, s2) => [...s1, ...s2], x => x + '′'), 2)
+    S('X⁰ → X′  [X takes no complement]', ins => {
+      if (ins.length !== 1) return null; const a = P(ins[0]);
+      return a.b === '⁰' && !cSel.some(([h]) => h === a.x) ? out(ins[0].str, a.x, '′', a.m) : null; }, 1),
+    S('X′ → XP  [X needs no specifier (EPP)]', ins => {
+      if (ins.length !== 1) return null; const a = P(ins[0]);
+      return a.b === '′' && !epp.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
+    S('YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]', ins => {
+      if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
+      if (y.b !== 'P' || x.b !== '′' || y.m || x.m || !has2(specs, x.x, y.x)) return null;
+      return caseOK(caseS, x.x, y.x) ? out([...ins[0].str, ...ins[1].str], x.x, 'P', null)
+        : out(ins[1].str, x.x, 'P', { str: ins[0].str, pos: y.x }); }, 2),
+    S("X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]", ins => {
+      if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
+      if (x.b !== '⁰' || y.b !== 'P' || x.m || !has2(cSel, x.x, y.x) || !caseOK(caseC, x.x, y.x)) return null;
+      return out(x.x === 'T' ? builds.lower([ins[0].str, ins[1].str]) : [...ins[0].str, ...ins[1].str], x.x, '′', y.m); }, 2),
+    S('X′ YP → X′  [YP is an adjunct of X]', ins => {
+      if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
+      if (x.b !== '′' || y.b !== 'P' || !has2(adjuncts, x.x, y.x) || (x.m && y.m)) return null;
+      return out([...ins[0].str, ...ins[1].str], x.x, '′', x.m || y.m); }, 2),
+    S('Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]', ins => {
+      if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
+      if (y.b !== 'P' || x.b !== '′' || y.m || !x.m) return null;
+      if (!same(x.m.str, ins[0].str) || x.m.pos !== y.x || !has2(landing, x.x, y.x) || !caseOK(caseS, x.x, y.x)) return null;
+      return out([...ins[0].str, ...ins[1].str], x.x, 'P', null); }, 2)
   ];
   const attachAffix = (v, a) => (v === 'see' && a === '-s') ? 'sees' : v + 's';
   const builds = {
@@ -182,7 +208,7 @@ const Engine = (() => {
     lower: xs => (xs.length === 2 && xs[0].length === 1 && xs[1].length >= 1)
       ? [attachAffix(xs[1][0], xs[0][0]), ...xs[1].slice(1)] : xs.flat()
   };
-  const exprText = e => `⟨${e.str.join(' ')}, ${e.cat}⟩`;
+  const exprText = e => `⟨${e.str.length ? e.str.join(' ') : '∅'}, ${e.cat}⟩`;
   const normRuleName = s => s.split('[')[0].replace(/′/g, "'").replace(/⁰/g, '0').replace(/→/g, '->')
     .split(' ').filter(x => x !== '').join(' ');
   function findRule(g, typed) {
@@ -332,7 +358,7 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const LEVELS = [
  { id: 'linear', kind: 'sentence', g: 'linear₁', name: 'A linear grammar', era: 'Build it',
    words: [['a', 'D'], ['very', 'Adv'], ['good', 'A'], ['day', 'N']], goal: 'D',
-   lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence, then click a rule. The rule decides whether it applies and computes the result. The new node stays selected for the next step.</p>',
+   lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence, then click a rule. The rule decides whether it applies and computes the result.</p>',
    solution: [[0, ['very', 'good']], [1, ['very good', 'day']], [2, ['a', 'very good day']]],
    done: 'Three rule applications. Nothing about linear grammar is built into the language: the next levels change only the data.' },
  { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Cannot be cleared', impossible: true,
@@ -347,14 +373,17 @@ const LEVELS = [
    done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
      'Suppose instead we keep only Rule 3, D N → D, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
  { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
-   lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'TP' },
-   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema: five rules with variables X and Y, which range over head categories. GB enters as conditions on their domains: c-selection (D selects NP, V selects DP, T selects VP); Case (V assigns accusative to its complement, finite T nominative to its specifier), so a DP stands only where it gets Case; EPP (T needs a specifier). When X is T, Rule 4 lowers the affix onto the verb instead of concatenating. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>Lexical items are never used up. Click the inputs (words in the lexicon or nodes in the trees), then a rule. The new node stays selected for the next step.</p>',
-   solution: [[0, [['cat', 'N⁰']]], [1, [['cat', 'N′']]], [3, [['the', 'D⁰'], ['cat', 'NP']]], [1, [['the cat', 'D′']]],
-     [0, [['dog', 'N⁰']]], [1, [['dog', 'N′']]], [3, [['the', 'D⁰'], ['dog', 'NP']]], [1, [['the dog', 'D′']]],
-     [3, [['see', 'V⁰'], ['the dog', 'DP']]], [1, [['see the dog', 'V′']]], [3, [['-s', 'T⁰'], ['see the dog', 'VP']]], [2, [['the cat', 'DP'], ['sees the dog', 'T′']]]],
-   done: 'Twelve applications of four schema rules. GB entered as conditions on the domains of these rules (which complement a head selects, where a DP gets Case, which head needs a specifier, which rule lowers the affix), not as new machinery in the language.' },
+   lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰'], ['', 'C⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'CP' },
+   arrow: { from: 'T⁰', to: 'V⁰', label: 'suffix lowering' },
+   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. GB enters as conditions on their domains: c-selection (C selects TP, T selects VP, V selects DP, D selects NP); Case (V assigns accusative to its complement, finite T nominative to its specifier); EPP (T needs a specifier). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
+   solution: [[0, ['cat|N⁰']], [1, ['cat|N′']], [3, ['the|D⁰', 'cat|NP']], [1, ['the cat|D′']],
+     [0, ['dog|N⁰']], [1, ['dog|N′']], [3, ['the|D⁰', 'dog|NP']], [1, ['the dog|D′']],
+     [3, ['see|V⁰', 'the dog|DP']], [2, ['the cat|DP', 'see the dog|V′']], [3, ['-s|T⁰', 'see the dog|VP/DP|the cat']],
+     [5, ['the cat|DP', 'sees the dog|T′/DP|the cat']], [3, ['|C⁰', 'the cat sees the dog|TP']], [1, ['the cat sees the dog|C′']]],
+   done: ['Fourteen rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ.',
+     'The arrow shows suffix lowering: the suffix *-s* in T⁰ attaches to the verb in V⁰. This is not the only analysis. In Chomsky (1957) the same effect is Affix Hopping, a transformation. Emonds (1978) and Pollock (1989) have the finite verb raise to T in French, while in English only auxiliaries raise. In Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T, so nothing lowers. Bobaljik (1995) has English tense and the verb join under adjacency at PF, and in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here lowering is a property of one rule: a different analysis changes that rule, not the language.'] },
  { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['the', 'cat', 'will', 'sleep'],
-   lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
+   lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
    solution: ['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep', 'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
    done: 'Before Internal MERGE, {DP, vP} had no label: D carries φ, v does not. Afterwards the lower DP is a copy, invisible to labeling, so that node is labeled v, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ. Only the higher copy is pronounced.' }
 ];
@@ -387,12 +416,12 @@ function applySentence(ri) {
   push();
   const node = { str: r.out.str, cat: r.out.cat, tree: { cat: r.out.cat, kids: idx.map(i => st.pieces[i].tree) } };
   st.pieces.splice(idx[0], idx.length, node);
-  st.sel = [idx[0]]; st.msgs = [];
-  if (st.pieces.length === 1 && node.cat === lv.goal) { st.sel = []; finish(); }
+  st.sel = []; st.msgs = [];
+  if (st.pieces.length === 1 && node.cat === lv.goal) finish();
   draw();
 }
-const keyOf = e => e.str.join(' ') + '|' + e.cat;
-const allExprs = () => [...L().lexicon.map(([w, c]) => ({ str: [w], cat: c, lex: true })), ...st.derived];
+const keyOf = e => e.str.join(' ') + '|' + e.cat + (e.mover ? '|' + e.mover.str.join(' ') : '');
+const allExprs = () => [...L().lexicon.map(([w, c]) => ({ str: w ? [w] : [], cat: c, lex: true })), ...st.derived];
 const keyOfId = id => id.slice(id.indexOf('#') + 1);
 const rootsOf = () => { const used = new Set(st.derived.flatMap(d => d.ins)); return st.derived.filter(d => !used.has(keyOf(d))); };
 function applyFree(ri) {
@@ -411,13 +440,12 @@ function applyFree(ri) {
   if (!r.ok) return say(r.msg, 'e');
   if (pool.some(e => keyOf(e) === keyOf(r.out))) { st.sel = []; draw(); return say(`You already have ${r.out.str.join(' ')} : ${r.out.cat}.`, 'p'); }
   push();
-  st.derived.push({ ...r.out, ins: ins.map(keyOf) });
-  const k = keyOf(r.out), roots = rootsOf();
-  st.sel = [`T${roots.findIndex(d => keyOf(d) === k)}#${k}`]; st.msgs = [];
-  if (k === keyOf(lv.goal)) { st.sel = []; finish(); }
+  st.derived.push({ ...r.out, ins: ins.map(keyOf), ri });
+  st.sel = []; st.msgs = [];
+  if (keyOf(r.out) === keyOf(lv.goal)) finish();
   draw();
 }
-function selectLI(x) { push(); st.ws = [...st.ws, E.li(x)]; st.sel = [String(st.ws.length - 1)]; st.msgs = []; draw(); }
+function selectLI(x) { push(); st.ws = [...st.ws, E.li(x)]; st.sel = []; st.msgs = []; draw(); }
 function soAt(path) { let s = st.ws[path[0]]; for (const i of path.slice(1)) s = s.set[i]; return s; }
 function nameOf(path) {
   const R = st.ws[path[0]], s = soAt(path);
@@ -427,9 +455,9 @@ function nameOf(path) {
   return `{${nameOf([...path, 0])}, ${nameOf([...path, 1])}}`;
 }
 function setWS(ws2, msgs, closed) {
-  st.ws = ws2; st.sel = ['0'];
+  st.ws = ws2; st.sel = [];
   st.msgs = msgs.map(t => ({ t, k: 'i' }));
-  if (closed) { st.sel = []; finish(); }
+  if (closed) finish();
 }
 function doMerge() {
   if (st.sel.length !== 2) return say('Click two objects in the workspace first.', 'p');
@@ -455,7 +483,7 @@ function solve() {
       const [ri, strs] = s, start = st.pieces.findIndex((p, j) => strs.every((w, k) => st.pieces[j + k] && st.pieces[j + k].str.join(' ') === w));
       st.sel = strs.map((_, k) => start + k); applySentence(ri);
     } else if (lv.kind === 'free') {
-      const [ri, ins] = s; st.sel = ins.map(([w, c]) => 'S#' + w + '|' + c); applyFree(ri);
+      const [ri, keys] = s; st.sel = keys.map(k => 'S#' + k); applyFree(ri);
     } else {
       const r = E.mpCommand(st.ws, s, lv.target);
       push(); setWS(r.ws, r.msgs || [], r.closed); draw();
@@ -491,12 +519,22 @@ function drawForest(trees, o) {
     if (t.k !== undefined) inner += `<rect class="hit" x="${t.x - bw / 2}" y="${y - 18}" width="${bw}" height="${bh}" rx="5"/>`;
     const cls = t.word !== undefined ? (t.copy ? 'copy' : 'word') : (t.cat === '?' ? 'q' : 'cat');
     inner += `<text class="${cls}" x="${t.x}" y="${y}" text-anchor="middle">${esc(txt)}</text>`;
-    if (t.extra) inner += `<rect class="strbg" x="${t.x - t.extra.length * 3.6 - 4}" y="${y + 4}" width="${t.extra.length * 7.2 + 8}" height="15"/><text class="str" x="${t.x}" y="${y + 15}" text-anchor="middle">${esc(t.extra)}</text>`;
     if (t.badge) inner += `<text class="badge" x="${t.x + bw / 2 + 4}" y="${y - 8}">${t.badge}</text>`;
     g += t.k !== undefined ? `<g data-k="${esc(t.k)}" class="${t.sel ? 'sel' : ''}" role="button" tabindex="0" aria-pressed="${!!t.sel}" aria-label="${esc(t.aria || txt)}">${inner}</g>` : inner;
     t.kids.forEach(node);
   };
   trees.forEach(node);
+  if (o.arrow) {
+    const all = [], walk = t => { all.push(t); t.kids.forEach(walk); }; trees.forEach(walk);
+    const A = all.find(t => t.cat === o.arrow.from), B = all.find(t => t.cat === o.arrow.to);
+    if (A && B) {
+      /* from T⁰ down past its suffix, then along V⁰'s row, under the trace */
+      const x1 = A.x + 10, y1 = A.y * ROW + 20, x2 = B.x - 14, y2 = B.y * ROW + 18;
+      g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker></defs>` +
+        `<path class="lower" d="M${x1} ${y1} C ${x1 + 14} ${y2 + 10}, ${x2 - 50} ${y2 + 6}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
+        `<text class="lowlab" x="${x1 + 16}" y="${y2 + 24}">${esc(o.arrow.label)}</text>`;
+    }
+  }
   if (o.ws) g += `<path class="bracket" d="M10 4 h-6 v${H - 8} h6 M${W - 10} 4 h6 v${H - 8} h-6"/>`;
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(o.aria)}">${g}</svg>`;
 }
@@ -516,8 +554,8 @@ function mpTree(R, s, d, path) {
 function rulesRow(lv, dis) {
   const rs = E.grammars[lv.g].rules, show = lv.rules || rs.map((_, i) => i);
   return '<div class="tools"><span class="lab">Rules</span>' + show.map(i => {
-    const [main, note] = rs[i].name.split('  [');
-    return `<button class="item" type="button" data-r="${i}"${dis}><span class="rn">Rule ${i + 1}</span>${esc(main)}${note ? ` <small>[${esc(note)}</small>` : ''}</button>`; }).join('') + '</div>';
+    const main = rs[i].name.split('  [')[0];
+    return `<button class="item" type="button" data-r="${i}"${dis}><span class="rn">Rule ${i + 1}</span>${esc(main)}</button>`; }).join('') + '</div>';
 }
 function drawPic() {
   const lv = L(), box = document.getElementById('pic'), avail = Math.max(260, box.clientWidth - 20), dis = off() ? ' disabled' : '';
@@ -528,20 +566,23 @@ function drawPic() {
     });
     h = `<div class="cap">The sentence. Click neighbouring pieces to select them, then a rule.</div>` + rulesRow(lv, dis) + `<div class="treebox">${drawForest(trees, { pad: 6, sep: 18, avail, baseline: true, aria: 'Sentence pieces' })}</div>`;
   } else if (lv.kind === 'free') {
-    const pool = allExprs();
-    const build = (e, id) => {
-      const k = keyOf(e), base = { k: id + '#' + k, sel: st.sel.includes(id + '#' + k), aria: `${e.str.join(' ')}, ${e.cat}` };
-      if (e.lex) return { ...base, cat: e.cat, kids: [{ word: e.str[0], kids: [] }] };
-      const concat = e.ins.map(x => x.split('|')[0]).join(' ');
-      return { ...base, cat: e.cat, kids: e.ins.map((x, j) => build(pool.find(y => keyOf(y) === x), id + '.' + j)),
-        extra: e.str.join(' ') !== concat ? '“' + e.str.join(' ') + '”' : '' };
+    const pool = allExprs(), find = x => pool.find(y => keyOf(y) === x);
+    const shown = c => c.replace(/\/.*$/, '');
+    /* moved: key of the phrase that Move α took out of this subtree; it is drawn there as tᵢ */
+    const build = (e, id, moved, mark) => {
+      const k = keyOf(e), base = { k: id + '#' + k, sel: st.sel.includes(id + '#' + k), aria: `${e.str.join(' ') || '∅'}, ${shown(e.cat)}` };
+      if (e.lex) return { ...base, cat: e.cat + (mark || ''), kids: [{ word: e.str[0] || '∅', kids: [] }] };
+      if (e.ri === 5) return { ...base, cat: shown(e.cat), kids: [build(find(e.ins[0]), id + '.0', null, 'ᵢ'), build(find(e.ins[1]), id + '.1', e.ins[0])] };
+      return { ...base, cat: shown(e.cat) + (mark || ''), kids: e.ins.map((x, j) =>
+        (moved && x === moved && e.mover && j === 0 && e.ri === 2) ? { word: 'tᵢ', kids: [] } : build(find(x), id + '.' + j, moved)) };
     };
     const roots = rootsOf().map((d, i) => build(d, 'T' + i));
     h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
       lv.lexicon.map(([w, c]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
-        return `<button class="item" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}>${esc(w)} <span class="c">${esc(c)}</span></button>`; }).join('') +
-      `<small class="lab" style="margin-left:4px">never used up</small></div>` + rulesRow(lv, dis) +
-      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees' })}</div>`
+        return `<button class="item" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}>${esc(w || '∅')} <span class="c">${esc(c)}</span></button>`; }).join('') +
+      `</div>` + rulesRow(lv, dis) +
+      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees',
+        arrow: st.closed && lv.arrow ? lv.arrow : null })}</div>`
         : `<div class="empty">Nothing built yet. Click an item in the lexicon, then a rule.</div>`);
   } else {
     const items = st.ws.map((R, i) => mpTree(R, R, 0, [i]));
