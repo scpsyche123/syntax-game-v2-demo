@@ -53,19 +53,38 @@ example (a : (["a"], Linear1Cat.D) ∈ linear₂.lexicon)
   rule "D N -> N" a the_this_dog_N
   rule "D N -> N" a a_the_this_dog_N
 
-/-! ## Level 3 — X-bar theory with GB
+/-! ## Level 4 — X-bar theory with GB, Turkish (head-final)
 
-The rules are the X-bar schema with variables X and Y, plus Move α; GB's data
-(c-selection, Case, EPP, θ) are conditions on their domains. The subject is merged
-in Spec-VP, gets no Case there, waits (VP/DP), and Move α puts it in Spec-TP.
-With X = T, X⁰ YP → X′ lowers the suffix: see + -s = sees. C is empty. -/
-example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
-    (cat : (["cat"], x0 .N) ∈ xbarGB.lexicon)
-    (dog : (["dog"], x0 .N) ∈ xbarGB.lexicon)
-    (see : (["see"], x0 .V) ∈ xbarGB.lexicon)
-    (s : (["-s"], x0 .T) ∈ xbarGB.lexicon)
-    (c : (([] : List String), x0 .C) ∈ xbarGB.lexicon) :
-    CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .C) := by
+*Kedi köpeği görüyor* — cat dog-ACC see-PROG — 'The cat sees the dog.'
+The rules are the X-bar schema with variables X and Y, plus Move α, produced from
+parameters; Turkish sets the head parameter to final. GB's data (c-selection, Case,
+EPP, θ) are conditions on the rules' domains. The subject is merged in Spec-VP, gets
+no Case there, waits (VP/NP), and Move α puts it in Spec-TP. -/
+example (kedi : (["kedi"], x0 .N) ∈ xbarTR.lexicon)
+    (köpek : (["köpek"], x0 .N) ∈ xbarTR.lexicon)
+    (gör : (["gör"], x0 .V) ∈ xbarTR.lexicon)
+    (yor : (["-Iyor"], x0 .T) ∈ xbarTR.lexicon)
+    (c : (([] : List String), x0 .C) ∈ xbarTR.lexicon) :
+    CanYield xbarTR ["kedi", "köpeği", "görüyor"] (xp .C) := by
+  rule "X0 -> X'" kedi
+  rule "X' -> XP" kedi_N'
+  rule "X0 -> X'" köpek
+  rule "X' -> XP" köpek_N'
+  rule "YP X0 -> X'" köpek_NP gör
+  rule "YP X' -> XP" kedi_NP köpeği_gör_V'
+  rule "YP X0 -> X'" köpeği_gör_VP_NP yor
+  rule "Move α: YP X' -> XP" kedi_NP köpeği_görüyor_T'_NP
+  rule "YP X0 -> X'" kedi_köpeği_görüyor_TP c
+  rule "X' -> XP" kedi_köpeği_görüyor_C'
+
+/-! The same schema with the head parameter set to initial, and an English lexicon. -/
+example (the : (["the"], x0 .D) ∈ xbarEN.lexicon)
+    (cat : (["cat"], x0 .N) ∈ xbarEN.lexicon)
+    (dog : (["dog"], x0 .N) ∈ xbarEN.lexicon)
+    (see : (["see"], x0 .V) ∈ xbarEN.lexicon)
+    (s : (["-s"], x0 .T) ∈ xbarEN.lexicon)
+    (c : (([] : List String), x0 .C) ∈ xbarEN.lexicon) :
+    CanYield xbarEN ["the", "cat", "sees", "the", "dog"] (xp .C) := by
   rule "X0 -> X'" cat
   rule "X' -> XP" cat_N'
   rule "X0 YP -> X'" the cat_NP
@@ -81,19 +100,18 @@ example (the : (["the"], x0 .D) ∈ xbarGB.lexicon)
   rule "X0 YP -> X'" c the_cat_sees_the_dog_TP
   rule "X' -> XP" the_cat_sees_the_dog_C'
 
-/-! ## Level 3 — the Minimalist Program, workspace era
+/-! ## Level 5 — the Minimalist Program, workspace era, Swahili
 
-An expression is a workspace; MERGE(P, Q, WS) = [{P, Q}, …] (Chomsky 2020).
-Labels by a labeling algorithm after Chomsky 2013. Only narrow syntax is done
-by hand; externalization is checked automatically after the last step. -/
-example : MP.Converges ["the", "cat", "will", "sleep"] := by
-  select the n cat will v sleep
-  merge n cat
-  merge the nP
-  merge v sleep
-  merge DP vP
-  merge will {DP, vP}     -- one object left, but {DP, vP} has no label
-  merge DP TP             -- Internal MERGE: the lower DP becomes a copy
+*Mtoto atalala* — m-toto a-ta-lala — 1-child 1SM-FUT-sleep — 'The child will sleep.'
+Externalization (order, the higher copy, prefixes joined) and the interface conditions
+are checked automatically after the last MERGE. -/
+example : MP.Converges ["mtoto", "atalala"] := by
+  select m toto ata v lala
+  merge m toto
+  merge v lala
+  merge nP vP
+  merge ata {nP, vP}     -- one object left, but {nP, vP} has no label
+  merge nP TP            -- Internal MERGE: the lower nP becomes a copy
 
 /-! ## Rejections
 

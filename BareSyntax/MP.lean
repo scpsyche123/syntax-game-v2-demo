@@ -1,6 +1,13 @@
 /-
-Level 3 grammar: `mpWS` — the Minimalist Program, workspace era, as a Bare
-Grammar.
+Level 5 grammar: `mpWS` — the Minimalist Program, workspace era, as a Bare
+Grammar, for a Swahili sentence:
+
+    Mtoto atalala.      m-toto   a-ta-lala
+                        1-child  1SM-FUT-sleep     'The child will sleep.'
+
+Lexical items: n = m- (the class-1 prefix; noun class is a φ-feature on n),
+the root √toto, T = a-ta- (future -ta- with the class-1 subject marker a-;
+Agree is not modeled, so T's φ is already valued), a silent v, the root √lala.
 
 Source for the operation: Chomsky 2020 (UCLA Lectures), as quoted in Victor
 Junnan Pan, *Lecture 10: The Minimalist Program*, §9:
@@ -28,47 +35,53 @@ How this sits in Bare Grammar:
 
 MERGE is free; what it builds is filtered at the interfaces. Conditions at CI,
 checked on the finished object:
-* Selection: D takes an nP, T takes a vP, n and v each take a root, and every
-  root is categorized by n or v.
-* θ-criterion: the DP is first merged as the sister of vP {v, √}, where v
-  assigns its θ-role, and that vP has such a DP.
-* Chains (Last Resort): only a DP is merged twice — from its θ-position to the
+* Selection: T takes a vP, n and v each take a root, and every root is
+  categorized by n or v.
+* θ-criterion: the subject nP is first merged as the sister of vP {v, √}, where
+  v assigns its θ-role, and that vP has such an nP.
+* Chains (Last Resort): only the nP is merged twice — from its θ-position to the
   specifier of T — and nothing else moves.
-Without these, free MERGE plus labeling and word order accepts many other
-objects for "the cat will sleep" (a search of all derivations with at most two
-Internal MERGEs found 1784); with them, exactly one.
+Without these, free MERGE plus labeling and word order accepts many objects
+that are not the intended one (for the earlier English fragment, a search of all
+derivations with at most two Internal MERGEs found 1784); with them, exactly one.
 
 Simplifications (stated, not hidden):
 * Copy vs. repetition: two occurrences of the same object count as copies; the
   one closer to the root is the higher copy. (Form Copy is not modeled.)
 * Agree is not modeled: T's φ is treated as already valued.
 * No phases, no Transfer, no Minimal Search / Resource Restriction.
-* Externalization order: a head precedes its sister; a DP precedes its sister;
-  only the highest copy is pronounced; n and v are silent.
+* Externalization order: a head precedes its sister; the nP precedes its
+  sister; only the highest copy is pronounced; v is silent; a prefix (m-,
+  a-ta-) joins the next pronounced item into one word.
 -/
 import BareSyntax.Basic
 
 namespace BareSyntax.MP
 
 /-- Lexical items of this fragment. -/
-inductive LI | the | n | cat | will | v | sleep
+inductive LI | m | toto | ata | v | lala
   deriving DecidableEq, Repr
 
 /-- Categorial features. `root` items cannot label. -/
-inductive Feat | D | n | v | T | root
+inductive Feat | n | v | T | root
   deriving DecidableEq, Repr
 
 def LI.feat : LI → Feat
-  | .the => .D | .n => .n | .cat => .root | .will => .T | .v => .v | .sleep => .root
+  | .m => .n | .toto => .root | .ata => .T | .v => .v | .lala => .root
 
+/-- φ: noun class on n, the valued subject agreement on T. -/
 def LI.phi : LI → Bool
-  | .the => true | .will => true | _ => false
+  | .m => true | .ata => true | _ => false
 
 def LI.form : LI → String
-  | .the => "the" | .n => "n" | .cat => "cat" | .will => "will" | .v => "v" | .sleep => "sleep"
+  | .m => "m" | .toto => "toto" | .ata => "ata" | .v => "v" | .lala => "lala"
 
 def LI.pronounced : LI → Bool
-  | .n => false | .v => false | _ => true
+  | .v => false | _ => true
+
+/-- A prefix joins the next pronounced item into one word. -/
+def LI.prefix : LI → Bool
+  | .m => true | .ata => true | _ => false
 
 /-- Syntactic objects: lexical items and two-member sets {a, b}. -/
 inductive SO | li (x : LI) | set (a b : SO)
@@ -131,23 +144,36 @@ def allLabeled (R : SO) : SO → Nat → Bool
 
 /-! ## Externalization -/
 
-def isDP (R : SO) (s : SO) (d : Nat) : Bool :=
+/-- The nominal argument: an object labeled n. -/
+def isArg (R : SO) (s : SO) (d : Nat) : Bool :=
   match labelAt R s d with
-  | some (.cat .D, _) => true
+  | some (.cat .n, _) => true
   | _ => false
 
 def isHead : SO → Bool
   | .li x => x.feat != .root
   | _ => false
 
-def ext (R : SO) : SO → Nat → List String
-  | .li x, _ => if x.pronounced then [x.form] else []
+/-- Linear order: the pronounced items, each with whether it is a prefix. -/
+def linearize (R : SO) : SO → Nat → List (String × Bool)
+  | .li x, _ => if x.pronounced then [(x.form, x.prefix)] else []
   | .set a b, d =>
-    if lowerCopy R a (d+1) then ext R b (d+1)
-    else if lowerCopy R b (d+1) then ext R a (d+1)
-    else if isHead b && !isHead a then ext R b (d+1) ++ ext R a (d+1)
-    else if isDP R b (d+1) && !isDP R a (d+1) then ext R b (d+1) ++ ext R a (d+1)
-    else ext R a (d+1) ++ ext R b (d+1)
+    if lowerCopy R a (d+1) then linearize R b (d+1)
+    else if lowerCopy R b (d+1) then linearize R a (d+1)
+    else if isHead b && !isHead a then linearize R b (d+1) ++ linearize R a (d+1)
+    else if isArg R b (d+1) && !isArg R a (d+1) then linearize R b (d+1) ++ linearize R a (d+1)
+    else linearize R a (d+1) ++ linearize R b (d+1)
+
+/-- Words: a prefix joins the next item. -/
+def joinPrefixes : List (String × Bool) → List String
+  | [] => []
+  | (p, true) :: rest => match joinPrefixes rest with
+    | w :: ws => (p ++ w) :: ws
+    | [] => [p]
+  | (w, false) :: rest => w :: joinPrefixes rest
+
+/-- Externalization: the words of the object rooted at `s`. -/
+def ext (R s : SO) (d : Nat) : List String := joinPrefixes (linearize R s d)
 
 /-! ## The two rules -/
 
@@ -204,7 +230,6 @@ def isSet : SO → Bool
 /-- What a head takes as its sister. -/
 def selects (R : SO) (h : LI) (X : SO) (d : Nat) : Bool :=
   match h.feat with
-  | .D => isSet X && labelIs R X d .n
   | .T => isSet X && labelIs R X d .v
   | .n | .v => isRoot X
   | .root => true
@@ -229,33 +254,33 @@ def pick (low : Bool) (xs : List (SO × SO × Nat × SO)) : Option (SO × SO × 
     | none => some o
     | some m => if (if low then o.2.2.1 > m.2.2.1 else o.2.2.1 < m.2.2.1) then some o else some m) none
 
-/-- θ-criterion: a DP's lowest occurrence is the sister of the minimal vP, and
-    the minimal vP has a DP sister. -/
+/-- θ-criterion: the nP's lowest occurrence is the sister of the minimal vP, and
+    the minimal vP has an nP sister. -/
 def thetaOK (R : SO) : Bool :=
   R.terms.all fun X =>
     let mine := (occs R 0).filter (·.1 == X)
     (match mine with
      | [] => true
      | (_, _, d₀, _) :: _ =>
-       if isSet X && labelIs R X d₀ .D then
+       if isSet X && labelIs R X d₀ .n then
          match pick true mine with
          | some (_, sis, _, _) => minVP sis
          | none => false
        else true) &&
-    (!minVP X || mine.any fun (_, sis, d, _) => isSet sis && labelIs R sis d .D)
+    (!minVP X || mine.any fun (_, sis, d, _) => isSet sis && labelIs R sis d .n)
 
 def dedupSO (xs : List SO) : List SO :=
   xs.foldl (fun acc x => if acc.contains x then acc else acc ++ [x]) []
 
 /-- Chains (Last Resort): an object that occurs under two different mothers was
-    merged twice. Only a DP may be, exactly twice, its higher copy in the
+    merged twice. Only the nP may be, exactly twice, its higher copy in the
     specifier of T. -/
 def chainsOK (R : SO) : Bool :=
   R.terms.all fun X =>
     let mine := (occs R 0).filter (·.1 == X)
     if (dedupSO (mine.map (·.2.2.2))).length < 2 then true
     else match pick false mine with
-      | some (_, sis, d, _) => isSet X && labelIs R X d .D && mine.length == 2 && isSet sis && labelIs R sis d .T
+      | some (_, sis, d, _) => isSet X && labelIs R X d .n && mine.length == 2 && isSet sis && labelIs R sis d .T
       | none => true
 
 def ciOK (R : SO) : Bool := selectionOK R && thetaOK R && chainsOK R

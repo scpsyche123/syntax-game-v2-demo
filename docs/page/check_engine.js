@@ -19,7 +19,7 @@ const check = (label, got, want) => {
 const parseLex = t => { const m = /^⟨(.*), ([^,⟩]+)⟩/.exec(t); return { str: m[1] === '∅' ? [] : m[1].split(' '), cat: m[2] }; };
 const errText = c => c.messages.filter(m => m.severity === 'error').map(m => m.text);
 
-for (const g of ['linear₁', 'linear₂', 'xbarGB']) check('rules ' + g, E.grammars[g].rules.map(r => r.name), T.rules[g]);
+for (const g of ['linear₁', 'linear₂', 'xbarTR']) check('rules ' + g, E.grammars[g].rules.map(r => r.name), T.rules[g]);
 
 /* run one `rule` command on an environment of named expressions */
 function run(g, env, cmd) {
@@ -38,7 +38,7 @@ function replay(g, steps, n) {
   steps.slice(0, n).forEach(c => { const r = run(g, env, c.cmd); env[c.after[c.after.length - 1][0]] = r.out; });
   return env;
 }
-const G = { lin1: 'linear₁', over: 'linear₂', xbar: 'xbarGB' };
+const G = { lin1: 'linear₁', over: 'linear₂', xbar: 'xbarTR' };
 for (const k of Object.keys(G)) {
   const g = G[k], steps = T[k].steps;
   steps.forEach((c, i) => {
@@ -56,7 +56,7 @@ T.impossible.cases.forEach(c => {
 });
 
 // MP: run the commands on the engine's own workspace
-const target = ['the', 'cat', 'will', 'sleep'];
+const target = ['mtoto', 'atalala'];
 const info = c => c.messages.filter(m => m.severity === 'information').map(m => m.text);
 let ws = [];
 const mpSteps = T.mp.steps.map(c => c.cmd);

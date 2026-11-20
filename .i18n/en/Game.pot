@@ -8,136 +8,23 @@ msgstr "Project-Id-Version: Game v4.23.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit"
 
-#: GameServer.RpcHandlers
-msgid "level completed! 🎉"
-msgstr ""
-
-#. §0: `rule \"X0 -> X'\" cat`
-#. §1: `rule \"X' -> XP\" cat_N'`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Start with a noun: §0, then §1."
-msgstr ""
-
-#. §0: `select the n cat will v sleep`
-#: Game.Levels.Demo.L04_MP
-msgid "Begin by drawing the lexical items into the workspace: §0."
-msgstr ""
-
-#: Game.Levels.Demo.L04_MP
-msgid "Narrow syntax for *the cat will sleep*."
-msgstr ""
-
-#: GameServer.RpcHandlers
-msgid "intermediate goal solved! 🎉"
-msgstr ""
-
-#. §0: `linear₂`
-#. §1: `D N → D`
-#: Game.Levels.Demo.L02_Overgeneration
-msgid "The proof went through, and that is the problem. *a a the this dog* is not an expression of\n"
-"English, yet §0 derives it, so the rule is too strong. Rule 4 takes an N and returns an N,\n"
-"so it can apply again and again.\n"
-"\n"
-"Suppose instead we keep only Rule 3, §1, and set the goal to D. Then *this dog* becomes a D,\n"
-"no rule applies after that, and ⟨a a the this dog, D⟩ cannot be derived. That is the result we want.\n"
-"Failing to derive is also a good result: a good model should not allow more than the natural\n"
-"language does."
-msgstr ""
-
-#. §0: `rule \"NAME\" x y …`
-#. §1: `the_cat_DP`
-#. §2: `\"X0 YP -> X'\"`
-#. §3: `\"X⁰ YP → X′\"`
-#. §4: `as NAME`
-#: Game.Metadata
-msgid "§0 applies the rule NAME to the expressions x, y, … in\n"
-"your hypotheses. The rule computes the result, which appears as a new\n"
-"hypothesis with a readable name (for example §1). If the rule is not\n"
-"defined on those inputs, it is rejected.\n"
-"\n"
-"Rule names may be typed with ASCII: §2 means §3.\n"
-"Add §4 at the end to choose the name of the result yourself."
-msgstr ""
-
-#: Game.Levels.Demo.L04_MP
-msgid "Look at the last step. Before Internal MERGE, {DP, vP} had no label: neither D nor v\n"
-"shares a feature with the other. After it, the lower DP is a copy, the labeling algorithm\n"
-"sees only vP, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ.\n"
-"Externalization pronounced only the higher copy: *the cat will sleep*.\n"
-"\n"
-"Three levels, three generations of generative syntax, one language.\n"
-"In each, a grammar is categories, a lexicon and rules — data — and Lean checks every step."
-msgstr ""
-
-#: Game
-msgid "This demo shows one formal language expressing grammars from three eras of generative syntax:\n"
-"\n"
-"1. a linear grammar,\n"
-"2. X-bar theory with GB modules (c-selection, Case, EPP, Infl lowering),\n"
-"3. the Minimalist Program of the workspace era (MERGE on workspaces, labeling).\n"
-"\n"
-"The language is Bare Grammar (Keenan & Stabler 2003), implemented in Lean 4. A grammar is\n"
-"data — categories, a lexicon, rules — and an expression belongs to the language when there is\n"
-"a derivation of it. Every step you take is checked by Lean's kernel."
-msgstr ""
-
-#. §0: `X⁰ → X′`
-#. §1: `X′ → XP`
-#. §2: `YP X′ → XP`
-#. §3: `X⁰ YP → X′`
-#. §4: `X′ YP → X′`
-#. §5: `Move α: YP X′ → XP`
-#. §6: `rule \"X0 -> X'\" cat`
-#. §7: `cat_N'`
-#. §8: `cat_NP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Same language, a different grammar.\n"
-"\n"
-"Categories are now head and bar level: N⁰, N′, NP, and so on. A category can also carry a\n"
-"phrase that waits inside it to move: VP/DP is a VP with a waiting DP.\n"
-"\n"
-"The rules are the X-bar schema, five rules with variables X and Y over head categories,\n"
-"plus Move α:\n"
-"\n"
-"- Rule 1: §0\n"
-"- Rule 2: §1\n"
-"- Rule 3: §2\n"
-"- Rule 4: §3\n"
-"- Rule 5: §4\n"
-"- Rule 6: §5\n"
-"\n"
-"GB enters as conditions on their domains:\n"
-"\n"
-"- **c-selection:** C selects TP, T selects VP, V selects DP, D selects NP.\n"
-"- **VP-internal subject:** the subject is merged in Spec-VP (Rule 3). V assigns it no Case,\n"
-"  so it leaves a trace there and waits: the result is VP/DP.\n"
-"- **Case:** V assigns accusative to its complement; finite T assigns nominative to its\n"
-"  specifier. **Move α** puts the waiting DP into Spec-TP.\n"
-"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′; only Move α makes TP.\n"
-"- **θ:** V assigns an external θ-role, so Rule 2 does not apply to V′ either: VP needs its\n"
-"  subject.\n"
-"- **Suffix lowering:** when X is T, Rule 4 attaches the suffix in T⁰ to the verb:\n"
-"  see + -s = sees.\n"
-"- **C** is empty. **Adjuncts:** none in this fragment, so Rule 5 never applies here.\n"
-"\n"
-"**Goal:** ⟨the cat sees the dog, CP⟩ ∈ L(xbarGB).\n"
-"\n"
-"Build from the bottom up, for example §6. Each result gets a name you can\n"
-"use in the next step (§7, then §8, …). The lexicon is not used up."
-msgstr ""
-
 #. §0: `?`
 #. §1: `copy(…)`
-#. §2: `select the n cat will v sleep`
+#. §2: `select m toto ata v lala`
 #. §3: `merge P Q`
-#. §4: `the`
-#. §5: `cat`
-#. §6: `DP`
+#. §4: `m`
+#. §5: `toto`
+#. §6: `nP`
 #. §7: `vP`
 #. §8: `TP`
-#. §9: `{DP, vP}`
+#. §9: `{nP, vP}`
 #: Game.Levels.Demo.L04_MP
-msgid "Same language, a grammar from a later era. Here **an expression is a workspace**.\n"
+msgid "Same language, a grammar from a later era, and another human language:\n"
+"\n"
+"  *Mtoto atalala.*   m-toto a-ta-lala   1-child 1SM-FUT-sleep   'The child will sleep.'\n"
+"\n"
+"The class-1 prefix m- is n; noun class is a φ-feature on n. T is a-ta-: future -ta- with the\n"
+"class-1 subject marker a-. Here **an expression is a workspace**.\n"
 "Following Chomsky (2020, *UCLA Lectures*):\n"
 "\n"
 "  MERGE(P, Q, WS) = [{P, Q}, …] = WS′\n"
@@ -157,6 +44,10 @@ msgid "Same language, a grammar from a later era. Here **an expression is a work
 "- {XP, YP}: labeled ⟨φ,φ⟩ if both heads carry φ; otherwise no label —\n"
 "  unless one of the two is a lower copy, which the algorithm does not see.\n"
 "\n"
+"MERGE is free; the finished object must meet conditions at the interface: selection (T takes\n"
+"vP, n and v take a root), the θ-criterion (the subject nP first merges with vP) and chains (only\n"
+"the nP moves, once, to the specifier of T).\n"
+"\n"
 "Unlabeled nodes show as §0, lower copies as §1.\n"
 "\n"
 "**Goal:** a workspace with one object, every node labeled. Externalization — word order,\n"
@@ -172,14 +63,169 @@ msgid "Same language, a grammar from a later era. Here **an expression is a work
 "Agree is not modeled (T's φ counts as valued); no phases."
 msgstr ""
 
+#: GameServer.RpcHandlers
+msgid "level completed! 🎉"
+msgstr ""
+
+#. §0: `rule \"X0 -> X'\" kedi`
+#. §1: `rule \"X' -> XP\" kedi_N'`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Start with a noun: §0, then §1."
+msgstr ""
+
+#. §0: `select m toto ata v lala`
+#: Game.Levels.Demo.L04_MP
+msgid "Begin by drawing the lexical items into the workspace: §0."
+msgstr ""
+
+#. §0: `rule \"Move α: YP X' -> XP\" kedi_NP köpeği_görüyor_T'_NP`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "T′ cannot become TP by Rule 2 (EPP). Move the waiting NP: §0."
+msgstr ""
+
+#: GameServer.RpcHandlers
+msgid "intermediate goal solved! 🎉"
+msgstr ""
+
+#. §0: `linear₂`
+#. §1: `D N → D`
+#: Game.Levels.Demo.L02_Overgeneration
+msgid "The proof went through, and that is the problem. *a a the this dog* is not an expression of\n"
+"English, yet §0 derives it, so the rule is too strong. Rule 4 takes an N and returns an N,\n"
+"so it can apply again and again.\n"
+"\n"
+"Suppose instead we keep only Rule 3, §1, and set the goal to D. Then *this dog* becomes a D,\n"
+"no rule applies after that, and ⟨a a the this dog, D⟩ cannot be derived. That is the result we want.\n"
+"Failing to derive is also a good result: a good model should not allow more than the natural\n"
+"language does."
+msgstr ""
+
+#. §0: `rule \"YP X0 -> X'\" köpek_NP gör`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Head-final: the complement comes first. §0. Watch the accusative."
+msgstr ""
+
+#. §0: `rule \"NAME\" x y …`
+#. §1: `the_cat_DP`
+#. §2: `\"X0 YP -> X'\"`
+#. §3: `\"X⁰ YP → X′\"`
+#. §4: `as NAME`
+#: Game.Metadata
+msgid "§0 applies the rule NAME to the expressions x, y, … in\n"
+"your hypotheses. The rule computes the result, which appears as a new\n"
+"hypothesis with a readable name (for example §1). If the rule is not\n"
+"defined on those inputs, it is rejected.\n"
+"\n"
+"Rule names may be typed with ASCII: §2 means §3.\n"
+"Add §4 at the end to choose the name of the result yourself."
+msgstr ""
+
+#. §0: `X⁰ → X′`
+#. §1: `X′ → XP`
+#. §2: `YP X′ → XP`
+#. §3: `YP X⁰ → X′`
+#. §4: `X⁰ YP → X′`
+#. §5: `X′ YP → X′`
+#. §6: `Move α: YP X′ → XP`
+#. §7: `rule \"X0 -> X'\" kedi`
+#. §8: `kedi_N'`
+#. §9: `kedi_NP`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Same language, a different grammar, and a different human language:\n"
+"\n"
+"  *Kedi köpeği görüyor.*   kedi köpeğ-i gör-üyor   cat dog-ACC see-PROG   'The cat sees the dog.'\n"
+"\n"
+"Categories are head and bar level: N⁰, N′, NP, and so on. A category can also carry a\n"
+"phrase that waits inside it to move: VP/NP is a VP with a waiting NP.\n"
+"\n"
+"The rules are the X-bar schema, five rules with variables X and Y over head categories,\n"
+"plus Move α. They are produced by a function from parameters; English and Turkish are two\n"
+"settings of it. Turkish is **head-final**: the complement comes before its head.\n"
+"\n"
+"- Rule 1: §0\n"
+"- Rule 2: §1\n"
+"- Rule 3: §2\n"
+"- Rule 4: §3 (English: §4)\n"
+"- Rule 5: §5\n"
+"- Rule 6: §6\n"
+"\n"
+"GB enters as conditions on their domains:\n"
+"\n"
+"- **c-selection:** C selects TP, T selects VP, V selects NP. Turkish has no articles; the\n"
+"  nominal arguments here are NPs.\n"
+"- **VP-internal subject:** the subject is merged in Spec-VP (Rule 3). V assigns it no Case,\n"
+"  so it leaves a trace there and waits: the result is VP/NP.\n"
+"- **Case:** V assigns accusative to its complement, spelled as the suffix -I:\n"
+"  köpek → köpeği. Finite T assigns nominative (no suffix) to its specifier.\n"
+"  **Move α** puts the waiting NP into Spec-TP.\n"
+"- **EPP:** T needs a specifier, so Rule 2 does not apply to T′; only Move α makes TP.\n"
+"- **θ:** V assigns an external θ-role, so Rule 2 does not apply to V′: VP needs its subject.\n"
+"- **The suffix:** when X is T, Rule 4 joins T's suffix to the verb: gör + -Iyor = görüyor.\n"
+"- **C** is empty. **Adjuncts:** none in this fragment.\n"
+"\n"
+"**Goal:** ⟨kedi köpeği görüyor, CP⟩ ∈ L(xbarTR).\n"
+"\n"
+"Build from the bottom up, for example §7. Each result gets a name you\n"
+"can use in the next step (§8, then §9, …). The lexicon is not used up."
+msgstr ""
+
+#: Game.Levels.Demo.L03_XBarGB
+msgid "X-bar theory with GB: Turkish"
+msgstr ""
+
+#. §0: `BareSyntax/Basic.lean`
+#. §1: `Deriv`
+#. §2: `CanYield`
+#. §3: `{{BUILD_VERSION}}`
+#: Game
+msgid "**The language.** §0: expressions ⟨string, category⟩, rules as partial\n"
+"functions, the derivation relation §1, grammaticality §2. Rules come in two forms:\n"
+"a domain given as a list of categories (levels 1–2), or a domain given by a pattern and a decidable\n"
+"condition (levels 3–4: the X-bar schema, and MERGE, where categories are workspaces).\n"
+"\n"
+"**References.**\n"
+"Keenan, E. & Stabler, E. (2003). *Bare Grammar: Lectures on Linguistic Invariants.* CSLI.\n"
+"Chomsky, N. (2013). Problems of projection. *Lingua* 130.\n"
+"Chomsky, N. (2020). *The UCLA Lectures.*\n"
+"Pan, V. J. *Lecture 10: The Minimalist Program* (\\§9).\n"
+"\n"
+"Source: https://github.com/scpsyche123/syntax-game-v2-demo\n"
+"\n"
+"---\n"
+"\n"
+"*Build: §3*"
+msgstr ""
+
+#: Game.Levels.Demo
+msgid "Four levels, grammars from three eras of generative syntax — for English, Turkish and\n"
+"Swahili — written in one formal language. Each grammar is data: categories, a lexicon, rules. The same derivation relation,\n"
+"checked by Lean, decides what each grammar generates."
+msgstr ""
+
+#: Game.Levels.Demo.L04_MP
+msgid "Narrow syntax for *mtoto atalala*."
+msgstr ""
+
+#: Game
+msgid "This demo shows one formal language expressing grammars from three eras of generative syntax:\n"
+"\n"
+"1. a linear grammar (English),\n"
+"2. X-bar theory with GB modules — c-selection, Case, EPP, θ, Move α — for Turkish, head-final,\n"
+"3. the Minimalist Program of the workspace era (MERGE on workspaces, labeling, interface\n"
+"   conditions) for Swahili.\n"
+"\n"
+"The language is Bare Grammar (Keenan & Stabler 2003), implemented in Lean 4. A grammar is\n"
+"data — categories, a lexicon, rules — and an expression belongs to the language when there is\n"
+"a derivation of it. Every step you take is checked by Lean's kernel."
+msgstr ""
+
+#: Game.Levels.Demo.L04_MP
+msgid "One object is left, but {nP, vP} has no label. What can MERGE do that makes the nP inside invisible there?"
+msgstr ""
+
 #: Game.Levels.Demo.L01_Linear
 msgid "Three rule applications. The same command — choose a rule, give it its inputs — runs every level.\n"
 "What changes from level to level is only the grammar: its categories, its lexicon, its rules."
-msgstr ""
-
-#. §0: `rule \"Move α: YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP`
-#: Game.Levels.Demo.L03_XBarGB
-msgid "T′ cannot become TP by Rule 2 (EPP). Move the waiting DP: §0."
 msgstr ""
 
 #: Game.Levels.Demo.L02_Overgeneration
@@ -216,19 +262,15 @@ msgid "In Bare Grammar (Keenan & Stabler 2003), a grammar is data:\n"
 "The rule computes the result and names it (§7); you only choose the rule and its inputs."
 msgstr ""
 
+#: Game.Levels.Demo.L04_MP
+msgid "The Minimalist Program: Swahili"
+msgstr ""
+
 #: Game
 msgid "Syntax Game v2 · Bare Grammar demo"
 msgstr ""
 
-#: Game.Levels.Demo.L04_MP
-msgid "One object is left, but {DP, vP} has no label. What can MERGE do that makes the DP inside invisible there?"
-msgstr ""
-
-#: Game.Levels.Demo.L03_XBarGB
-msgid "X-bar theory with GB"
-msgstr ""
-
-#. §0: `merge n cat`
+#. §0: `merge m toto`
 #: Game.Levels.Demo.L04_MP
 msgid "Build the noun first: §0."
 msgstr ""
@@ -242,23 +284,9 @@ msgstr ""
 msgid "Start from the right: §0."
 msgstr ""
 
-#. §0: `rule \"YP X' -> XP\" the_cat_DP see_the_dog_V'`
+#. §0: `rule \"YP X' -> XP\" kedi_NP köpeği_gör_V'`
 #: Game.Levels.Demo.L03_XBarGB
 msgid "Merge the subject in Spec-VP: §0. It gets no Case there."
-msgstr ""
-
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Fourteen rule applications, one of them Move α: the subject was merged in Spec-VP, where V\n"
-"gives it no Case, and moved to Spec-TP, where finite T assigns nominative. It left a trace.\n"
-"\n"
-"Suffix lowering is not the only analysis of *sees*. In Chomsky (1957) the same effect is\n"
-"Affix Hopping, a transformation. Emonds (1978) and Pollock (1989) have the finite verb raise\n"
-"to T in French, while in English only auxiliaries raise. In Chomsky (1993) the verb comes from\n"
-"the lexicon already inflected and checks its features against T, so nothing lowers. Bobaljik\n"
-"(1995) treats English tense and the verb as joining under adjacency at PF, and in Distributed\n"
-"Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001).\n"
-"Here lowering is a property of one rule: a different analysis changes that rule, not the\n"
-"language."
 msgstr ""
 
 #. §0: `merge P Q`
@@ -317,6 +345,26 @@ msgid "§0 is §1 with three more words (the : D, this : D, dog : N) and one mor
 "**Goal:** show that ⟨a a the this dog, N⟩ ∈ L(linear₂), using only Rule 4."
 msgstr ""
 
+#. §0: `xbarEN`
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Ten rule applications, one of them Move α: the subject was merged in Spec-VP, where V gives\n"
+"it no Case, and moved to Spec-TP, where finite T assigns nominative. In a head-final\n"
+"language this movement does not change the word order — the subject is first either way —\n"
+"but the grammar still requires it.\n"
+"\n"
+"The same rules with the head parameter set the other way, and an English lexicon, derive\n"
+"*the cat sees the dog* (§0 in the playground).\n"
+"\n"
+"Suffix lowering is not the only analysis of the verb's suffix. In a head-final language V\n"
+"and T are adjacent, so lowering T's suffix and raising the verb to T give the same string.\n"
+"In Chomsky (1957) the English effect is Affix Hopping, a transformation; Emonds (1978) and\n"
+"Pollock (1989) have the finite verb raise to T in French; in Chomsky (1993) the verb comes\n"
+"from the lexicon already inflected and checks its features against T; Bobaljik (1995) joins\n"
+"tense and verb under adjacency at PF; in Distributed Morphology lowering is an operation after\n"
+"syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here the joining is a property of one\n"
+"rule: a different analysis changes that rule, not the language."
+msgstr ""
+
 #. §0: `select x y …`
 #. §1: `the`
 #. §2: `n`
@@ -329,43 +377,21 @@ msgid "§0 draws lexical items into the workspace WS (rule Select).\n"
 "The lexicon of this grammar: §1, §2, §3, §4, §5, §6."
 msgstr ""
 
-#: Game.Levels.Demo.L03_XBarGB
-msgid "Build ⟨the cat sees the dog, CP⟩ in X-bar theory with GB modules."
-msgstr ""
-
 #: Game.Levels.Demo
 msgid "One language, three theories"
 msgstr ""
 
-#: Game.Levels.Demo
-msgid "Four levels, grammars from three eras of generative syntax, written in one formal\n"
-"language. Each grammar is data: categories, a lexicon, rules. The same derivation relation,\n"
-"checked by Lean, decides what each grammar generates."
-msgstr ""
-
-#. §0: `BareSyntax/Basic.lean`
-#. §1: `Deriv`
-#. §2: `CanYield`
-#. §3: `{{BUILD_VERSION}}`
-#: Game
-msgid "**The language.** §0: expressions ⟨string, category⟩, rules as partial\n"
-"functions, the derivation relation §1, grammaticality §2. Rules come in two forms:\n"
-"a domain given as a list of categories (levels 1–2), or a domain given as a decidable condition\n"
-"(level 3, where categories are workspaces).\n"
-"\n"
-"**References.**\n"
-"Keenan, E. & Stabler, E. (2003). *Bare Grammar: Lectures on Linguistic Invariants.* CSLI.\n"
-"Chomsky, N. (2013). Problems of projection. *Lingua* 130.\n"
-"Chomsky, N. (2020). *The UCLA Lectures.*\n"
-"Pan, V. J. *Lecture 10: The Minimalist Program* (\\§9).\n"
-"\n"
-"Source: https://github.com/scpsyche123/syntax-game-v2-demo\n"
-"\n"
-"---\n"
-"\n"
-"*Build: §3*"
+#: Game.Levels.Demo.L03_XBarGB
+msgid "Build ⟨kedi köpeği görüyor, CP⟩ in X-bar theory with GB modules, head-final."
 msgstr ""
 
 #: Game.Levels.Demo.L04_MP
-msgid "The Minimalist Program: MERGE on workspaces"
+msgid "Look at the last step. The subject has to start in vP (θ-criterion), but there {nP, vP}\n"
+"has no label: n carries φ (noun class 1), v does not. After Internal MERGE the lower nP is a\n"
+"copy, the labeling algorithm sees only vP, and the new root {nP, TP} is labeled ⟨φ,φ⟩: the\n"
+"class-1 φ of m- and of the subject marker a-. Externalization pronounced only the higher\n"
+"copy and joined the prefixes: *mtoto atalala*.\n"
+"\n"
+"Four levels, three generations of generative syntax, three human languages, one formal language.\n"
+"In each, a grammar is categories, a lexicon and rules — data — and Lean checks every step."
 msgstr ""

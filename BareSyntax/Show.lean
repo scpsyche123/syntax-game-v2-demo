@@ -4,7 +4,7 @@ Display layer: how expressions, goals and workspaces appear in the infoview.
 * `Deriv G (s, C)`           ↦ ⟨s, C⟩            (a derived expression)
 * `e ∈ G.lexicon`            ↦ ⟨s, C⟩ ∈ Lex(G)   (a lexicon entry)
 * `CanYield G s C`           ↦ ⟨s, C⟩ ∈ L(G)     (the goal of levels 1–2)
-* `MP.WS.mk items`           ↦ [ D:{the, n:{n, √cat}}, will, … ]
+* `MP.WS.mk items`           ↦ [ n:{m-, √toto}, a-ta-, … ]
 * `MP.Converges s`           ↦ the goal of level 3
 
 The text is produced by plain functions; the delaborators only wrap it.
@@ -23,10 +23,10 @@ open Lean Meta PrettyPrinter Delaborator SubExpr
 namespace MP
 
 def Feat.text : Feat → String
-  | .D => "D" | .n => "n" | .v => "v" | .T => "T" | .root => "√"
+  | .n => "n" | .v => "v" | .T => "T" | .root => "√"
 
-def LI.text (x : LI) : String :=
-  if x.feat = .root then "√" ++ x.form else x.form
+def LI.text : LI → String
+  | .m => "m-" | .ata => "a-ta-" | x => if x.feat = .root then "√" ++ x.form else x.form
 
 def labelText : Option (Label × Option LI) → String
   | some (.cat f, _) => f.text
@@ -90,9 +90,9 @@ def catText (e : Lean.Expr) : MetaM String := do
 
 def liOfExpr? (e : Lean.Expr) : Option MP.LI :=
   match e.constName? with
-  | some ``MP.LI.the => some .the | some ``MP.LI.n => some .n
-  | some ``MP.LI.cat => some .cat | some ``MP.LI.will => some .will
-  | some ``MP.LI.v => some .v | some ``MP.LI.sleep => some .sleep
+  | some ``MP.LI.m => some .m | some ``MP.LI.toto => some .toto
+  | some ``MP.LI.ata => some .ata | some ``MP.LI.v => some .v
+  | some ``MP.LI.lala => some .lala
   | _ => none
 
 partial def soOfExpr? (e : Lean.Expr) : Option MP.SO :=
@@ -111,8 +111,8 @@ def wsOfExpr? (e : Lean.Expr) : MetaM (Option (List MP.SO)) := do
   return none
 
 def liExpr : MP.LI → Lean.Expr
-  | .the => mkConst ``MP.LI.the | .n => mkConst ``MP.LI.n | .cat => mkConst ``MP.LI.cat
-  | .will => mkConst ``MP.LI.will | .v => mkConst ``MP.LI.v | .sleep => mkConst ``MP.LI.sleep
+  | .m => mkConst ``MP.LI.m | .toto => mkConst ``MP.LI.toto | .ata => mkConst ``MP.LI.ata
+  | .v => mkConst ``MP.LI.v | .lala => mkConst ``MP.LI.lala
 
 def soExpr : MP.SO → Lean.Expr
   | .li x => mkApp (mkConst ``MP.SO.li) (liExpr x)

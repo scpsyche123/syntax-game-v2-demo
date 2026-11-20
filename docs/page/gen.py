@@ -30,8 +30,8 @@ LIN1_LEX = [('a', 'a', 'Linear1Cat.D'), ('very', 'very', 'Linear1Cat.Adv'),
             ('good', 'good', 'Linear1Cat.A'), ('day', 'day', 'Linear1Cat.N')]
 LIN2_LEX = [('a', 'a', 'Linear1Cat.D'), ('the', 'the', 'Linear1Cat.D'),
             ('this', 'this', 'Linear1Cat.D'), ('dog', 'dog', 'Linear1Cat.N')]
-XB_LEX = [('the', 'the', 'x0 .D'), ('cat', 'cat', 'x0 .N'), ('dog', 'dog', 'x0 .N'),
-          ('see', 'see', 'x0 .V'), ('s', '-s', 'x0 .T'), ('c', '', 'x0 .C')]
+XB_LEX = [('kedi', 'kedi', 'x0 .N'), ('köpek', 'köpek', 'x0 .N'), ('gör', 'gör', 'x0 .V'),
+          ('yor', '-Iyor', 'x0 .T'), ('c', '', 'x0 .C')]
 
 LEVELS = {
   'lin1': dict(G='linear₁', lex=LIN1_LEX, goal='CanYield linear₁ ["a", "very", "good", "day"] .D',
@@ -43,32 +43,30 @@ LEVELS = {
                steps=['rule "D N -> N" this dog', 'rule "D N -> N" the this_dog_N',
                       'rule "D N -> N" a the_this_dog_N', 'rule "D N -> N" a a_the_this_dog_N'],
                wrong=[(0, 'rule "Adv A -> A" the dog'), (0, 'rule "D N -> D" this the')]),
-  'xbar': dict(G='xbarGB', lex=XB_LEX, goal='CanYield xbarGB ["the", "cat", "sees", "the", "dog"] (xp .C)',
-               steps=["rule \"X0 -> X'\" cat", "rule \"X' -> XP\" cat_N'", "rule \"X0 YP -> X'\" the cat_NP",
-                      "rule \"X' -> XP\" the_cat_D'", "rule \"X0 -> X'\" dog", "rule \"X' -> XP\" dog_N'",
-                      "rule \"X0 YP -> X'\" the dog_NP", "rule \"X' -> XP\" the_dog_D'",
-                      "rule \"X0 YP -> X'\" see the_dog_DP", "rule \"YP X' -> XP\" the_cat_DP see_the_dog_V'",
-                      "rule \"X0 YP -> X'\" s see_the_dog_VP_DP", "rule \"Move α: YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
-                      "rule \"X0 YP -> X'\" c the_cat_sees_the_dog_TP", "rule \"X' -> XP\" the_cat_sees_the_dog_C'"],
-               wrong=[(2, "rule \"X0 YP -> X'\" the cat_N'"), (11, "rule \"X' -> XP\" sees_the_dog_T'_DP"),
-                      (8, "rule \"X0 YP -> X'\" see dog_NP"), (0, "rule \"X0 -> X'\" the"), (0, "rule \"X0 -> X'\" c"),
-                      (4, "rule \"X' YP -> X'\" cat_N' the_cat_DP"), (8, "rule \"YP X' -> XP\" the_cat_DP the_dog_D'"),
-                      (11, "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP"),
-                      (11, "rule \"Move α: YP X' -> XP\" the_dog_DP sees_the_dog_T'_DP"),
-                      (9, "rule \"Move α: YP X' -> XP\" the_cat_DP see_the_dog_V'"),
-                      (12, "rule \"X0 YP -> X'\" c sees_the_dog_T'_DP"),
-                      (9, "rule \"X' -> XP\" see_the_dog_V'"),
-                      (0, "rule \"N' -> N0\" cat")]),
-  'mp': dict(G=None, lex=[], goal='MP.Converges ["the", "cat", "will", "sleep"]',
-             steps=['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep',
-                    'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
-             wrong=[(5, 'merge will vP'), (6, 'merge DP vP'), (1, 'merge cat sleep'),
+  'xbar': dict(G='xbarTR', lex=XB_LEX, goal='CanYield xbarTR ["kedi", "köpeği", "görüyor"] (xp .C)',
+               steps=["rule \"X0 -> X'\" kedi", "rule \"X' -> XP\" kedi_N'", "rule \"X0 -> X'\" köpek",
+                      "rule \"X' -> XP\" köpek_N'", "rule \"YP X0 -> X'\" köpek_NP gör",
+                      "rule \"YP X' -> XP\" kedi_NP köpeği_gör_V'", "rule \"YP X0 -> X'\" köpeği_gör_VP_NP yor",
+                      "rule \"Move α: YP X' -> XP\" kedi_NP köpeği_görüyor_T'_NP",
+                      "rule \"YP X0 -> X'\" kedi_köpeği_görüyor_TP c", "rule \"X' -> XP\" kedi_köpeği_görüyor_C'"],
+               wrong=[(0, "rule \"X0 -> X'\" gör"), (0, "rule \"X0 YP -> X'\" gör kedi"),
+                      (4, "rule \"YP X0 -> X'\" köpek_N' gör"), (4, "rule \"YP X0 -> X'\" gör köpek_NP"),
+                      (7, "rule \"X' -> XP\" köpeği_görüyor_T'_NP"), (5, "rule \"X' -> XP\" köpeği_gör_V'"),
+                      (7, "rule \"Move α: YP X' -> XP\" köpek_NP köpeği_görüyor_T'_NP"),
+                      (7, "rule \"YP X' -> XP\" kedi_NP köpeği_görüyor_T'_NP"),
+                      (4, "rule \"X' YP -> X'\" kedi_N' köpek_NP"),
+                      (8, "rule \"YP X0 -> X'\" köpeği_görüyor_T'_NP c"),
+                      (0, "rule \"N' -> N0\" kedi")]),
+  'mp': dict(G=None, lex=[], goal='MP.Converges ["mtoto", "atalala"]',
+             steps=['select m toto ata v lala', 'merge m toto', 'merge v lala', 'merge nP vP',
+                    'merge ata {nP, vP}', 'merge nP TP'],
+             wrong=[(4, 'merge ata vP'), (5, 'merge nP vP'), (1, 'merge toto lala'),
                     # the subject never enters vP: merged straight into the specifier of T (θ-criterion)
-                    (4, ['merge will vP', 'merge DP TP']),
-                    # no n, no v: D and T take roots (selection)
-                    (0, ['select the cat will sleep', 'merge the cat', 'merge will sleep', 'merge DP TP']),
+                    (3, ['merge ata vP', 'merge nP TP']),
+                    # no v: T takes a root (selection)
+                    (0, ['select m toto ata lala', 'merge m toto', 'merge ata lala', 'merge nP TP']),
                     # T's head is merged again (chains)
-                    (6, ['merge TP will', 'merge DP {{will, {DP, vP}}, will}'])]),
+                    (5, ['merge TP ata', 'merge nP {{ata, {nP, vP}}, ata}'])]),
 }
 
 def statement(L, goal):
@@ -137,9 +135,9 @@ truth['impossible'] = {'cases': imp}
 assert not any(c['ok'] for c in imp)
 
 # rule lists as Lean shows them
-ev = run(HEAD + '#eval linear₁.ruleNames\n#eval linear₂.ruleNames\n#eval xbarGB.fruleNames\n')
+ev = run(HEAD + '#eval linear₁.ruleNames\n#eval linear₂.ruleNames\n#eval xbarTR.fruleNames\n')
 truth['rules'] = {'linear₁': json.loads(ev[0]['data']), 'linear₂': json.loads(ev[1]['data']),
-                  'xbarGB': json.loads(ev[2]['data'])}
+                  'xbarTR': json.loads(ev[2]['data'])}
 json.dump(truth, open(os.path.join(HERE, 'truth.json'), 'w'), ensure_ascii=False, indent=1)
 print('cases:', sum(len(v['steps']) + len(v['wrong']) for k, v in truth.items() if k not in ('impossible', 'rules'))
       + len(imp))

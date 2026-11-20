@@ -560,1582 +560,890 @@
  "xbar": {
   "steps": [
    {
-    "cmd": "rule \"X0 -> X'\" cat",
+    "cmd": "rule \"X0 -> X'\" kedi",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> XP\" cat_N'",
+    "cmd": "rule \"X' -> XP\" kedi_N'",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X0 YP -> X'\" the cat_NP",
+    "cmd": "rule \"X0 -> X'\" köpek",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> XP\" the_cat_D'",
+    "cmd": "rule \"X' -> XP\" köpek_N'",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X0 -> X'\" dog",
+    "cmd": "rule \"YP X0 -> X'\" köpek_NP gör",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> XP\" dog_N'",
+    "cmd": "rule \"YP X' -> XP\" kedi_NP köpeği_gör_V'",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X0 YP -> X'\" the dog_NP",
+    "cmd": "rule \"YP X0 -> X'\" köpeği_gör_VP_NP yor",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X' -> XP\" the_dog_D'",
+    "cmd": "rule \"Move α: YP X' -> XP\" kedi_NP köpeği_görüyor_T'_NP",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ],
      [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
+      "kedi_köpeği_görüyor_TP",
+      "⟨kedi köpeği görüyor, TP⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"X0 YP -> X'\" see the_dog_DP",
+    "cmd": "rule \"YP X0 -> X'\" kedi_köpeği_görüyor_TP c",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ],
      [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
+      "kedi_köpeği_görüyor_TP",
+      "⟨kedi köpeği görüyor, TP⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ],
      [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
+      "kedi_köpeği_görüyor_TP",
+      "⟨kedi köpeği görüyor, TP⟩"
      ],
      [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
+      "kedi_köpeği_görüyor_C'",
+      "⟨kedi köpeği görüyor, C′⟩"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "rule \"YP X' -> XP\" the_cat_DP see_the_dog_V'",
+    "cmd": "rule \"X' -> XP\" kedi_köpeği_görüyor_C'",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ],
      [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
+      "kedi_köpeği_görüyor_TP",
+      "⟨kedi köpeği görüyor, TP⟩"
      ],
      [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
+      "kedi_köpeği_görüyor_C'",
+      "⟨kedi köpeği görüyor, C′⟩"
      ]
     ],
     "after": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ],
      [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
+      "kedi_köpeği_görüyor_TP",
+      "⟨kedi köpeği görüyor, TP⟩"
      ],
      [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
+      "kedi_köpeği_görüyor_C'",
+      "⟨kedi köpeği görüyor, C′⟩"
      ],
      [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ]
-    ],
-    "messages": [],
-    "ok": true
-   },
-   {
-    "cmd": "rule \"X0 YP -> X'\" s see_the_dog_VP_DP",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ]
-    ],
-    "after": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ]
-    ],
-    "messages": [],
-    "ok": true
-   },
-   {
-    "cmd": "rule \"Move α: YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ]
-    ],
-    "after": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_TP",
-      "⟨the cat sees the dog, TP⟩"
-     ]
-    ],
-    "messages": [],
-    "ok": true
-   },
-   {
-    "cmd": "rule \"X0 YP -> X'\" c the_cat_sees_the_dog_TP",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_TP",
-      "⟨the cat sees the dog, TP⟩"
-     ]
-    ],
-    "after": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_TP",
-      "⟨the cat sees the dog, TP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_C'",
-      "⟨the cat sees the dog, C′⟩"
-     ]
-    ],
-    "messages": [],
-    "ok": true
-   },
-   {
-    "cmd": "rule \"X' -> XP\" the_cat_sees_the_dog_C'",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_TP",
-      "⟨the cat sees the dog, TP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_C'",
-      "⟨the cat sees the dog, C′⟩"
-     ]
-    ],
-    "after": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_TP",
-      "⟨the cat sees the dog, TP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_C'",
-      "⟨the cat sees the dog, C′⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_CP",
-      "⟨the cat sees the dog, CP⟩"
+      "kedi_köpeği_görüyor_CP",
+      "⟨kedi köpeği görüyor, CP⟩"
      ]
     ],
     "messages": [],
@@ -2144,239 +1452,34 @@
   ],
   "wrong": [
    {
-    "cmd": "rule \"X0 YP -> X'\" the cat_N'",
+    "cmd": "rule \"X0 -> X'\" gör",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category D⁰, N′. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's suffix lowers onto V."
-     }
-    ],
-    "ok": false,
-    "after_step": 2,
-    "extra": []
-   },
-   {
-    "cmd": "rule \"X' -> XP\" sees_the_dog_T'_DP",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP: T needs one; θ: V needs its external argument)."
-     }
-    ],
-    "ok": false,
-    "after_step": 11,
-    "extra": []
-   },
-   {
-    "cmd": "rule \"X0 YP -> X'\" see dog_NP",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's suffix lowers onto V."
-     }
-    ],
-    "ok": false,
-    "after_step": 8,
-    "extra": []
-   },
-   {
-    "cmd": "rule \"X0 -> X'\" the",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "The rule \"X⁰ → X′\" is not defined on inputs of category D⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X takes no complement."
+      "text": "The rule \"X⁰ → X′\" is not defined on inputs of category V⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X takes no complement."
      }
     ],
     "ok": false,
@@ -2384,38 +1487,34 @@
     "extra": []
    },
    {
-    "cmd": "rule \"X0 -> X'\" c",
+    "cmd": "rule \"X0 YP -> X'\" gör kedi",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X⁰ → X′\" is not defined on inputs of category C⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X takes no complement."
+      "text": "xbarTR has no rule \"X0 YP -> X'\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]\n  YP X′ → XP  [YP is the specifier of X; an NP that gets no Case there leaves a trace and waits to move]\n  YP X⁰ → X′  [X c-selects Y; an NP needs Case from X; T's suffix joins V]\n  X′ YP → X′  [YP is an adjunct of X]\n  Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where an NP needs Case from X]"
      }
     ],
     "ok": false,
@@ -2423,54 +1522,50 @@
     "extra": []
    },
    {
-    "cmd": "rule \"X' YP -> X'\" cat_N' the_cat_DP",
+    "cmd": "rule \"YP X0 -> X'\" köpek_N' gör",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"X′ YP → X′\" is not defined on inputs of category N′, DP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is an adjunct of X."
+      "text": "The rule \"YP X⁰ → X′\" is not defined on inputs of category N′, V⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; an NP needs Case from X; T's suffix joins V."
      }
     ],
     "ok": false,
@@ -2478,466 +1573,161 @@
     "extra": []
    },
    {
-    "cmd": "rule \"YP X' -> XP\" the_cat_DP the_dog_D'",
+    "cmd": "rule \"YP X0 -> X'\" gör köpek_NP",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category DP, D′. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move."
+      "text": "The rule \"YP X⁰ → X′\" is not defined on inputs of category V⁰, NP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; an NP needs Case from X; T's suffix joins V."
      }
     ],
     "ok": false,
-    "after_step": 8,
+    "after_step": 4,
     "extra": []
    },
    {
-    "cmd": "rule \"YP X' -> XP\" the_cat_DP sees_the_dog_T'_DP",
+    "cmd": "rule \"X' -> XP\" köpeği_görüyor_T'_NP",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ],
      [
-      "dog_NP",
-      "⟨dog, NP⟩"
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
      ],
      [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category DP, T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move."
+      "text": "The rule \"X′ → XP\" is not defined on inputs of category T′/NP. Its domain is fixed by the pattern on its left-hand side and by its condition: X needs no specifier (EPP: T needs one; θ: V needs its external argument)."
      }
     ],
     "ok": false,
-    "after_step": 11,
+    "after_step": 7,
     "extra": []
    },
    {
-    "cmd": "rule \"Move α: YP X' -> XP\" the_dog_DP sees_the_dog_T'_DP",
+    "cmd": "rule \"X' -> XP\" köpeği_gör_V'",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat_N'",
-      "⟨cat, N′⟩"
+      "kedi_N'",
+      "⟨kedi, N′⟩"
      ],
      [
-      "cat_NP",
-      "⟨cat, NP⟩"
+      "kedi_NP",
+      "⟨kedi, NP⟩"
      ],
      [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
+      "köpek_N'",
+      "⟨köpek, N′⟩"
      ],
      [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
+      "köpek_NP",
+      "⟨köpek, NP⟩"
      ],
      [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "The rule \"Move α: YP X′ → XP\" is not defined on inputs of category DP, T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X."
-     }
-    ],
-    "ok": false,
-    "after_step": 11,
-    "extra": []
-   },
-   {
-    "cmd": "rule \"Move α: YP X' -> XP\" the_cat_DP see_the_dog_V'",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "The rule \"Move α: YP X′ → XP\" is not defined on inputs of category DP, V′. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X."
-     }
-    ],
-    "ok": false,
-    "after_step": 9,
-    "extra": []
-   },
-   {
-    "cmd": "rule \"X0 YP -> X'\" c sees_the_dog_T'_DP",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
-     ],
-     [
-      "see_the_dog_VP_DP",
-      "⟨see the dog, VP/DP⟩"
-     ],
-     [
-      "sees_the_dog_T'_DP",
-      "⟨sees the dog, T′/DP⟩"
-     ],
-     [
-      "the_cat_sees_the_dog_TP",
-      "⟨the cat sees the dog, TP⟩"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "The rule \"X⁰ YP → X′\" is not defined on inputs of category C⁰, T′/DP. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; a DP needs Case from X; T's suffix lowers onto V."
-     }
-    ],
-    "ok": false,
-    "after_step": 12,
-    "extra": []
-   },
-   {
-    "cmd": "rule \"X' -> XP\" see_the_dog_V'",
-    "before": [
-     [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "cat_N'",
-      "⟨cat, N′⟩"
-     ],
-     [
-      "cat_NP",
-      "⟨cat, NP⟩"
-     ],
-     [
-      "the_cat_D'",
-      "⟨the cat, D′⟩"
-     ],
-     [
-      "the_cat_DP",
-      "⟨the cat, DP⟩"
-     ],
-     [
-      "dog_N'",
-      "⟨dog, N′⟩"
-     ],
-     [
-      "dog_NP",
-      "⟨dog, NP⟩"
-     ],
-     [
-      "the_dog_D'",
-      "⟨the dog, D′⟩"
-     ],
-     [
-      "the_dog_DP",
-      "⟨the dog, DP⟩"
-     ],
-     [
-      "see_the_dog_V'",
-      "⟨see the dog, V′⟩"
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
      ]
     ],
     "after": null,
@@ -2948,42 +1738,282 @@
      }
     ],
     "ok": false,
-    "after_step": 9,
+    "after_step": 5,
     "extra": []
    },
    {
-    "cmd": "rule \"N' -> N0\" cat",
+    "cmd": "rule \"Move α: YP X' -> XP\" köpek_NP köpeği_görüyor_T'_NP",
     "before": [
      [
-      "the",
-      "⟨the, D⁰⟩ ∈ Lex(xbarGB)"
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "cat",
-      "⟨cat, N⁰⟩ ∈ Lex(xbarGB)"
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "dog",
-      "⟨dog, N⁰⟩ ∈ Lex(xbarGB)"
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
-      "see",
-      "⟨see, V⁰⟩ ∈ Lex(xbarGB)"
-     ],
-     [
-      "s",
-      "⟨-s, T⁰⟩ ∈ Lex(xbarGB)"
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
      ],
      [
       "c",
-      "⟨∅, C⁰⟩ ∈ Lex(xbarGB)"
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "kedi_N'",
+      "⟨kedi, N′⟩"
+     ],
+     [
+      "kedi_NP",
+      "⟨kedi, NP⟩"
+     ],
+     [
+      "köpek_N'",
+      "⟨köpek, N′⟩"
+     ],
+     [
+      "köpek_NP",
+      "⟨köpek, NP⟩"
+     ],
+     [
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
+     ],
+     [
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
+     ],
+     [
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "xbarGB has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]\n  YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]\n  X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]\n  X′ YP → X′  [YP is an adjunct of X]\n  Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]"
+      "text": "The rule \"Move α: YP X′ → XP\" is not defined on inputs of category NP, T′/NP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the phrase waiting inside X′; it lands in the specifier of X, where an NP needs Case from X."
+     }
+    ],
+    "ok": false,
+    "after_step": 7,
+    "extra": []
+   },
+   {
+    "cmd": "rule \"YP X' -> XP\" kedi_NP köpeği_görüyor_T'_NP",
+    "before": [
+     [
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "kedi_N'",
+      "⟨kedi, N′⟩"
+     ],
+     [
+      "kedi_NP",
+      "⟨kedi, NP⟩"
+     ],
+     [
+      "köpek_N'",
+      "⟨köpek, N′⟩"
+     ],
+     [
+      "köpek_NP",
+      "⟨köpek, NP⟩"
+     ],
+     [
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
+     ],
+     [
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
+     ],
+     [
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"YP X′ → XP\" is not defined on inputs of category NP, T′/NP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is the specifier of X; an NP that gets no Case there leaves a trace and waits to move."
+     }
+    ],
+    "ok": false,
+    "after_step": 7,
+    "extra": []
+   },
+   {
+    "cmd": "rule \"X' YP -> X'\" kedi_N' köpek_NP",
+    "before": [
+     [
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "kedi_N'",
+      "⟨kedi, N′⟩"
+     ],
+     [
+      "kedi_NP",
+      "⟨kedi, NP⟩"
+     ],
+     [
+      "köpek_N'",
+      "⟨köpek, N′⟩"
+     ],
+     [
+      "köpek_NP",
+      "⟨köpek, NP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"X′ YP → X′\" is not defined on inputs of category N′, NP. Its domain is fixed by the pattern on its left-hand side and by its condition: YP is an adjunct of X."
+     }
+    ],
+    "ok": false,
+    "after_step": 4,
+    "extra": []
+   },
+   {
+    "cmd": "rule \"YP X0 -> X'\" köpeği_görüyor_T'_NP c",
+    "before": [
+     [
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "kedi_N'",
+      "⟨kedi, N′⟩"
+     ],
+     [
+      "kedi_NP",
+      "⟨kedi, NP⟩"
+     ],
+     [
+      "köpek_N'",
+      "⟨köpek, N′⟩"
+     ],
+     [
+      "köpek_NP",
+      "⟨köpek, NP⟩"
+     ],
+     [
+      "köpeği_gör_V'",
+      "⟨köpeği gör, V′⟩"
+     ],
+     [
+      "köpeği_gör_VP_NP",
+      "⟨köpeği gör, VP/NP⟩"
+     ],
+     [
+      "köpeği_görüyor_T'_NP",
+      "⟨köpeği görüyor, T′/NP⟩"
+     ],
+     [
+      "kedi_köpeği_görüyor_TP",
+      "⟨kedi köpeği görüyor, TP⟩"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "The rule \"YP X⁰ → X′\" is not defined on inputs of category T′/NP, C⁰. Its domain is fixed by the pattern on its left-hand side and by its condition: X c-selects Y; an NP needs Case from X; T's suffix joins V."
+     }
+    ],
+    "ok": false,
+    "after_step": 8,
+    "extra": []
+   },
+   {
+    "cmd": "rule \"N' -> N0\" kedi",
+    "before": [
+     [
+      "kedi",
+      "⟨kedi, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "köpek",
+      "⟨köpek, N⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "gör",
+      "⟨gör, V⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "yor",
+      "⟨-Iyor, T⁰⟩ ∈ Lex(xbarTR)"
+     ],
+     [
+      "c",
+      "⟨∅, C⁰⟩ ∈ Lex(xbarTR)"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "xbarTR has no rule \"N' -> N0\". Its rules are:\n  X⁰ → X′  [X takes no complement]\n  X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]\n  YP X′ → XP  [YP is the specifier of X; an NP that gets no Case there leaves a trace and waits to move]\n  YP X⁰ → X′  [X c-selects Y; an NP needs Case from X; T's suffix joins V]\n  X′ YP → X′  [YP is an adjunct of X]\n  Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where an NP needs Case from X]"
      }
     ],
     "ok": false,
@@ -2995,97 +2025,80 @@
  "mp": {
   "steps": [
    {
-    "cmd": "select the n cat will v sleep",
+    "cmd": "select m toto ata v lala",
     "before": [],
     "after": [
      [
       "WS",
-      "[the, n, √cat, will, v, √sleep]"
+      "[m-, √toto, a-ta-, v, √lala]"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "merge n cat",
+    "cmd": "merge m toto",
     "before": [
      [
       "WS",
-      "[the, n, √cat, will, v, √sleep]"
+      "[m-, √toto, a-ta-, v, √lala]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[n:{n, √cat}, the, will, v, √sleep]"
+      "[n:{m-, √toto}, a-ta-, v, √lala]"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "merge the nP",
+    "cmd": "merge v lala",
     "before": [
      [
       "WS",
-      "[n:{n, √cat}, the, will, v, √sleep]"
+      "[n:{m-, √toto}, a-ta-, v, √lala]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[D:{the, n:{n, √cat}}, will, v, √sleep]"
+      "[v:{v, √lala}, n:{m-, √toto}, a-ta-]"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "merge v sleep",
+    "cmd": "merge nP vP",
     "before": [
      [
       "WS",
-      "[D:{the, n:{n, √cat}}, will, v, √sleep]"
+      "[v:{v, √lala}, n:{m-, √toto}, a-ta-]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[v:{v, √sleep}, D:{the, n:{n, √cat}}, will]"
+      "[?:{n:{m-, √toto}, v:{v, √lala}}, a-ta-]"
      ]
     ],
     "messages": [],
     "ok": true
    },
    {
-    "cmd": "merge DP vP",
+    "cmd": "merge ata {nP, vP}",
     "before": [
      [
       "WS",
-      "[v:{v, √sleep}, D:{the, n:{n, √cat}}, will]"
+      "[?:{n:{m-, √toto}, v:{v, √lala}}, a-ta-]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}, will]"
-     ]
-    ],
-    "messages": [],
-    "ok": true
-   },
-   {
-    "cmd": "merge will {DP, vP}",
-    "before": [
-     [
-      "WS",
-      "[?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}, will]"
-     ]
-    ],
-    "after": [
-     [
-      "WS",
-      "[T:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}]"
+      "[T:{a-ta-, ?:{n:{m-, √toto}, v:{v, √lala}}}]"
      ]
     ],
     "messages": [
@@ -3097,23 +2110,23 @@
     "ok": true
    },
    {
-    "cmd": "merge DP TP",
+    "cmd": "merge nP TP",
     "before": [
      [
       "WS",
-      "[T:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}]"
+      "[T:{a-ta-, ?:{n:{m-, √toto}, v:{v, √lala}}}]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[⟨φ,φ⟩:{D:{the, n:{n, √cat}}, T:{will, v:{copy(D), v:{v, √sleep}}}}]"
+      "[⟨φ,φ⟩:{n:{m-, √toto}, T:{a-ta-, v:{copy(n), v:{v, √lala}}}}]"
      ]
     ],
     "messages": [
      {
       "severity": "information",
-      "text": "Converged. Externalization: “the cat will sleep”."
+      "text": "Converged. Externalization: “mtoto atalala”."
      }
     ],
     "ok": true
@@ -3121,18 +2134,37 @@
   ],
   "wrong": [
    {
-    "cmd": "merge will vP",
+    "cmd": "merge ata vP",
     "before": [
      [
       "WS",
-      "[?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}, will]"
+      "[?:{n:{m-, √toto}, v:{v, √lala}}, a-ta-]"
      ]
     ],
     "after": null,
     "messages": [
      {
       "severity": "error",
-      "text": "MERGE(will, vP, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE)."
+      "text": "MERGE(ata, vP, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE)."
+     }
+    ],
+    "ok": false,
+    "after_step": 4,
+    "extra": []
+   },
+   {
+    "cmd": "merge nP vP",
+    "before": [
+     [
+      "WS",
+      "[T:{a-ta-, ?:{n:{m-, √toto}, v:{v, √lala}}}]"
+     ]
+    ],
+    "after": null,
+    "messages": [
+     {
+      "severity": "error",
+      "text": "MERGE(nP, vP, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE)."
      }
     ],
     "ok": false,
@@ -3140,36 +2172,17 @@
     "extra": []
    },
    {
-    "cmd": "merge DP vP",
+    "cmd": "merge toto lala",
     "before": [
      [
       "WS",
-      "[T:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}]"
-     ]
-    ],
-    "after": null,
-    "messages": [
-     {
-      "severity": "error",
-      "text": "MERGE(DP, vP, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE)."
-     }
-    ],
-    "ok": false,
-    "after_step": 6,
-    "extra": []
-   },
-   {
-    "cmd": "merge cat sleep",
-    "before": [
-     [
-      "WS",
-      "[the, n, √cat, will, v, √sleep]"
+      "[m-, √toto, a-ta-, v, √lala]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[?:{√cat, √sleep}, the, n, will, v]"
+      "[?:{√toto, √lala}, m-, a-ta-, v]"
      ]
     ],
     "messages": [],
@@ -3178,83 +2191,83 @@
     "extra": []
    },
    {
-    "cmd": "merge DP TP",
+    "cmd": "merge nP TP",
     "before": [
      [
       "WS",
-      "[T:{will, v:{v, √sleep}}, D:{the, n:{n, √cat}}]"
+      "[T:{a-ta-, v:{v, √lala}}, n:{m-, √toto}]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[⟨φ,φ⟩:{D:{the, n:{n, √cat}}, T:{will, v:{v, √sleep}}}]"
+      "[⟨φ,φ⟩:{n:{m-, √toto}, T:{a-ta-, v:{v, √lala}}}]"
      ]
     ],
     "messages": [
      {
       "severity": "information",
-      "text": "Narrow syntax is done, but the θ-criterion fails: the DP must first merge with vP, where v assigns its θ-role."
+      "text": "Narrow syntax is done, but the θ-criterion fails: the nP must first merge with vP, where v assigns its θ-role."
      }
     ],
     "ok": true,
-    "after_step": 4,
+    "after_step": 3,
     "extra": [
-     "merge will vP"
+     "merge ata vP"
     ]
    },
    {
-    "cmd": "merge DP TP",
+    "cmd": "merge nP TP",
     "before": [
      [
       "WS",
-      "[T:{will, √sleep}, D:{the, √cat}]"
+      "[T:{a-ta-, √lala}, n:{m-, √toto}]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[⟨φ,φ⟩:{D:{the, √cat}, T:{will, √sleep}}]"
+      "[⟨φ,φ⟩:{n:{m-, √toto}, T:{a-ta-, √lala}}]"
      ]
     ],
     "messages": [
      {
       "severity": "information",
-      "text": "Narrow syntax is done, but a selection requirement fails: D takes an nP, T takes a vP, n and v take a root, and every root needs n or v."
+      "text": "Narrow syntax is done, but a selection requirement fails: T takes a vP, n and v take a root, and every root needs n or v."
      }
     ],
     "ok": true,
     "after_step": 0,
     "extra": [
-     "select the cat will sleep",
-     "merge the cat",
-     "merge will sleep"
+     "select m toto ata lala",
+     "merge m toto",
+     "merge ata lala"
     ]
    },
    {
-    "cmd": "merge DP {{will, {DP, vP}}, will}",
+    "cmd": "merge nP {{ata, {nP, vP}}, ata}",
     "before": [
      [
       "WS",
-      "[T:{?:{will, ?:{D:{the, n:{n, √cat}}, v:{v, √sleep}}}, will}]"
+      "[T:{?:{a-ta-, ?:{n:{m-, √toto}, v:{v, √lala}}}, a-ta-}]"
      ]
     ],
     "after": [
      [
       "WS",
-      "[⟨φ,φ⟩:{D:{the, n:{n, √cat}}, T:{v:{will, v:{copy(D), v:{v, √sleep}}}, will}}]"
+      "[⟨φ,φ⟩:{n:{m-, √toto}, T:{v:{a-ta-, v:{copy(n), v:{v, √lala}}}, a-ta-}}]"
      ]
     ],
     "messages": [
      {
       "severity": "information",
-      "text": "Narrow syntax is done, but a chain is ill-formed: only the DP moves, once, from its θ-position to the specifier of T (Last Resort)."
+      "text": "Narrow syntax is done, but a chain is ill-formed: only the nP moves, once, from its θ-position to the specifier of T (Last Resort)."
      }
     ],
     "ok": true,
-    "after_step": 6,
+    "after_step": 5,
     "extra": [
-     "merge TP will"
+     "merge TP ata"
     ]
    }
   ]
@@ -3500,13 +2513,13 @@
    "D N → D",
    "D N → N"
   ],
-  "xbarGB": [
+  "xbarTR": [
    "X⁰ → X′  [X takes no complement]",
    "X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]",
-   "YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]",
-   "X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]",
+   "YP X′ → XP  [YP is the specifier of X; an NP that gets no Case there leaves a trace and waits to move]",
+   "YP X⁰ → X′  [X c-selects Y; an NP needs Case from X; T's suffix joins V]",
    "X′ YP → X′  [YP is an adjunct of X]",
-   "Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]"
+   "Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where an NP needs Case from X]"
   ]
  }
 }

@@ -13,8 +13,8 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 | 1 | `linear₁` | a grammar is categories, a lexicon and rules: *a very good day* as a D in three steps |
 | — | `linear₁` | *a very day* is not in the language: every move is rejected (page and playground only; a lean4game level needs a solution) |
 | 2 | `linear₂` | overgeneration: with D N → N alone the grammar derives *a a the this dog* as an N |
-| 3 | `xbarGB` | X-bar schema as rules with variables X, Y, plus Move α (condition-domain rules); GB data (c-selection, Case, EPP, the external θ-role of V) as conditions on their domains; the subject moves from Spec-VP to Spec-TP; suffix lowering as a non-concatenative rule; an empty C makes CP |
-| 4 | `mpWS` | workspace-era MERGE: an expression is a workspace, MERGE(P, Q, WS) = [{P, Q}, …]; labeling algorithm; externalization checked automatically |
+| 3 | `xbarTR` | Turkish, *kedi köpeği görüyor* 'the cat sees the dog'. X-bar schema as rules with variables X, Y, plus Move α, produced by a function from parameters (`xbarEN` is the English setting); Turkish sets the head parameter to final; GB data (c-selection, Case with accusative -I, EPP, the external θ-role of V) as conditions on the rules' domains; the subject moves from Spec-VP to Spec-TP; T's suffix joins the verb; an empty C makes CP |
+| 4 | `mpWS` | Swahili, *mtoto atalala* 'the child will sleep'. Workspace-era MERGE: an expression is a workspace, MERGE(P, Q, WS) = [{P, Q}, …]; labeling algorithm (noun class as φ on n, valued φ on T); interface conditions; externalization, including the joining of prefixes, checked automatically |
 
 ## Layout
 
@@ -34,12 +34,14 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
   the player chooses rules and inputs, never types an output.
 - Level 4 asks only for narrow syntax: one object in the workspace, every node labeled.
   Externalization (order, pronouncing the highest copy) is computed and checked by Lean.
-- MERGE is free; the finished object is filtered at CI by selection (D takes nP, T takes
-  vP, n and v take a root), the θ-criterion (the subject first merges with vP) and a chain
-  condition (only the subject moves, once, to the specifier of T). These are checked
-  automatically with externalization. Without them, a search of all derivations with at
-  most two Internal MERGEs found 1784 objects pronounced "the cat will sleep" with every
-  node labeled; with them, exactly one.
+- MERGE is free; the finished object is filtered at CI by selection (T takes vP, n and v
+  take a root), the θ-criterion (the subject nP first merges with vP) and a chain condition
+  (only the subject moves, once, to the specifier of T). These are checked automatically with
+  externalization. Without them, a search of all derivations with at most two Internal
+  MERGEs (for the earlier English version of this level) found 1784 objects pronounced
+  "the cat will sleep" with every node labeled; with them, exactly one. The same holds for
+  the Swahili fragment: exactly one object converges, and none from a subset of the lexicon
+  or with a repeated n or v.
 - MERGE follows Chomsky (2020, *UCLA Lectures*) as quoted in V. J. Pan, *Lecture 10: The
   Minimalist Program*, §9: MERGE replaces P and Q by {P, Q}. Pan & Du's rendering
   [{P, Q}, P, Q, …] is not used.

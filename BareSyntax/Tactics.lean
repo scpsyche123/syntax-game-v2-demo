@@ -7,11 +7,11 @@ Player commands.
   added as a new hypothesis; the player never types the output. When the
   result is the goal expression, the level closes.
   Rule names may be typed in ASCII: `"X0 YP -> X'"` = `"X⁰ YP → X′"`.
-* `select the n cat will v sleep` — draw lexical items into the workspace
-  (level 3, rule `Select`).
-* `merge P Q` — MERGE(P, Q, WS) (level 3). P and Q are written as lexical
-  items (`the`, `cat`), as phrases named by their label (`DP`, `nP`, `vP`,
-  `TP`), or as a set of two such names (`{DP, vP}`). When the workspace holds a
+* `select m toto ata v lala` — draw lexical items into the workspace
+  (level 4, rule `Select`).
+* `merge P Q` — MERGE(P, Q, WS) (level 4). P and Q are written as lexical
+  items (`m`, `toto`), as phrases named by their label (`nP`, `vP`, `TP`),
+  or as a set of two such names (`{nP, vP}`). When the workspace holds a
   single fully labeled object, externalization is checked automatically.
 
 The commands only hide Lean bookkeeping. Each step's linguistic content — which
@@ -189,8 +189,8 @@ elab_rules : tactic
 
 open MP in
 def liOfName? : String → Option LI
-  | "the" => some .the | "n" => some .n | "cat" => some .cat
-  | "will" => some .will | "v" => some .v | "sleep" => some .sleep
+  | "m" => some .m | "toto" => some .toto | "ata" => some .ata
+  | "v" => some .v | "lala" => some .lala
   | _ => none
 
 /-- The workspace hypothesis, if any: its derivation and its current items. -/
@@ -263,7 +263,7 @@ elab_rules : tactic
     let mut ws := ws0
     for x in xs do
       let some li := liOfName? x.getId.toString
-        | throwError "`{x.getId}` is not a lexical item. The lexicon has: the, n, cat, will, v, sleep."
+        | throwError "`{x.getId}` is not a lexical item. The lexicon has: m, toto, ata, v, lala."
       let ws' := ws ++ [.li li]
       d ← fstep 0 (mkApp (mkConst ``MP.Arg.sel) (liExpr li)) d ws ws'
       ws := ws'
@@ -353,13 +353,13 @@ elab_rules : tactic
           logInfo m!"The workspace holds one object, but some node is still unlabeled (shown as ?)."
           return
         if !(MP.selectionOK R) then
-          logInfo m!"Narrow syntax is done, but a selection requirement fails: D takes an nP, T takes a vP, n and v take a root, and every root needs n or v."
+          logInfo m!"Narrow syntax is done, but a selection requirement fails: T takes a vP, n and v take a root, and every root needs n or v."
           return
         if !(MP.thetaOK R) then
-          logInfo m!"Narrow syntax is done, but the θ-criterion fails: the DP must first merge with vP, where v assigns its θ-role."
+          logInfo m!"Narrow syntax is done, but the θ-criterion fails: the nP must first merge with vP, where v assigns its θ-role."
           return
         if !(MP.chainsOK R) then
-          logInfo m!"Narrow syntax is done, but a chain is ill-formed: only the DP moves, once, from its θ-position to the specifier of T (Last Resort)."
+          logInfo m!"Narrow syntax is done, but a chain is ill-formed: only the nP moves, once, from its θ-position to the specifier of T (Last Resort)."
           return
         let out := MP.ext R R 0
         if out != target then

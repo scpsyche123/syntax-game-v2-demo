@@ -46,6 +46,7 @@ button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);out
 .lead{max-width:72ch;margin:0 0 14px}
 .lead h2{font-size:clamp(26px,3vw,34px);line-height:1.1;margin:0 0 8px;font-weight:600}
 .lead p{margin:0 0 8px}
+.lead p.gloss{font-size:15.5px;line-height:1.45;padding-left:12px;border-left:2px solid var(--line);margin-bottom:12px}
 .board{border:1px solid var(--line);border-radius:8px 8px 0 0}
 .goal{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:10px 14px;font:15px/1.45 "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 .goal b{font:600 14px "IBM Plex Sans",sans-serif;color:var(--muted)}
@@ -116,7 +117,7 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <body>
 <header class="band"><div class="wrap">
 <h1>One language, many grammars</h1>
-<p>Bare Grammar (Keenan &amp; Stabler 2003) treats a grammar as data: categories, a lexicon and rules. In this Lean 4 implementation the same language states a linear grammar, X-bar theory with GB modules, and the workspace-era Minimalist Program. Each level below is playable: pick inputs, pick a rule, and the grammar accepts or rejects the step.</p>
+<p>Bare Grammar (Keenan &amp; Stabler 2003) treats a grammar as data: categories, a lexicon and rules. In this Lean 4 implementation the same language states a linear grammar (English), X-bar theory with GB modules (Turkish), and the workspace-era Minimalist Program (Swahili). Each level below is playable: pick inputs, pick a rule, and the grammar accepts or rejects the step.</p>
 <p class="note">This is a five-level demo that shows the basic capabilities of the system. The full game has not been built yet. If you would rather not play every step yourself, click Solution to see the result.</p>
 <div class="tabs" role="tablist" id="tabs"></div>
 </div></header>
@@ -139,12 +140,13 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <footer class="band"><div class="wrap cols">
 <div>
 <h3>What is running</h3>
-<p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (the linear levels), and with a domain given by a pattern and a decidable condition (the X-bar schema, where X and Y are variables, and MERGE, where a category is a whole workspace).</p>
+<p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (the linear levels), and with a domain given by a pattern and a decidable condition (the X-bar schema, where X and Y are variables and the head direction is a parameter, and MERGE, where a category is a whole workspace).</p>
 <p>Your browser cannot run Lean, so this page runs a JavaScript simulation of it.</p>
 </div>
 <div>
 <h3>Sources</h3>
 <p>Bobaljik, J. D. (1995). <i>Morphosyntax: The Syntax of Verbal Inflection.</i> PhD thesis, MIT.</p>
+<p>Carstens, V. (2005). Agree and EPP in Bantu. <i>Natural Language &amp; Linguistic Theory</i> 23.</p>
 <p>Chomsky, N. (1957). <i>Syntactic Structures.</i> Mouton.</p>
 <p>Chomsky, N. (1993). A minimalist program for linguistic theory. In K. Hale &amp; S. J. Keyser (eds.), <i>The View from Building 20.</i> MIT Press.</p>
 <p>Chomsky, N. (2013). Problems of projection. <i>Lingua</i> 130.</p>
@@ -154,6 +156,7 @@ code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
 <p>Halle, M. &amp; Marantz, A. (1993). Distributed Morphology and the pieces of inflection. In <i>The View from Building 20.</i></p>
 <p>Keenan, E. &amp; Stabler, E. (2003). <i>Bare Grammar: Lectures on Linguistic Invariants.</i> CSLI.</p>
 <p>Koopman, H. &amp; Sportiche, D. (1991). The position of subjects. <i>Lingua</i> 85.</p>
+<p>Kramer, R. (2015). <i>The Morphosyntax of Gender.</i> Oxford University Press.</p>
 <p>Pollock, J.-Y. (1989). Verb movement, Universal Grammar, and the structure of IP. <i>Linguistic Inquiry</i> 20.</p>
 </div>
 </div></footer>
@@ -165,45 +168,60 @@ const Engine = (() => {
   const lin = [R('Adv A → A', ['Adv', 'A'], 'A'), R('A N → N', ['A', 'N'], 'N'), R('D N → D', ['D', 'N'], 'D')];
   const grammars = {
     'linear₁': { rules: lin },
-    'linear₂': { rules: [...lin, R('D N → N', ['D', 'N'], 'N')] },
-    'xbarGB': { rules: [] }
+    'linear₂': { rules: [...lin, R('D N → N', ['D', 'N'], 'N')] }
   };
-  /* X-bar schema (variables X, Y over head categories) plus Move α; GB data as conditions.
-     A category may carry a waiting phrase: VP/DP is a VP with a DP waiting to move. */
-  const cSel = [['C', 'T'], ['T', 'V'], ['V', 'D'], ['D', 'N']], specs = [['V', 'D']], landing = [['T', 'D']],
-    epp = ['T'], extTheta = ['V'], caseC = ['V'], caseS = ['T'], adjuncts = [];
+  /* X-bar schema (variables X, Y over head categories) plus Move α, as a function of parameters
+     (XBarGB.lean: GBParams, xbarSchema). A category may carry a waiting phrase: VP/NP. */
   const has2 = (xs, x, y) => xs.some(([a, b]) => a === x && b === y);
-  const caseOK = (as, x, y) => y !== 'D' || as.includes(x);
   const P = e => { const m = /^([A-Z])(⁰|′|P)/.exec(e.cat); return { x: m[1], b: m[2], m: e.mover || null }; };
   const out = (str, x, b, mover) => mover ? { str, cat: x + b + '/' + mover.pos + 'P', mover } : { str, cat: x + b };
   const same = (a, b) => a.length === b.length && a.every((w, i) => w === b[i]);
   const S = (name, apply, arity) => ({ name, schema: true, apply, arity });
-  grammars.xbarGB.rules = [
-    S('X⁰ → X′  [X takes no complement]', ins => {
-      if (ins.length !== 1) return null; const a = P(ins[0]);
-      return a.b === '⁰' && !cSel.some(([h]) => h === a.x) ? out(ins[0].str, a.x, '′', a.m) : null; }, 1),
-    S('X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]', ins => {
-      if (ins.length !== 1) return null; const a = P(ins[0]);
-      return a.b === '′' && !epp.includes(a.x) && !extTheta.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
-    S('YP X′ → XP  [YP is the specifier of X; a DP that gets no Case there leaves a trace and waits to move]', ins => {
-      if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
-      if (y.b !== 'P' || x.b !== '′' || y.m || x.m || !has2(specs, x.x, y.x)) return null;
-      return caseOK(caseS, x.x, y.x) ? out([...ins[0].str, ...ins[1].str], x.x, 'P', null)
-        : out(ins[1].str, x.x, 'P', { str: ins[0].str, pos: y.x }); }, 2),
-    S("X⁰ YP → X′  [X c-selects Y; a DP needs Case from X; T's suffix lowers onto V]", ins => {
-      if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
-      if (x.b !== '⁰' || y.b !== 'P' || x.m || !has2(cSel, x.x, y.x) || !caseOK(caseC, x.x, y.x)) return null;
-      return out(x.x === 'T' ? builds.lower([ins[0].str, ins[1].str]) : [...ins[0].str, ...ins[1].str], x.x, '′', y.m); }, 2),
-    S('X′ YP → X′  [YP is an adjunct of X]', ins => {
-      if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
-      if (x.b !== '′' || y.b !== 'P' || !has2(adjuncts, x.x, y.x) || (x.m && y.m)) return null;
-      return out([...ins[0].str, ...ins[1].str], x.x, '′', x.m || y.m); }, 2),
-    S('Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where a DP needs Case from X]', ins => {
-      if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
-      if (y.b !== 'P' || x.b !== '′' || y.m || !x.m) return null;
-      if (!same(x.m.str, ins[0].str) || x.m.pos !== y.x || !has2(landing, x.x, y.x) || !caseOK(caseS, x.x, y.x)) return null;
-      return out([...ins[0].str, ...ins[1].str], x.x, 'P', null); }, 2)
-  ];
+  function xbarSchema(p) {
+    const caseOK = (as, x, y) => y !== p.nominal || as.includes(x);
+    const headOrder = (h, c) => p.headFinal ? [...c, ...h] : [...h, ...c];
+    const joinTV = (sT, sVP) => {
+      if (p.headFinal) return (sT.length === 1 && sVP.length) ? [...sVP.slice(0, -1), p.attach(sVP[sVP.length - 1], sT[0])] : [...sVP, ...sT];
+      return (sT.length === 1 && sVP.length) ? [p.attach(sVP[0], sT[0]), ...sVP.slice(1)] : [...sT, ...sVP];
+    };
+    const compApply = (h, c) => {
+      const x = P(h), y = P(c);
+      if (x.b !== '⁰' || x.m || y.b !== 'P' || !has2(p.cSel, x.x, y.x) || !caseOK(p.caseC, x.x, y.x)) return null;
+      const cs = (x.x === 'V' && y.x === p.nominal) ? p.acc(c.str) : c.str;
+      return out(x.x === 'T' ? joinTV(h.str, cs) : headOrder(h.str, cs), x.x, '′', y.m);
+    };
+    return [
+      S('X⁰ → X′  [X takes no complement]', ins => {
+        if (ins.length !== 1) return null; const a = P(ins[0]);
+        return a.b === '⁰' && !p.cSel.some(([h]) => h === a.x) ? out(ins[0].str, a.x, '′', a.m) : null; }, 1),
+      S('X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]', ins => {
+        if (ins.length !== 1) return null; const a = P(ins[0]);
+        return a.b === '′' && !p.epp.includes(a.x) && !p.extTheta.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
+      S(`YP X′ → XP  [YP is the specifier of X; ${p.argText} that gets no Case there leaves a trace and waits to move]`, ins => {
+        if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
+        if (y.b !== 'P' || x.b !== '′' || y.m || x.m || !has2(p.specs, x.x, y.x)) return null;
+        return caseOK(p.caseS, x.x, y.x) ? out([...ins[0].str, ...ins[1].str], x.x, 'P', null)
+          : out(ins[1].str, x.x, 'P', { str: ins[0].str, pos: y.x }); }, 2),
+      S((p.headFinal ? 'YP X⁰ → X′' : 'X⁰ YP → X′') + `  [X c-selects Y; ${p.argText} needs Case from X; T's suffix joins V]`, ins => {
+        if (ins.length !== 2) return null;
+        return p.headFinal ? compApply(ins[1], ins[0]) : compApply(ins[0], ins[1]); }, 2),
+      S('X′ YP → X′  [YP is an adjunct of X]', ins => {
+        if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
+        if (x.b !== '′' || y.b !== 'P' || x.m || y.m || !has2(p.adjuncts, x.x, y.x)) return null;
+        return out([...ins[0].str, ...ins[1].str], x.x, '′', null); }, 2),
+      S(`Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where ${p.argText} needs Case from X]`, ins => {
+        if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
+        if (y.b !== 'P' || x.b !== '′' || y.m || !x.m) return null;
+        if (!same(x.m.str, ins[0].str) || x.m.pos !== y.x || !has2(p.landing, x.x, y.x) || !caseOK(p.caseS, x.x, y.x)) return null;
+        return out([...ins[0].str, ...ins[1].str], x.x, 'P', null); }, 2)
+    ];
+  }
+  const accWordTR = w => ({ 'köpek': 'köpeği', 'kedi': 'kediyi' })[w] || w + 'i';
+  const turkish = { headFinal: true, nominal: 'N', argText: 'an NP', cSel: [['C', 'T'], ['T', 'V'], ['V', 'N']],
+    specs: [['V', 'N']], landing: [['T', 'N']], epp: ['T'], extTheta: ['V'], caseC: ['V'], caseS: ['T'], adjuncts: [],
+    attach: (v, s) => (v === 'gör' && s === '-Iyor') ? 'görüyor' : v + s,
+    acc: ws => ws.length ? [...ws.slice(0, -1), accWordTR(ws[ws.length - 1])] : [] };
+  grammars.xbarTR = { rules: xbarSchema(turkish) };
   const attachAffix = (v, a) => (v === 'see' && a === '-s') ? 'sees' : v + 's';
   const builds = {
     flat: xs => xs.flat(),
@@ -233,10 +251,11 @@ const Engine = (() => {
   }
 
   /* ---- MP ---- */
+  /* Swahili: m-toto a-ta-lala. n = m- (noun class 1, φ), T = a-ta- (valued φ), v silent. */
   const LI = {
-    the: { feat: 'D', phi: true, pron: true }, n: { feat: 'n', phi: false, pron: false },
-    cat: { feat: 'root', phi: false, pron: true }, will: { feat: 'T', phi: true, pron: true },
-    v: { feat: 'v', phi: false, pron: false }, sleep: { feat: 'root', phi: false, pron: true }
+    m: { feat: 'n', phi: true, pron: true, prefix: true, text: 'm-' }, toto: { feat: 'root', phi: false, pron: true },
+    ata: { feat: 'T', phi: true, pron: true, prefix: true, text: 'a-ta-' },
+    v: { feat: 'v', phi: false, pron: false }, lala: { feat: 'root', phi: false, pron: true }
   };
   const li = x => ({ li: x }), set = (a, b) => ({ set: [a, b] });
   const key = s => s.li !== undefined ? s.li : '{' + key(s.set[0]) + ',' + key(s.set[1]) + '}';
@@ -267,16 +286,23 @@ const Engine = (() => {
     return labelAt(R, s, d) !== null && (lowerCopy(R, a, d + 1) || allLabeled(R, a, d + 1)) && (lowerCopy(R, b, d + 1) || allLabeled(R, b, d + 1));
   }
   const isHead = s => s.li !== undefined && feat(s) !== 'root';
-  const isDP = (R, s, d) => { const l = labelAt(R, s, d); return !!l && l.lab === 'D'; };
-  function ext(R, s, d) {
-    if (s.li !== undefined) return LI[s.li].pron ? [s.li] : [];
+  const isArg = (R, s, d) => { const l = labelAt(R, s, d); return !!l && l.lab === 'n'; };
+  function linearize(R, s, d) {
+    if (s.li !== undefined) return LI[s.li].pron ? [[s.li, !!LI[s.li].prefix]] : [];
     const [a, b] = s.set;
-    if (lowerCopy(R, a, d + 1)) return ext(R, b, d + 1);
-    if (lowerCopy(R, b, d + 1)) return ext(R, a, d + 1);
-    if (isHead(b) && !isHead(a)) return [...ext(R, b, d + 1), ...ext(R, a, d + 1)];
-    if (isDP(R, b, d + 1) && !isDP(R, a, d + 1)) return [...ext(R, b, d + 1), ...ext(R, a, d + 1)];
-    return [...ext(R, a, d + 1), ...ext(R, b, d + 1)];
+    if (lowerCopy(R, a, d + 1)) return linearize(R, b, d + 1);
+    if (lowerCopy(R, b, d + 1)) return linearize(R, a, d + 1);
+    if (isHead(b) && !isHead(a)) return [...linearize(R, b, d + 1), ...linearize(R, a, d + 1)];
+    if (isArg(R, b, d + 1) && !isArg(R, a, d + 1)) return [...linearize(R, b, d + 1), ...linearize(R, a, d + 1)];
+    return [...linearize(R, a, d + 1), ...linearize(R, b, d + 1)];
   }
+  /* a prefix joins the next item into one word */
+  function joinPrefixes(xs) {
+    if (!xs.length) return [];
+    const [[w, pre], ...rest] = xs, tail = joinPrefixes(rest);
+    return pre ? (tail.length ? [w + tail[0], ...tail.slice(1)] : [w]) : [w, ...tail];
+  }
+  const ext = (R, s, d) => joinPrefixes(linearize(R, s, d));
   /* ---- interface conditions at CI (MP.lean: selectionOK, thetaOK, chainsOK) ---- */
   function occs(s, d) {
     if (s.li !== undefined) return [];
@@ -286,7 +312,7 @@ const Engine = (() => {
   const labelIs = (R, s, d, f) => { const l = labelAt(R, s, d); return !!l && l.lab === f; };
   const isRoot = s => s.li !== undefined && feat(s) === 'root';
   const isSet = s => s.set !== undefined;
-  const selects = (R, h, X, d) => ({ D: () => isSet(X) && labelIs(R, X, d, 'n'), T: () => isSet(X) && labelIs(R, X, d, 'v'),
+  const selects = (R, h, X, d) => ({ T: () => isSet(X) && labelIs(R, X, d, 'v'),
     n: () => isRoot(X), v: () => isRoot(X), root: () => true })[LI[h].feat]();
   const selectionOK = R => occs(R, 0).every(([x, y, d]) => x.li === undefined ? true
     : LI[x.li].feat === 'root' ? (y.li !== undefined && (feat(y) === 'n' || feat(y) === 'v')) : selects(R, x.li, y, d));
@@ -294,22 +320,22 @@ const Engine = (() => {
   const pick = (low, xs) => xs.reduce((m, o) => m === null ? o : ((low ? o[2] > m[2] : o[2] < m[2]) ? o : m), null);
   const thetaOK = R => terms(R).every(X => {
     const mine = occs(R, 0).filter(o => eq(o[0], X));
-    const first = !mine.length ? true : (isSet(X) && labelIs(R, X, mine[0][2], 'D')) ? (() => { const lo = pick(true, mine); return lo ? minVP(lo[1]) : false; })() : true;
-    return first && (!minVP(X) || mine.some(([, sis, d]) => isSet(sis) && labelIs(R, sis, d, 'D')));
+    const first = !mine.length ? true : (isSet(X) && labelIs(R, X, mine[0][2], 'n')) ? (() => { const lo = pick(true, mine); return lo ? minVP(lo[1]) : false; })() : true;
+    return first && (!minVP(X) || mine.some(([, sis, d]) => isSet(sis) && labelIs(R, sis, d, 'n')));
   });
   const chainsOK = R => terms(R).every(X => {
     const mine = occs(R, 0).filter(o => eq(o[0], X));
     if (new Set(mine.map(o => key(o[3]))).size < 2) return true;
     const hi = pick(false, mine);
-    return !hi || (isSet(X) && labelIs(R, X, hi[2], 'D') && mine.length === 2 && isSet(hi[1]) && labelIs(R, hi[1], hi[2], 'T'));
+    return !hi || (isSet(X) && labelIs(R, X, hi[2], 'n') && mine.length === 2 && isSet(hi[1]) && labelIs(R, hi[1], hi[2], 'T'));
   });
   const ciMsgs = {
-    selection: 'Narrow syntax is done, but a selection requirement fails: D takes an nP, T takes a vP, n and v take a root, and every root needs n or v.',
-    theta: 'Narrow syntax is done, but the θ-criterion fails: the DP must first merge with vP, where v assigns its θ-role.',
-    chain: 'Narrow syntax is done, but a chain is ill-formed: only the DP moves, once, from its θ-position to the specifier of T (Last Resort).' };
+    selection: 'Narrow syntax is done, but a selection requirement fails: T takes a vP, n and v take a root, and every root needs n or v.',
+    theta: 'Narrow syntax is done, but the θ-criterion fails: the nP must first merge with vP, where v assigns its θ-role.',
+    chain: 'Narrow syntax is done, but a chain is ill-formed: only the nP moves, once, from its θ-position to the specifier of T (Last Resort).' };
   const ciFail = R => !selectionOK(R) ? 'selection' : !thetaOK(R) ? 'theta' : !chainsOK(R) ? 'chain' : null;
   const labText = l => l === null ? '?' : (l.lab === 'root' ? '√' : l.lab);
-  const liText = x => LI[x].feat === 'root' ? '√' + x : x;
+  const liText = x => LI[x].text || (LI[x].feat === 'root' ? '√' + x : x);
   function render(R, s, d) {
     if (s.li !== undefined) return liText(s.li);
     if (lowerCopy(R, s, d)) return `copy(${labText(labelAt(R, s, d))})`;
@@ -380,7 +406,7 @@ const Engine = (() => {
     return { ok: true, ws: ws2, msgs: a.msgs, closed: a.closed };
   }
   return { grammars, findRule, applyRule, exprText, normRuleName, LI, li, set, eq, key, terms, labelAt, lowerCopy,
-    labText, liText, render, renderWS, mergeWS, undefinedMsg, afterMerge, resolve, parseRef, mpCommand, ext, allLabeled, isHead, isDP, ciFail };
+    labText, liText, render, renderWS, mergeWS, undefinedMsg, afterMerge, resolve, parseRef, mpCommand, ext, allLabeled, isHead, isArg, ciFail };
 })();
 if (typeof module !== 'undefined') module.exports = Engine;
 </script>
@@ -407,20 +433,19 @@ const LEVELS = [
    solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [3, ['a', 'a the this dog']]],
    done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
      'Suppose instead we keep only Rule 3, D N → D, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
- { id: 'xbar-gb', kind: 'free', g: 'xbarGB', name: 'X-bar theory with GB', era: 'Principles and parameters',
-   lexicon: [['the', 'D⁰'], ['cat', 'N⁰'], ['dog', 'N⁰'], ['see', 'V⁰'], ['-s', 'T⁰'], ['', 'C⁰']], goal: { str: ['the', 'cat', 'sees', 'the', 'dog'], cat: 'CP' },
+ { id: 'xbar-gb', kind: 'free', g: 'xbarTR', name: 'X-bar theory with GB', era: 'Principles and parameters',
+   lexicon: [['kedi', 'N⁰'], ['köpek', 'N⁰'], ['gör', 'V⁰'], ['-Iyor', 'T⁰'], ['', 'C⁰']], goal: { str: ['kedi', 'köpeği', 'görüyor'], cat: 'CP' },
    arrow: { from: 'T⁰', to: 'V⁰', label: 'suffix lowering' },
-   lead: '<h2>X-bar theory with GB</h2><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. GB enters as conditions on their domains: c-selection (C selects TP, T selects VP, V selects DP, D selects NP); Case (V assigns accusative to its complement, finite T nominative to its specifier); EPP (T needs a specifier); θ (V assigns an external θ-role, so VP needs its subject). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
-   solution: [[0, ['cat|N⁰']], [1, ['cat|N′']], [3, ['the|D⁰', 'cat|NP']], [1, ['the cat|D′']],
-     [0, ['dog|N⁰']], [1, ['dog|N′']], [3, ['the|D⁰', 'dog|NP']], [1, ['the dog|D′']],
-     [3, ['see|V⁰', 'the dog|DP']], [2, ['the cat|DP', 'see the dog|V′']], [3, ['-s|T⁰', 'see the dog|VP/DP|the cat']],
-     [5, ['the cat|DP', 'sees the dog|T′/DP|the cat']], [3, ['|C⁰', 'the cat sees the dog|TP']], [1, ['the cat sees the dog|C′']]],
-   done: ['Fourteen rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ.',
-     'The arrow shows suffix lowering: the suffix *-s* in T⁰ attaches to the verb in V⁰. This is not the only analysis. In Chomsky (1957) the same effect is Affix Hopping, a transformation. Emonds (1978) and Pollock (1989) have the finite verb raise to T in French, while in English only auxiliaries raise. In Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T, so nothing lowers. Bobaljik (1995) has English tense and the verb join under adjacency at PF, and in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here lowering is a property of one rule: a different analysis changes that rule, not the language.'] },
- { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['the', 'cat', 'will', 'sleep'],
-   lead: '<h2>The Minimalist Program, workspace era</h2><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. MERGE is free, but the finished object must meet conditions at the interface: selection (D takes nP, T takes vP, n and v take a root), the θ-criterion (the subject first merges with vP), and chains (only the subject moves, once, to the specifier of T). Draw the items into WS, click two objects, then MERGE. Word order and which copy is pronounced are checked automatically.</p>',
-   solution: ['select the n cat will v sleep', 'merge n cat', 'merge the nP', 'merge v sleep', 'merge DP vP', 'merge will {DP, vP}', 'merge DP TP'],
-   done: 'The subject has to start in vP (θ-criterion), but there {DP, vP} has no label: D carries φ, v does not. Internal MERGE to the specifier of T solves it: the lower DP is a copy, invisible to labeling, so that node is labeled v, and the new root {DP, TP} is labeled ⟨φ,φ⟩ by shared φ. Only the higher copy is pronounced.' }
+   lead: '<h2>X-bar theory with GB: Turkish</h2><p class="gloss"><i>Kedi köpeği görüyor.</i><br>kedi köpeğ-i gör-üyor<br>cat dog-ACC see-PROG<br>‘The cat sees the dog.’</p><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. They are a function of parameters: English and Turkish are two settings of it. Turkish is head-final, so Rule 4 is YP X⁰ → X′: the complement comes before its head (English: X⁰ YP → X′).</p><p>GB enters as conditions on the rules’ domains: c-selection (C selects TP, T selects VP, V selects NP; Turkish has no articles, so the nominal arguments here are NPs); Case (V assigns accusative to its complement, spelled -I: köpek → köpeği; finite T assigns nominative to its specifier); EPP (T needs a specifier); θ (V assigns an external θ-role, so VP needs its subject). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
+   solution: [[0, ['kedi|N⁰']], [1, ['kedi|N′']], [0, ['köpek|N⁰']], [1, ['köpek|N′']],
+     [3, ['köpek|NP', 'gör|V⁰']], [2, ['kedi|NP', 'köpeği gör|V′']], [3, ['köpeği gör|VP/NP|kedi', '-Iyor|T⁰']],
+     [5, ['kedi|NP', 'köpeği görüyor|T′/NP|kedi']], [3, ['kedi köpeği görüyor|TP', '|C⁰']], [1, ['kedi köpeği görüyor|C′']]],
+   done: ['Ten rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ. In a head-final language this movement does not change the word order — the subject comes first either way — but the grammar still requires it.',
+     'The arrow shows suffix lowering: the suffix *-Iyor* in T⁰ joins the verb in V⁰ (gör + -Iyor = görüyor, by vowel harmony). This is not the only analysis. In a head-final language V and T are adjacent, so lowering the suffix and raising the verb to T give the same string. For English, Chomsky (1957) has Affix Hopping, a transformation; Emonds (1978) and Pollock (1989) have the finite verb raise to T in French; in Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T; Bobaljik (1995) joins tense and verb under adjacency at PF; in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here joining is a property of one rule: a different analysis changes that rule, not the language.'] },
+ { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['mtoto', 'atalala'],
+   lead: '<h2>The Minimalist Program: Swahili</h2><p class="gloss"><i>Mtoto atalala.</i><br>m-toto a-ta-lala<br>1-child 1SM-FUT-sleep<br>‘The child will sleep.’</p><p>The class-1 prefix m- is n: noun class is a φ-feature on n. T is a-ta-: the future -ta- with the class-1 subject marker a- (Agree is not modeled, so T’s φ counts as valued). v is silent.</p><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. MERGE is free, but the finished object must meet conditions at the interface: selection (T takes vP, n and v take a root), the θ-criterion (the subject nP first merges with vP), and chains (only the subject moves, once, to the specifier of T). Draw the items into WS, click two objects, then MERGE. Word order, which copy is pronounced, and the joining of prefixes are checked automatically.</p>',
+   solution: ['select m toto ata v lala', 'merge m toto', 'merge v lala', 'merge nP vP', 'merge ata {nP, vP}', 'merge nP TP'],
+   done: 'The subject has to start in vP (θ-criterion), but there {nP, vP} has no label: n carries φ (noun class 1), v does not. Internal MERGE to the specifier of T solves it: the lower nP is a copy, invisible to labeling, so that node is labeled v, and the new root {nP, TP} is labeled ⟨φ,φ⟩ — the class-1 φ of m- and of the subject marker a-. Only the higher copy is pronounced, and the prefixes join their words: mtoto atalala.' }
 ];
 
 let cur = 0, st = null, playing = false;
@@ -564,10 +589,12 @@ function drawForest(trees, o) {
     const A = all.find(t => t.cat === o.arrow.from), B = all.find(t => t.cat === o.arrow.to);
     if (A && B) {
       /* from T⁰ down past its suffix, then along V⁰'s row, under the trace */
-      const x1 = A.x + 10, y1 = A.y * ROW + 20, x2 = B.x - 14, y2 = B.y * ROW + 18;
+      /* from T⁰ down past its own suffix, then into V⁰ from the side facing T⁰ */
+      const dir = B.x >= A.x ? 1 : -1;
+      const x1 = A.x + 12 * dir, y1 = A.y * ROW + 22, x2 = B.x - 16 * dir, y2 = B.y * ROW + 16;
       g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker></defs>` +
-        `<path class="lower" d="M${x1} ${y1} C ${x1 + 14} ${y2 + 10}, ${x2 - 50} ${y2 + 6}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
-        `<text class="lowlab" x="${x1 + 16}" y="${y2 + 24}">${esc(o.arrow.label)}</text>`;
+        `<path class="lower" d="M${x1} ${y1} C ${A.x + 30 * dir} ${(A.y + 1) * ROW + 14}, ${x2 - 30 * dir} ${y2 - 4}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
+        `<text class="lowlab" x="${B.x - 20 * dir}" y="${y2 + 22}" text-anchor="${dir > 0 ? 'end' : 'start'}">${esc(o.arrow.label)}</text>`;
     }
   }
   if (o.ws) g += `<path class="bracket" d="M10 4 h-6 v${H - 8} h6 M${W - 10} 4 h6 v${H - 8} h-6"/>`;
@@ -581,7 +608,7 @@ function mpTree(R, s, d, path) {
   if (s.li !== undefined) return { ...base, word: E.liText(s.li), kids: [] };
   if (E.lowerCopy(R, s, d)) return { word: `copy(${E.labText(E.labelAt(R, s, d))})`, copy: true, kids: [] };
   const [a, b] = s.set, ka = mpTree(R, a, d + 1, [...path, 0]), kb = mpTree(R, b, d + 1, [...path, 1]);
-  const swap = (E.isHead(b) && !E.isHead(a)) || (E.isDP(R, b, d + 1) && !E.isDP(R, a, d + 1));
+  const swap = (E.isHead(b) && !E.isHead(a)) || (E.isArg(R, b, d + 1) && !E.isArg(R, a, d + 1));
   return { ...base, cat: E.labText(E.labelAt(R, s, d)), kids: swap ? [kb, ka] : [ka, kb] };
 }
 
@@ -624,7 +651,7 @@ function drawPic() {
     const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
     h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
       '<div class="tools"><span class="lab">Select</span>' +
-      ['the', 'n', 'cat', 'will', 'v', 'sleep'].map(x => `<button class="item" type="button" data-li="${x}"${dis}>${esc(E.liText(x))}</button>`).join('') +
+      ['m', 'toto', 'ata', 'v', 'lala'].map(x => `<button class="item" type="button" data-li="${x}"${dis}>${esc(E.liText(x))}</button>`).join('') +
       `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS) <small>replaces P and Q by {P, Q}</small></button></div>` +
       (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
   }
