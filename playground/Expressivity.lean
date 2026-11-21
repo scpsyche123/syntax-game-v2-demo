@@ -50,8 +50,9 @@ theorem same_surface_string :
   decide
 
 -- Both merge orders can be used in a full successful proof of Converges.
--- These two goals are extensionally the same proposition, but the named
--- merge sequence constructs distinct underlying SO values r₁ and r₂.
+-- These two goals are the same proposition (`Converges` only says that SOME
+-- object converges), so on their own they do not show which object is built.
+-- `r₁_derivable` and `r₂_derivable` below state that.
 theorem standard_subject_order_converges : MP.Converges ["mtoto", "atalala"] := by
   select m toto ata v lala
   merge m toto
@@ -67,6 +68,27 @@ theorem reversed_subject_order_converges : MP.Converges ["mtoto", "atalala"] := 
   merge nP vP
   merge ata {nP, vP}
   merge nP TP
+
+-- Each of r₁ and r₂ is itself reached by a complete derivation from the
+-- empty workspace. With `both_satisfy_interface` and `same_surface_string`,
+-- this shows that both objects converge as `Converges` requires.
+theorem r₁_derivable : Nonempty (Deriv MP.mpWS ([], ⟨[r₁]⟩)) := by
+  select m toto ata v lala
+  merge m toto
+  merge v lala
+  merge nP vP
+  merge ata {nP, vP}
+  merge nP TP
+  exact ⟨WS⟩
+
+theorem r₂_derivable : Nonempty (Deriv MP.mpWS ([], ⟨[r₂]⟩)) := by
+  select m toto ata v lala
+  merge toto m
+  merge v lala
+  merge nP vP
+  merge ata {nP, vP}
+  merge nP TP
+  exact ⟨WS⟩
 
 -- The ambient FRule definition places no bound on Arg or output provenance.
 def unrestrictedRule : FRule Unit (List String) where

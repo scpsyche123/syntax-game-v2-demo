@@ -43,7 +43,11 @@ checked on the finished object:
   specifier of T — and nothing else moves.
 Without these, free MERGE plus labeling and word order accepts many objects
 that are not the intended one (for the earlier English fragment, a search of all
-derivations with at most two Internal MERGEs found 1784); with them, exactly one.
+derivations with at most two Internal MERGEs found 1784; the search script is not
+part of this repository). With them the intended object is accepted, but it is
+not unique under raw `SO` equality: `SO.set` records argument order, and two
+objects for "mtoto atalala" that differ only in the order inside nP both pass
+(`playground/Expressivity.lean`).
 
 Simplifications (stated, not hidden):
 * Copy vs. repetition: two occurrences of the same object count as copies; the
