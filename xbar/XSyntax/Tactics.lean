@@ -1,0 +1,776 @@
+/-
+The player's instruction set. Each X-bar rule becomes a tactic named after
+the rule itself — the textbook's rule table and the player's key bindings
+are the same table.
+
+v3: every command now fails in linguistic vocabulary. The diagnostic
+pattern is uniform: probe the goal (and the player's declaration, where
+there is one) BEFORE running the real tactic; if the probe finds a
+linguistic mistake, name it; otherwise run the tactic and let deeper
+layers speak for themselves (selection violations surface from `license!`
+untouched — layering by NOT catching).
+
+v4 (commitment-driven segmentation): a split (`complement`/`adjoinL`/
+`adjoinR`/`specifier`) NO LONGER pre-computes where the parent string breaks.
+It opens the two children with UNDECIDED targets and remembers, in a parked
+`SplitLink` marker, that one child's target is the parent span minus the
+other child's surface string. The instant the player commits the reference
+child (e.g. `head "my"` at the D⁰), `closeParses` reduces that child's yield
+to a literal, subtracts it from the parent span IN META CODE (compiled
+`residual`, never the kernel), and pins the sibling's target. So the panel
+shows `NP : "house"` only as a CONSEQUENCE of the player's own choice — the
+boundary is never handed to them.
+
+v5 (immediate feedback): a wrong commit no longer waits for the final
+combination proof. The instant the reference child is built, `closeParses`
+checks its yield is a prefix of the parent span and REFUSES on the spot if not;
+`nocomp` refuses immediately if its X⁰ span is multiword. Since the XBar
+solution is unique, every wrong word / order / structure breaks a prefix or a
+structural invariant at the moment it is committed. The non-spoiler property is
+kept: before the commit both children still show bare `D⁰` / `NP`.
+
+Player vocabulary (eight commands): the seven X-bar rules
+  nospec · nocomp · specifier · complement · adjoinL · adjoinR · head
+plus `CannotSelect`, which PROVES a head–complement pairing is unlicensed
+(goal `¬ Selects c d`). `license!` is internal machinery, not player
+vocabulary. `tree` and `pronounce` are gone (v3): grammaticality theorems are
+now stated in term mode, with the built tree as the witness — see Playground.
+
+Lexicon gate (closed): `XTree.word` now demands a `Lexicon c e.word` licence
+(Tree.lean), and `head` discharges it via `lexicon!` from the LEVEL'S OWN
+hypotheses — the words the level handed the player. So a word can only sit at a
+category the given lexicon licenses it for; "sleep" cannot become an N⁰ unless
+the level said so. `Lexicon` is empty globally, so this is the third Church
+gate, alongside geometry and `Selects`.
+-/
+
+import Lean
+import XSyntax.Display
+import XSyntax.TreeView
+
+open Lean Elab Tactic Meta
+
+register_option XSyntax.treeView.enabled : Bool := {
+  defValue := true
+  descr := "show the live syntax tree marker in interactive goal states"
+}
+
+namespace XSyntax
+
+/-! ### Internal machinery -/
+
+/-- INTERNAL. Decompose a type of the form `XTree bar pos` into its two
+    index expressions. `none` if the type is not a syntactic position. -/
+private def asXTree? (t0 : Expr) : Option (Expr × Expr) :=
+  let t := t0.consumeMData
+  let fn := t.getAppFn
+  let args := t.getAppArgs
+  if fn.isConstOf ``XTree && args.size == 2 then
+    some (args[0]!, args[1]!)
+  else
+    none
+
+/-- INTERNAL. The current goal's type, metavariables instantiated and any
+    leading `mdata` stripped. Stripping matters: `have`, and lean4game's
+    auto-`intro` of a level's hypothesis binders, wrap the target in `mdata`,
+    which would otherwise hide the `XTree`/`Parses` head from the `isConstOf`
+    probes below. -/
+private def goalType : TacticM Expr := do
+  return (← instantiateMVars (← (← getMainGoal).getType)).consumeMData
+
+/-- INTERNAL. Elaborate a declared position and insist it is a full
+    phrase (XP). Used by `specifier` / `complement` / `adjoinL` / `adjoinR`. -/
+private def checkDeclaredXP (stx : Term) (who : String) : TacticM Unit := do
+  let d ← elabTerm stx none
+  match asXTree? d with
+  | some (b, _) =>
+    unless b.isConstOf ``Bar.two do
+      throwError "✗ {who} must be a full phrase (XP); you declared {d}"
+  | none =>
+    throwError "✗ {who} must be a syntactic position (an XP); you declared {d}"
+
+/-- INTERNAL. Discharge a `Selects` goal from the licensing table, or fail
+    in linguistic vocabulary, naming the two offending categories. -/
+elab "license!" : tactic => do
+  let t ← goalType
+  let fn := t.getAppFn
+  let args := t.getAppArgs
+  if fn.isConstOf ``Selects && args.size == 2 then
+    try
+      evalTactic (← `(tactic| constructor))
+    catch _ =>
+      throwError "✗ selection violation: {args[0]!} does not select {args[1]!}"
+  else
+    throwError "license!: not a selection goal"
+
+/-! ### Yield-checked level goals
+
+A level's goal is `Parses b c s`: build a tree of bar `b`, category `c`, that
+pronounces the target string `s`. The player still types ONLY the seven
+tree-building commands — the string check rides along invisibly:
+
+* `enterParses`, run at the START of every command, cracks an `Parses` goal
+  into `⟨tree, proof⟩` and PARKS the `yield t = s` proof off the visible goal
+  list. So the panel shows one clean linguistic goal, never a bare equation.
+* `closeParses`, run at the END of every command, watches the parked proof.
+  While the tree is unfinished its type still carries metavariables → nothing
+  happens. The instant the tree is complete it discharges the proof if the
+  yield matches, or REFUSES in linguistics if the tree pronounces something
+  else. A wrong word therefore cannot pass — it is caught at the final move. -/
+
+/-- Level goal: a tree of bar `b`, category `c`, pronouncing `s`. -/
+def Parses (b : Bar) (c : Pos) (s : String) : Type := { t : XTree b c // yield t = s }
+
+private structure ParsesGoal where
+  bar : Expr
+  pos : Expr
+  target : String
+
+private def asParses? (t0 : Expr) : Option ParsesGoal :=
+  let t := t0.consumeMData
+  let fn := t.getAppFn
+  let args := t.getAppArgs
+  if fn.isConstOf ``Parses && args.size == 3 then
+    match args[2]! with
+    | .lit (.strVal s) => some { bar := args[0]!, pos := args[1]!, target := s }
+    | _ => none
+  else
+    none
+
+private def barTerm? (e : Expr) : Option (TSyntax `term) :=
+  if      e.isConstOf ``Bar.two  then some (mkIdent ``Bar.two)
+  else if e.isConstOf ``Bar.one  then some (mkIdent ``Bar.one)
+  else if e.isConstOf ``Bar.zero then some (mkIdent ``Bar.zero)
+  else none
+
+private def posTerm? (e : Expr) : Option (TSyntax `term) :=
+  if      e.isConstOf ``Pos.N    then some (mkIdent ``Pos.N)
+  else if e.isConstOf ``Pos.V    then some (mkIdent ``Pos.V)
+  else if e.isConstOf ``Pos.A    then some (mkIdent ``Pos.A)
+  else if e.isConstOf ``Pos.P    then some (mkIdent ``Pos.P)
+  else if e.isConstOf ``Pos.Adv  then some (mkIdent ``Pos.Adv)
+  else if e.isConstOf ``Pos.T    then some (mkIdent ``Pos.T)
+  else if e.isConstOf ``Pos.D    then some (mkIdent ``Pos.D)
+  else if e.isConstOf ``Pos.C    then some (mkIdent ``Pos.C)
+  else if e.isConstOf ``Pos.Conj then some (mkIdent ``Pos.Conj)
+  else none
+
+/-- INTERNAL, META-ONLY. The parent span `whole` with the reference child's
+    surface string `prefixStr` removed from its front (with the joining space).
+    Runs as compiled code inside the tactic — never as a type index, so the
+    kernel never has to reduce `String.take`/`drop`. A non-prefix leaves the
+    span unchanged, so a wrong commit surfaces as the phrase mispronouncing. -/
+def residual (whole prefixStr : String) : String :=
+  if whole == prefixStr then ""
+  else
+    let p := prefixStr ++ " "
+    if whole.take p.length == p then whole.drop p.length
+    else whole
+
+/-- INTERNAL, META-ONLY MARKER. Parked by a split tactic. Definitionally
+    `True`, so it never obstructs a proof and is discharged the moment it
+    fires. Its INDICES carry the data `closeParses` needs: the parent span
+    `whole`, the reference child's surface string `ref` (an expression that
+    becomes a literal once that child is built), and the sibling's target
+    metavariable, which gets pinned to `residual whole ref`. -/
+def SplitLink (_whole _ref _rest : String) : Prop := True
+
+/-- INTERNAL. If the main goal is `Parses …`, split it and hide the
+    yield-proof, leaving only the tree goal visible. No-op otherwise. -/
+private def enterParses : TacticM Unit := do
+  let ty ← goalType
+  if ty.getAppFn.isConstOf ``Parses then
+    evalTactic (← `(tactic| refine ⟨?_, ?_⟩))
+    match ← getGoals with
+    | treeG :: _prf :: rest => setGoals (treeG :: rest)
+    | _ => pure ()
+
+/-- INTERNAL, META-ONLY. Fully evaluate a `yield …` expression to its surface
+    string, or `none` if the tree still has holes. `.all` reduction strips the
+    `Subtype.val ⟨tree, ?proof⟩` projections (so parked PROOF mvars drop out);
+    any metavariable that survives is a genuine unbuilt TREE part → `none`.
+    Compiled `evalExpr` turns the reduced form into a clean `String` literal
+    (avoiding the `String.mk [chars…]` shape a raw `.all` whnf leaves behind). -/
+private def reduceYield? (e : Expr) : TacticM (Option String) := do
+  let r ← withTransparency .all (whnf e)
+  if r.hasExprMVar then return none
+  return some (← unsafe Meta.evalExpr String (.const ``String []) r)
+
+/-- INTERNAL. Run after every command. Two sweeps over the metavariable
+    context:
+
+    1. `SplitLink whole ref ?rest`: once `ref` (a reference child's yield)
+       evaluates to a literal, subtract it from `whole` in meta code and pin
+       the sibling target `?rest`. This is the commitment-driven segmentation.
+    2. `yield t = s`: once the tree is fully built (every leftover mvar in it
+       is a PROOF, not an unbuilt subtree), discharge the parked proof —
+       assigning an open `?_` target, or refl-checking a fixed literal, or
+       REFUSING in linguistics if the tree pronounces the wrong string.
+       `refl` closes via the kernel's own (cheap, string-accelerated) defeq;
+       we deliberately do NOT pre-reduce the whole tree here — on the big L05
+       sentence that blows the heartbeat budget out from under `refl`. -/
+private def closeParses : TacticM Unit :=
+  -- A generous, reset budget: the final sweep on the big L05 sentence reduces
+  -- several subtrees AND refl-checks the whole tree; the default 200k window
+  -- (already partly spent by earlier tactics) would starve the closing `refl`
+  -- and misreport the timeout as a mispronunciation.
+  withTheReader Core.Context (fun ctx => { ctx with maxHeartbeats := 10000000 }) do
+  for (mvarId, decl) in (← getMCtx).decls.toList do
+    unless (← mvarId.isAssigned) do
+      let dty := (← instantiateMVars decl.type).consumeMData
+      -- Sweep 1: resolve a pending segmentation.
+      if dty.getAppFn.isConstOf ``SplitLink && dty.getAppNumArgs == 3 then
+        let a := dty.getAppArgs
+        match a[0]! with
+        | .lit (.strVal whole) =>
+          match ← reduceYield? a[1]! with
+          | some r =>
+            let restE := a[2]!
+            -- IMMEDIATE FEEDBACK: the reference child's surface string
+            -- must be a prefix of the parent span. `residual` would silently
+            -- return the span unchanged on a non-prefix, deferring the error to
+            -- the final combination proof (the original behaviour). Instead
+            -- refuse the moment the reference is committed — the mistake surfaces
+            -- at THIS step, not deep downstream. Because the XBar solution here
+            -- is unique, a wrong word / wrong constituent order breaks the prefix
+            -- exactly when the player commits it.
+            -- `r == ""` is a NULL head (silent C/T/D): it contributes nothing,
+            -- so the sibling legitimately gets the whole span — accept it, don't
+            -- mistake the empty string for a non-prefix.
+            let p := r ++ " "
+            if r == "" || r == whole || whole.take p.length == p then
+              if restE.isMVar then
+                restE.mvarId!.assign (toExpr (residual whole r))
+              mvarId.assign (mkConst ``True.intro)
+            else
+              throwError "✗ \"{r}\", planted here, does not begin the target \"{whole}\": the word or the structure at this step is wrong"
+          | none => pure ()
+        | _ => pure ()
+      -- Sweep 2: discharge a parked yield proof.
+      else
+        let args := dty.getAppArgs
+        if dty.isAppOf ``Eq && args.size == 3 && args[1]!.getAppFn.isConstOf ``yield then
+          let lhs ← instantiateMVars args[1]!
+          let rhs := args[2]!
+          -- Tree is ready ⇔ every surviving mvar in it is a proof (`Prop`);
+          -- an unbuilt subtree mvar has a `Type` (`XTree …`/`Parses …`) type.
+          let ready ← (lhs.collectMVars {}).result.allM fun mv => do
+            isProp (← mv.getType)
+          if ready then
+            -- Decide the surface string with COMPILED evaluation (fast, native
+            -- string ops), then hand the kernel an `Eq.refl` to verify. We do
+            -- NOT use the elaborator's `isDefEq`/`refl`: symbolically reducing
+            -- the whole L05 sentence's `yield` blows up there, whereas the
+            -- kernel reduces it fine (as the original per-node proofs relied on).
+            match ← reduceYield? lhs with
+            | none => pure ()
+            | some said =>
+              if rhs.isMVar then
+                -- Open target (a `?_` placeholder): pin it to the tree's yield
+                -- so the panel shows `D⁰ : "my"`, then close.
+                rhs.mvarId!.assign (toExpr said)
+                mvarId.assign (← mkEqRefl (toExpr said))
+              else
+                let want := match rhs with | .lit (.strVal s) => s | _ => said
+                if said == want then
+                  mvarId.assign (← mkEqRefl (toExpr want))
+                else
+                  throwError "✗ this tree reads \"{said}\", not the target \"{want}\""
+
+private def hasWhitespace (s : String) : Bool :=
+  s.any (fun c => c.isWhitespace)
+
+/-! Display a `Parses` goal as e.g. `"my house" [DP]` — the target string next to
+    its bracketed category (house style: `plot` emits `[ɴᴘ …]`). The label comes
+    from `xTreeLabel?` (the real phrase-type notation token, so `DP` prints clean,
+    not `«DP»`). A still-undecided target (a metavariable, before the player's
+    commitment resolves it) shows the bracketed category alone. -/
+
+open PrettyPrinter.Delaborator SubExpr in
+@[delab app.XSyntax.Parses]
+def delabParses : Delab := do
+  let e ← getExpr
+  guard (e.getAppNumArgs == 3)
+  let some catStx ← xTreeLabel? (e.getArg! 0) (e.getArg! 1) | failure
+  match e.getArg! 2 with
+  | .lit (.strVal str) => `($(Syntax.mkStrLit str) [$catStx])
+  | _                  => `([$catStx])
+
+private def tryTargetNospec : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.two do
+    throwError "✗ nospec closes off a full phrase (XP); the position here is {← goalType}"
+  let some posStx := posTerm? u.pos | return false
+  let targetStx := Syntax.mkStrLit u.target
+  evalTactic (← `(tactic|
+    refine
+      (fun child : XSyntax.Parses .one $posStx $targetStx =>
+        ⟨XTree.bareX1 child.1, by
+          simpa [XSyntax.Parses, XSyntax.yield] using child.2⟩) ?_))
+  return true
+
+private def tryTargetNocomp : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.one do
+    throwError "✗ nocomp projects a head to bar level (X′); the position here is {← goalType}"
+  -- IMMEDIATE STRUCTURAL CHECK: `nocomp` sends the whole span down to a
+  -- single X⁰ head, but a head pronounces exactly one word. A multiword span
+  -- here is already doomed — refuse now with a structural hint, instead of
+  -- letting it fail one step later at `head`.
+  if hasWhitespace u.target then
+    throwError "✗ a head position holds one word, but \"{u.target}\" is several words, so it cannot project straight down to X⁰ (perhaps an adjunct or a complement belongs here?)"
+  let some posStx := posTerm? u.pos | return false
+  let targetStx := Syntax.mkStrLit u.target
+  evalTactic (← `(tactic|
+    refine
+      (fun child : XSyntax.Parses .zero $posStx $targetStx =>
+        ⟨XTree.bareX0 child.1, by
+          simpa [XSyntax.Parses, XSyntax.yield] using child.2⟩) ?_))
+  return true
+
+/-- INTERNAL. Category label of a `Pos` expression, for error messages. -/
+private def posLabel? (e : Expr) : Option String :=
+  if      e.isConstOf ``Pos.N    then some "N"
+  else if e.isConstOf ``Pos.V    then some "V"
+  else if e.isConstOf ``Pos.A    then some "A"
+  else if e.isConstOf ``Pos.P    then some "P"
+  else if e.isConstOf ``Pos.Adv  then some "Adv"
+  else if e.isConstOf ``Pos.T    then some "T"
+  else if e.isConstOf ``Pos.D    then some "D"
+  else if e.isConstOf ``Pos.C    then some "C"
+  else if e.isConstOf ``Pos.Conj then some "Conj"
+  else none
+
+/-- INTERNAL. Discharge a `Lexicon c w` goal from the LEVEL'S OWN hypotheses —
+    the words the level handed the player. The twin of `license!`: `license!`
+    reads the universal `Selects` table, `lexicon!` reads the given lexicon
+    (which is why it searches the local context, never a global list). Not player
+    vocabulary; invoked inside `head`. On failure it speaks linguistics — the
+    word is licensed here for another category, or is not in this level's
+    lexicon at all. -/
+elab "lexicon!" : tactic => do
+  let g ← getMainGoal
+  let solved ← g.withContext do
+    try
+      evalTactic (← `(tactic| assumption))
+      pure true
+    catch _ => pure false
+  if solved then return
+  g.withContext do
+    let t := (← instantiateMVars (← g.getType)).consumeMData
+    unless t.getAppFn.isConstOf ``Lexicon && t.getAppNumArgs == 2 do
+      throwError "lexicon!: not a lexicon goal"
+    let posE := t.getAppArgs[0]!
+    let word := match ← whnf t.getAppArgs[1]! with | .lit (.strVal s) => s | _ => ""
+    -- No hypothesis matched the position: collect the categories this word IS
+    -- licensed for here (if any), to name the mismatch.
+    let mut otherCats : List String := []
+    for decl in ← getLCtx do
+      if decl.isImplementationDetail then continue
+      let dty ← instantiateMVars decl.type
+      if dty.getAppFn.isConstOf ``Lexicon && dty.getAppNumArgs == 2 then
+        let a := dty.getAppArgs
+        let sameWord := match ← whnf a[1]! with | .lit (.strVal s) => s == word | _ => false
+        if sameWord then
+          if let some lbl := posLabel? a[0]! then otherCats := otherCats ++ [lbl]
+    let here := (posLabel? posE).getD "?"
+    let shown := if word == "" then "∅" else word
+    let cats := String.intercalate "/" otherCats
+    if otherCats.isEmpty then
+      throwError "✗ \"{shown}\" is not in this lexicon; only the words given as hypotheses can be planted"
+    else
+      throwError "✗ in this lexicon \"{shown}\" is {cats}, so it cannot be {here}"
+
+private def tryTargetHead (word : String) (w : TSyntax `str) : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.zero do
+    throwError "✗ a bare head cannot stand at {← goalType} — project it first (nocomp / nospec)"
+  if word != u.target then
+    throwError "✗ this position must read \"{u.target}\", so \"{word}\" cannot go here"
+  evalTactic (← `(tactic| exact ⟨XTree.word ⟨$w⟩ (by lexicon!), rfl⟩))
+  return true
+
+private def declaredXPPos (stx : Term) (who : String) : TacticM Expr := do
+  let d ← elabTerm stx none
+  match asXTree? d with
+  | some (b, pos) =>
+    unless b.isConstOf ``Bar.two do
+      throwError "✗ {who} must be a full phrase (XP); you declared {d}"
+    return pos
+  | none =>
+    throwError "✗ {who} must be a syntactic position (an XP); you declared {d}"
+
+private def barTrace? (e : Expr) : Option String :=
+  if      e.isConstOf ``Bar.two  then some "two"
+  else if e.isConstOf ``Bar.one  then some "one"
+  else if e.isConstOf ``Bar.zero then some "zero"
+  else none
+
+private def posTrace? (e : Expr) : Option String :=
+  if      e.isConstOf ``Pos.N    then some "N"
+  else if e.isConstOf ``Pos.V    then some "V"
+  else if e.isConstOf ``Pos.A    then some "A"
+  else if e.isConstOf ``Pos.P    then some "P"
+  else if e.isConstOf ``Pos.Adv  then some "Adv"
+  else if e.isConstOf ``Pos.T    then some "T"
+  else if e.isConstOf ``Pos.D    then some "D"
+  else if e.isConstOf ``Pos.C    then some "C"
+  else if e.isConstOf ``Pos.Conj then some "Conj"
+  else none
+
+private def joinTabs : List String → String
+  | [] => ""
+  | x :: xs => xs.foldl (fun acc part => acc ++ "\t" ++ part) x
+
+private def treeViewDecl? (g : MVarId) : TacticM (Option (FVarId × String)) := do
+  g.withContext do
+    for localDecl in (← getLCtx) do
+      let ty ← instantiateMVars localDecl.type
+      if ty.getAppFn.isConstOf ``TreeView && ty.getAppArgs.size == 1 then
+        match ty.getArg! 0 with
+        | .lit (.strVal events) => return some (localDecl.fvarId, events)
+        | _ => return some (localDecl.fvarId, "")
+    return none
+
+private def currentTreeViewEvents? (goals : List MVarId) : TacticM (Option String) := do
+  for g in goals do
+    match (← treeViewDecl? g) with
+    | some (_, events) => return some events
+    | none => pure ()
+  return none
+
+private def clearTreeView? (g : MVarId) : TacticM MVarId := do
+  match (← treeViewDecl? g) with
+  | some (fvarId, _) => g.clear fvarId
+  | none => return g
+
+private def takeTreeViewEvents : TacticM String := do
+  unless XSyntax.treeView.enabled.get (← getOptions) do
+    return ""
+  let goals ← getGoals
+  let previous := (← currentTreeViewEvents? goals).getD ""
+  let mut clearedGoals := []
+  for g in goals do
+    clearedGoals := clearedGoals ++ [← clearTreeView? g]
+  setGoals clearedGoals
+  return previous
+
+private def eventForCurrentGoal (op arg word : String) : TacticM String := do
+  try
+    let t ← goalType
+    match asParses? t with
+    | some u =>
+      return joinTabs [op, (barTrace? u.bar).getD "?", (posTrace? u.pos).getD "?", arg, word, u.target]
+    | none =>
+      match asXTree? t with
+      | some (bar, pos) =>
+        return joinTabs [op, (barTrace? bar).getD "?", (posTrace? pos).getD "?", arg, word, ""]
+      | none =>
+        return joinTabs [op, "?", "?", arg, word, ""]
+  catch _ =>
+    return joinTabs [op, "?", "?", arg, word, ""]
+
+private def appendTreeViewToAllGoals (previous event : String) : TacticM Unit := do
+  unless XSyntax.treeView.enabled.get (← getOptions) do
+    return
+  let goals ← getGoals
+  if goals.isEmpty then
+    return
+  let events := if previous == "" then event else previous ++ "\n" ++ event
+  let viewType ← mkAppM ``TreeView #[toExpr events]
+  let viewProof ← mkAppM ``treeViewIntro #[toExpr events]
+  let mut updated := []
+  for g in goals do
+    let cleared ← clearTreeView? g
+    let (_, noted) ← cleared.note `treeView viewProof viewType
+    updated := updated ++ [noted]
+  setGoals updated
+
+private def appendTreeViewEvent (event : String) : TacticM Unit := do
+  let goals ← getGoals
+  let previous := (← currentTreeViewEvents? goals).getD ""
+  appendTreeViewToAllGoals previous event
+
+/-- INTERNAL. After a split `refine` has opened goals tagged `front`/`back`
+    (and parked a `comb` proof), park a `SplitLink` recording that `back`'s
+    target is the parent span `whole` minus `front`'s yield, then show only
+    `front` and `back` (in that order). `others` are the pre-existing sibling
+    goals, preserved. -/
+private def installSplitLink (whole : String) (others : List MVarId) : TacticM Unit := do
+  let after ← getGoals
+  let fresh := after.filter (fun g => !(others.any (fun o => o.name == g.name)))
+  let mut front? : Option MVarId := none
+  let mut back? : Option MVarId := none
+  for g in fresh do
+    -- `?front`/`?back` come back with hygiene scopes appended (`front._@…hyg.88`),
+    -- so match the root component, not the full mangled name.
+    match (← g.getTag).eraseMacroScopes with
+    | `front => front? := some g
+    | `back  => back? := some g
+    | _      => pure ()
+  match front?, back? with
+  | some front, some back =>
+    let frontTy ← instantiateMVars (← front.getType)
+    let backTy := (← instantiateMVars (← back.getType)).consumeMData
+    let restTarget := backTy.getAppArgs[2]!
+    let frontVal ←
+      if frontTy.getAppFn.isConstOf ``Parses then
+        mkAppM ``Subtype.val #[mkMVar front]
+      else
+        match asXTree? frontTy with
+        | some _ => pure (mkMVar front)
+        | none => throwError "installSplitLink: front goal is not a syntactic tree"
+    let refExpr ← mkAppM ``yield #[frontVal]
+    let linkTy ← mkAppM ``SplitLink #[toExpr whole, refExpr, restTarget]
+    let _ ← mkFreshExprMVar linkTy (userName := `splitLink)
+    setGoals (front :: back :: others)
+  | _, _ => setGoals (fresh ++ others)
+
+private def tryTargetComplement (t : Term) : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.one do
+    throwError "✗ a complement merges at the bar level (X′); the position here is {← goalType}"
+  let compPos ← declaredXPPos t "a complement"
+  let some headPosStx := posTerm? u.pos | return false
+  let some compPosStx := posTerm? compPos | return false
+  let others := (← getGoals).drop 1
+  evalTactic (← `(tactic|
+    refine ⟨XTree.compl
+              (?front : XSyntax.Parses .zero $headPosStx ?_).1
+              (?back : XSyntax.Parses .two $compPosStx ?_).1
+              (by license!), ?comb⟩))
+  installSplitLink u.target others
+  return true
+
+private def tryTargetAdjoinL (t : Term) : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.one do
+    throwError "✗ an adjunct merges at the bar level (X′); the position here is {← goalType}"
+  let adjPos ← declaredXPPos t "an adjunct"
+  let some parentPosStx := posTerm? u.pos | return false
+  let some adjPosStx := posTerm? adjPos | return false
+  let others := (← getGoals).drop 1
+  evalTactic (← `(tactic|
+    refine ⟨XTree.adjunctL
+              (?front : XSyntax.Parses .two $adjPosStx ?_).1
+              (?back : XSyntax.Parses .one $parentPosStx ?_).1, ?comb⟩))
+  installSplitLink u.target others
+  return true
+
+private def tryTargetAdjoinR (t : Term) : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.one do
+    throwError "✗ an adjunct merges at the bar level (X′); the position here is {← goalType}"
+  let adjPos ← declaredXPPos t "an adjunct"
+  let some parentPosStx := posTerm? u.pos | return false
+  let some adjPosStx := posTerm? adjPos | return false
+  let others := (← getGoals).drop 1
+  evalTactic (← `(tactic|
+    refine ⟨XTree.adjunctR
+              (?front : XSyntax.Parses .one $parentPosStx ?_).1
+              (?back : XSyntax.Parses .two $adjPosStx ?_).1, ?comb⟩))
+  installSplitLink u.target others
+  return true
+
+private def tryTargetSpecifier (t : Term) : TacticM Bool := do
+  let some u := asParses? (← goalType) | return false
+  unless u.bar.isConstOf ``Bar.two do
+    throwError "✗ a specifier merges at the phrase level (XP); the position here is {← goalType}"
+  let specPos ← declaredXPPos t "a specifier"
+  let some parentPosStx := posTerm? u.pos | return false
+  let some specPosStx := posTerm? specPos | return false
+  let others := (← getGoals).drop 1
+  evalTactic (← `(tactic|
+    refine ⟨XTree.Spec
+              (?front : XSyntax.Parses .two $specPosStx ?_).1
+              (?back : XSyntax.Parses .one $parentPosStx ?_).1, ?comb⟩))
+  installSplitLink u.target others
+  return true
+
+/-! ### Player vocabulary -/
+
+/-- `XP → X′` (no specifier). Vacuous top projection, made explicit. -/
+elab "nospec" : tactic => do
+  let event ← eventForCurrentGoal "nospec" "" ""
+  if ← tryTargetNospec then
+    closeParses
+    appendTreeViewEvent event
+    return
+  enterParses
+  let t ← goalType
+  match asXTree? t with
+  | some (b, _) =>
+    if b.isConstOf ``Bar.two then
+      evalTactic (← `(tactic| apply XTree.bareX1))
+    else
+      throwError "✗ nospec closes off a full phrase (XP); the position here is {t}"
+  | none => throwError "nospec: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewEvent event
+
+/-- `X′ → X⁰` (no complement). Vacuous bar projection, made explicit. -/
+elab "nocomp" : tactic => do
+  let event ← eventForCurrentGoal "nocomp" "" ""
+  if ← tryTargetNocomp then
+    closeParses
+    appendTreeViewEvent event
+    return
+  enterParses
+  let t ← goalType
+  match asXTree? t with
+  | some (b, _) =>
+    if b.isConstOf ``Bar.one then
+      evalTactic (← `(tactic| apply XTree.bareX0))
+    else
+      throwError "✗ nocomp projects a head to bar level (X′); the position here is {t}"
+  | none => throwError "nocomp: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewEvent event
+
+/-- Plant a word (or a null head) at an `X⁰` goal. A null head is written
+    `head ""` or `head "∅"` — both normalise to the empty string, and its
+    licence comes from the level's `Lexicon .C ""` / `.T ""` / `.D ""`. -/
+elab "head" w:str : tactic => do
+  let raw := w.getString
+  let word := if raw == "∅" then "" else raw
+  if word != "" && hasWhitespace word then
+    throwError "✗ head plants one word at a time; several words need one head each, and an empty head is written `head \"\"` or `head \"∅\"`"
+  let wStx := Syntax.mkStrLit word
+  let event ← eventForCurrentGoal "head" "" word
+  if ← tryTargetHead word wStx then
+    closeParses
+    appendTreeViewEvent event
+    return
+  enterParses
+  let t ← goalType
+  match asXTree? t with
+  | some (b, _pos) =>
+    if b.isConstOf ``Bar.zero then
+      evalTactic (← `(tactic| exact XTree.word ⟨$wStx⟩ (by lexicon!)))
+    else
+      throwError "✗ a bare head cannot stand at {t} — project it first (nocomp / nospec)"
+  | none => throwError "head: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewEvent event
+
+/-- `XP → Spec X′`. Usage: `specifier DP` — declare the specifier. -/
+elab "specifier" t:term : tactic => do
+  let previous ← takeTreeViewEvents
+  let event ← eventForCurrentGoal "specifier" (toString t) ""
+  if ← tryTargetSpecifier t then
+    closeParses
+    appendTreeViewToAllGoals previous event
+    return
+  enterParses
+  let g ← goalType
+  match asXTree? g with
+  | some (b, _) =>
+    if b.isConstOf ``Bar.two then
+      checkDeclaredXP t "a specifier"
+      evalTactic (← `(tactic| refine XTree.Spec (?_ : $t) ?_))
+    else
+      throwError "✗ a specifier merges at the phrase level (XP); the position here is {g}"
+  | none => throwError "specifier: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewToAllGoals previous event
+
+/-- `X′ → X⁰ Compl`. Usage: `complement NP` — declare the complement.
+    Selection is checked here, at the moment of combination: an unlicensed
+    pair makes this very command fail, in the licensing layer's own words. -/
+elab "complement" t:term : tactic => do
+  let previous ← takeTreeViewEvents
+  let event ← eventForCurrentGoal "complement" (toString t) ""
+  if ← tryTargetComplement t then
+    closeParses
+    appendTreeViewToAllGoals previous event
+    return
+  enterParses
+  let g ← goalType
+  match asXTree? g with
+  | some (b, _) =>
+    if b.isConstOf ``Bar.one then
+      checkDeclaredXP t "a complement"
+      evalTactic (← `(tactic| refine XTree.compl ?_ (?_ : $t) (by license!)))
+    else
+      throwError "✗ a complement merges at the bar level (X′); the position here is {g}"
+  | none => throwError "complement: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewToAllGoals previous event
+
+/-- `X′ → Adjunct X′` (left adjunction). Usage: `adjoinL AP`. -/
+elab "adjoinL" t:term : tactic => do
+  let previous ← takeTreeViewEvents
+  let event ← eventForCurrentGoal "adjoinL" (toString t) ""
+  if ← tryTargetAdjoinL t then
+    closeParses
+    appendTreeViewToAllGoals previous event
+    return
+  enterParses
+  let g ← goalType
+  match asXTree? g with
+  | some (b, _) =>
+    if b.isConstOf ``Bar.one then
+      checkDeclaredXP t "an adjunct"
+      evalTactic (← `(tactic| refine XTree.adjunctL (?_ : $t) ?_))
+    else
+      throwError "✗ an adjunct merges at the bar level (X′); the position here is {g}"
+  | none => throwError "adjoinL: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewToAllGoals previous event
+
+/-- `X′ → X′ Adjunct` (right adjunction). Usage: `adjoinR AdvP`. -/
+elab "adjoinR" t:term : tactic => do
+  let previous ← takeTreeViewEvents
+  let event ← eventForCurrentGoal "adjoinR" (toString t) ""
+  if ← tryTargetAdjoinR t then
+    closeParses
+    appendTreeViewToAllGoals previous event
+    return
+  enterParses
+  let g ← goalType
+  match asXTree? g with
+  | some (b, _) =>
+    if b.isConstOf ``Bar.one then
+      checkDeclaredXP t "an adjunct"
+      evalTactic (← `(tactic| refine XTree.adjunctR ?_ (?_ : $t)))
+    else
+      throwError "✗ an adjunct merges at the bar level (X′); the position here is {g}"
+  | none => throwError "adjoinR: the goal is not a syntactic position"
+  closeParses
+  appendTreeViewToAllGoals previous event
+
+/-! ### Refutation (the eighth command) -/
+
+/-- INTERNAL. The licensing table in `Tree.lean`, mirrored by hand: `Selects`
+    has exactly these five constructors. Checking membership BEFORE running
+    `cases` lets `CannotSelect` refuse in linguistics on an actually-licensed
+    pair, rather than leaking Lean's generic "unsolved goals" (which is what a
+    bare `cases` leaves behind when the pair IS licensed). -/
+private def isLicensedPair (c d : Expr) : Bool :=
+  (c.isConstOf ``Pos.D && d.isConstOf ``Pos.N) ||
+  (c.isConstOf ``Pos.T && d.isConstOf ``Pos.V) ||
+  (c.isConstOf ``Pos.C && d.isConstOf ``Pos.T) ||
+  (c.isConstOf ``Pos.P && d.isConstOf ``Pos.D) ||
+  (c.isConstOf ``Pos.V && d.isConstOf ``Pos.D)
+
+/-- Prove a head–complement pairing has NO license, on a goal `¬ Selects c d`.
+    Mirrors `license!`: exhaust `Selects`'s constructors — none match an
+    unlicensed pair, so the case split closes the goal vacuously. If the pair
+    IS licensed, refuse in the same linguistic register as every other command. -/
+elab "CannotSelect" : tactic => do
+  let t ← goalType
+  if t.getAppFn.isConstOf ``Not && t.getAppArgs.size == 1 then
+    let selectsTy := t.getAppArgs[0]!
+    let fn := selectsTy.getAppFn
+    let args := selectsTy.getAppArgs
+    if fn.isConstOf ``Selects && args.size == 2 then
+      if isLicensedPair args[0]! args[1]! then
+        throwError "✗ {args[0]!} does select {args[1]!}: the combination is licensed, so its absence cannot be proved"
+      else
+        evalTactic (← `(tactic| intro h; cases h))
+    else
+      throwError "CannotSelect: the goal is not a negated licence of the form ¬ Selects _ _"
+  else
+    throwError "CannotSelect: the goal is not a negation"
+
+end XSyntax

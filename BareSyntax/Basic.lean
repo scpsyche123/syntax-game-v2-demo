@@ -1,7 +1,7 @@
 /-
 Bare Grammar — the base language.
 
-Copied from `scpsyche123/syntax-game`, `BareSyntax/Basic.lean` (merged 2026-07-28),
+Copied from the earlier project's `BareSyntax/Basic.lean` (merged 2026-07-28),
 with ONE additive extension, marked [EXT] below. Nothing in the original part
 was changed.
 

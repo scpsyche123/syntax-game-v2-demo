@@ -51,7 +51,7 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 ## Layout
 
 - `BareSyntax/Basic.lean` — the language: expressions, rules, `Deriv`, `CanYield`.
-  Copied from `scpsyche123/syntax-game` (`BareSyntax/Basic.lean`, merged 2026-07-28) with one
+  Copied from the earlier project's `BareSyntax/Basic.lean` (merged 2026-07-28) with one
   additive extension: a second rule form (`FRule`) whose domain is a decidable condition and
   which is indexed by an argument; `Deriv` gains the constructor `fapp`.
 - `BareSyntax/Linear.lean` (`linear₁`, `linear₂`), `XBarGB.lean`, `MP.lean` — the grammars.
@@ -59,6 +59,10 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 - `BareSyntax/Tactics.lean` — the player commands `rule`, `select`, `merge`.
 - `Game/` — the lean4game levels. Each level's statement contains a solution, so
   `lake build` checks that every level can be completed.
+- `playground/Expressivity.lean` — the Lean-checked pilot on expressive power; notes in
+  `docs/research/`.
+- `xbar/` — English demo of the earlier X-bar formalization: the theory library and its
+  twelve levels as plain Lean, with its own [README](xbar/README.md).
 
 ## Design decisions
 
@@ -70,8 +74,9 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
   take a root), the θ-criterion (the subject nP first merges with vP) and a chain condition
   (only the subject moves, once, to the specifier of T). These are checked automatically with
   externalization. A previous bounded search for an earlier English fragment found
-  1784 labeled objects pronounced "the cat will sleep" before these checks; its
-  constrained uniqueness count depends on the chosen representation. The Swahili
+  1784 labeled objects pronounced "the cat will sleep" before these checks (the search
+  script is not part of this repository); its constrained uniqueness count depends on the
+  chosen representation. The Swahili
   fragment also has a representation caveat: the current `SO.set a b` is a
   two-argument constructor rather than a commutative set. Two distinct raw
   objects (`merge m toto` vs `merge toto m`) pass all current interface
@@ -96,6 +101,13 @@ contains the rejected attempts at *a very day*.
 lake build
 ```
 
-Toolchain and GameServer versions are pinned to those of `scpsyche123/syntax-game`
+Toolchain and GameServer versions are pinned to those of the earlier project
 (`leanprover/lean4:v4.23.0`). Pushing to `main` builds the game in GitHub Actions and
 triggers the import on adam.math.hhu.de.
+
+The two dependency-free packages are built in CI as well:
+
+```
+cd playground && lake build   # the language, Demo.lean and the Expressivity pilot
+cd xbar && lake build         # the X-bar library and its twelve levels
+```
