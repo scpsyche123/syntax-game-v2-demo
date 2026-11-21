@@ -50,19 +50,19 @@ implemented in Lean 4 — expressing grammars from three eras of generative synt
 
 ## Layout
 
-- `BareSyntax/Basic.lean` — the language: expressions, rules, `Deriv`, `CanYield`.
+- `BareSyntax/Basic.lean`: the language (expressions, rules, `Deriv`, `CanYield`).
   Copied from the earlier project's `BareSyntax/Basic.lean` (merged 2026-07-28) with one
   additive extension: a second rule form (`FRule`) whose domain is a decidable condition and
   which is indexed by an argument; `Deriv` gains the constructor `fapp`.
-- `BareSyntax/Linear.lean` (`linear₁`, `linear₂`), `XBarGB.lean`, `MP.lean` — the grammars.
-- `BareSyntax/Show.lean` — how expressions and workspaces are displayed.
-- `BareSyntax/Tactics.lean` — the player commands `rule`, `select`, `merge`.
-- `Game/` — the lean4game levels. Each level's statement contains a solution, so
+- `BareSyntax/Linear.lean` (`linear₁`, `linear₂`), `XBarGB.lean`, `MP.lean`: the grammars.
+- `BareSyntax/Show.lean`: how expressions and workspaces are displayed.
+- `BareSyntax/Tactics.lean`: the player commands `rule`, `select`, `merge`.
+- `Game/`: the lean4game levels. Each level's statement contains a solution, so
   `lake build` checks that every level can be completed.
-- `playground/Expressivity.lean` — the Lean-checked pilot on expressive power; notes in
+- `playground/Expressivity.lean`: the Lean-checked pilot on expressive power; notes in
   `docs/research/`.
-- `xbar/` — English demo of the earlier X-bar formalization: the theory library and its
-  twelve levels as plain Lean, with its own [README](xbar/README.md).
+- `xbar/`: English demo of the earlier X-bar formalization, with the theory library and
+  its twelve levels as plain Lean; see its [README](xbar/README.md).
 
 ## Design decisions
 

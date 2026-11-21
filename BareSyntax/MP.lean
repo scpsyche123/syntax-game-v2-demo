@@ -44,8 +44,8 @@ checked on the finished object:
 Without these, free MERGE plus labeling and word order accepts many objects
 that are not the intended one (for the earlier English fragment, a search of all
 derivations with at most two Internal MERGEs found 1784; the search script is not
-part of this repository). With them the intended object is accepted, but it is
-not unique under raw `SO` equality: `SO.set` records argument order, and two
+part of this repository). With them the intended object is accepted. It is not
+unique under raw `SO` equality, however: `SO.set` records argument order, and two
 objects for "mtoto atalala" that differ only in the order inside nP both pass
 (`playground/Expressivity.lean`).
 
