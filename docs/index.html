@@ -46,6 +46,8 @@
   pre { margin: 0 0 1rem; font-size: 0.9rem; line-height: 1.5; overflow-x: auto; }
   sub { font-size: 0.72em; line-height: 0; }
   .nowrap { white-space: nowrap; }
+  .ipa { white-space: nowrap; font-variant-numeric: normal; }
+  :lang(zh) { font-family: "Songti SC", "Songti TC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", "STIX Two Text", serif; }
   footer { margin-top: 3rem; font-size: 0.9rem; }
   @media print { body { background: #fff; font-size: 11pt; } main { padding-top: 0; } }
 </style>
@@ -55,9 +57,7 @@
 
 <h1>Formalization of Syntactic Theory</h1>
 <p class="subtitle">Investigating grammatical structure, invariance, and the expressive limits of syntactic models through formal methods.</p>
-<!-- Author line, if wanted: <p>Name, Affiliation</p> -->
-
-<p>This is an undergraduate research project in theoretical linguistics. It treats grammars as mathematical objects and asks which of their properties are structural, and what one model of syntax can express that another cannot. Claims about small grammars are checked in the proof assistant Lean&nbsp;4.</p>
+<p>Hi! Welcome to my research page. I’m Haoyu Wang (<span lang="zh">王浩宇</span> <span class="ipa">[wɑŋ˧˥ xɑʊ̯˥˩ y˨˩˦]</span>). This is my undergraduate research project in theoretical linguistics and formalization. It treats grammars as mathematical objects and asks which of their properties are structural, and what one model of syntax can express that another cannot. I use Lean&nbsp;4, a functional programming language and proof assistant, to verify formal claims about small grammars.</p>
 <p class="muted"><a href="game/">Try the syntax game</a></p>
 
 <h2>Bare Grammar and explanatory adequacy</h2>
