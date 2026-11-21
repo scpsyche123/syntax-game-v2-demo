@@ -11,3 +11,6 @@ lean_lib BareSyntax where
 
 @[default_target]
 lean_lib Demo
+
+@[default_target]
+lean_lib Expressivity

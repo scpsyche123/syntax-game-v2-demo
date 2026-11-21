@@ -21,6 +21,11 @@ jobs:
         with:
           use-github-cache: false
 
+      - name: check the dependency-free packages (playground proofs, X-bar demo)
+        run: |
+          (cd playground && lake build)
+          (cd xbar && lake build)
+
       - name: compress built game
         #run: tar -czvf ../game.tar.gz .
         run: zip game.zip * .lake/ .i18n/ -r
@@ -35,7 +40,10 @@ jobs:
       - name: trigger cloud import
         run: curl -fsSL "https://adam.math.hhu.de/import/trigger/${GITHUB_REPOSITORY,,}"
 
+      # The lean4game server import is outside this repository's control; a failed
+      # import is reported here as a warning without failing the build.
       - name: verify game is live
+        continue-on-error: true
         run: |
           repo="${GITHUB_REPOSITORY,,}"
           url="https://adam.math.hhu.de/data/g/${repo}/game.json"

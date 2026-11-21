@@ -85,7 +85,7 @@ package Game where
     -- TODO: replace with `lean4game.verbose`
     ⟨`trace.debug, true⟩]
 
--- The Bare Grammar language (grammar = data). Same base as syntax-game BareSyntax, extended.
+-- The Bare Grammar language (grammar = data). Same base as the earlier project's BareSyntax, extended.
 -- so it does not steal the default target.
 lean_lib BareSyntax
 

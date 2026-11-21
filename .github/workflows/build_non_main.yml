@@ -14,3 +14,8 @@ jobs:
       - uses: leanprover/lean-action@v1
         with:
           use-github-cache: false
+
+      - name: check the dependency-free packages (playground proofs, X-bar demo)
+        run: |
+          (cd playground && lake build)
+          (cd xbar && lake build)

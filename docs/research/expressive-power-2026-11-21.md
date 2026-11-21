@@ -32,7 +32,8 @@ The preceding `√toto/√lala` structures are *not* valid whole sentences under
 - `distinct_narrow_syntax_objects`: let `nP₁ = set m toto` and `nP₂ = set toto m`, and consistently use the selected `nP` as both the lower and higher occurrence inside the full Swahili object; the resulting roots `r₁ ≠ r₂`.
 - `both_satisfy_interface`: **both** objects satisfy `allLabeled = true` and `ciOK = true`.
 - `same_surface_string`: both externally realize `["mtoto","atalala"]`.
-- `standard_subject_order_converges` and `reversed_subject_order_converges`: the original and reversed `merge m toto` / `merge toto m` scripts **both compile** as complete Lean proofs of `MP.Converges ["mtoto","atalala"]`. These scripts exhibit the distinct daughter order in reachable derivations. The two results have the same proposition, not a claim of two logically different truth values.
+- `standard_subject_order_converges` and `reversed_subject_order_converges`: the original and reversed `merge m toto` / `merge toto m` scripts **both compile** as complete Lean proofs of `MP.Converges ["mtoto","atalala"]`. The two results have the same proposition: `Converges` only asserts that *some* object converges.
+- `r₁_derivable` and `r₂_derivable` (added 2026-11-21): each of `r₁` and `r₂` is itself the single object of a complete derivation from the empty workspace, `Nonempty (Deriv MP.mpWS ([], ⟨[rᵢ]⟩))`. Together with the two previous facts, both objects satisfy every clause of `Converges`.
 
 **Consequences:** the README's historical finite-search statement of \"exactly one object converges\" should *not* be interpreted as uniqueness under raw Lean `SO` equality; the current representation distinguishes multiple orders of the same intended set. Uniqueness *modulo unordered-MERGE equivalence* is a different, unproved claim.
 
@@ -84,4 +85,4 @@ lake build BareSyntax
 lake env lean Expressivity.lean
 ```
 
-Both commands were run successfully against the pinned toolchain in a temporary checkout. The proof file has no `sorry` or `admit`. Two distinct ordered representatives can satisfy the Swahili interface conditions and both have successful Converges scripts; this has not yet been reformulated as uniqueness/equivalence classes under true unordered Merge. This experiment does **not** repair `MP.SO` or make the present syntax demo an honest unordered-MERGE model. Changes to the model and interface are future research work, not part of the current checked claims.
+Both commands were run successfully against the pinned toolchain in a temporary checkout. The proof file has no `sorry` or `admit`. Two distinct ordered representatives are each derivable and satisfy the Swahili interface conditions (`r₁_derivable`, `r₂_derivable`, `both_satisfy_interface`); this has not yet been reformulated as uniqueness/equivalence classes under true unordered Merge. This experiment does **not** repair `MP.SO` or make the present syntax demo an honest unordered-MERGE model. Changes to the model and interface are future research work, not part of the current checked claims.
