@@ -1,13 +1,39 @@
-# Syntax Game v2 · Bare Grammar demo
+# Formalization of Syntactic Theory · Bare Grammar in Lean 4
 
-**Play the public demo:** https://scpsyche123.github.io/syntax-game-v2-demo/
+**Research homepage:** https://scpsyche123.github.io/syntax-game-v2-demo/  
+**Play the syntax game:** https://scpsyche123.github.io/syntax-game-v2-demo/game/
 
-The five-level interactive demo is published from `main/docs` with GitHub Pages. It is a browser-based JavaScript simulation of the Lean 4 implementation; the full game is still in development.
+This repository holds the Lean 4 formalization behind a research project in theoretical
+linguistics: Bare Grammar (Keenan & Stabler 2003) implemented in Lean, grammars from three
+eras of generative syntax as instances of it, Lean-checked observations about expressive
+power, and a five-level teaching game built on these grammars.
 
-**Research beyond the game:** The first [Lean-checked expressive-power investigation](docs/research/expressive-power-2026-11-21.md) and its [proof file](playground/Expressivity.lean) examine the current model's representation of unordered MERGE, unrestricted rule arguments, and symmetry of linearization. This is exploratory work, not a claimed equivalence or separation of full linguistic theories.
+**Research:** The project asks whether generating the right expressions guarantees that a
+grammar captures the relevant generalizations, which grammatical properties are invariant
+under structure-preserving transformations (automorphisms), and what different syntactic
+models can and cannot express. The first [Lean-checked expressive-power investigation](docs/research/expressive-power-2026-11-21.md)
+and its [proof file](playground/Expressivity.lean) examine the current model's representation
+of unordered MERGE, unrestricted rule arguments, and symmetry of linearization. This is
+exploratory work, not a claimed equivalence or separation of full linguistic theories.
 
-Playable page: `docs/index.html` (self-contained). It runs a JavaScript transcription of
-`BareSyntax/`, checked against Lean's output case by case; see `docs/page/README.md`.
+**Game:** The five-level interactive demo is a browser-based JavaScript simulation of the
+Lean 4 implementation; the full game is still in development.
+
+## GitHub Pages
+
+The site is published from `main/docs`:
+
+| Path | URL | What it is |
+|---|---|---|
+| `docs/index.html` (+ `docs/assets/fonts/`) | `/syntax-game-v2-demo/` | research homepage (one HTML file, self-hosted fonts) |
+| `docs/game/index.html` | `/syntax-game-v2-demo/game/` | the playable game page (self-contained) |
+| `docs/page/` | not a page | scripts that check the game's engine against Lean |
+| `docs/research/` | not a page | research notes (Markdown) |
+
+Old links to game levels (`/syntax-game-v2-demo/#mp` etc.) are forwarded to `game/`.
+
+The game page runs a JavaScript transcription of `BareSyntax/`, checked against Lean's
+output case by case; see `docs/page/README.md`.
 
 Play (once the lean4game server import works): https://adam.math.hhu.de/#/g/scpsyche123/syntax-game-v2-demo
 

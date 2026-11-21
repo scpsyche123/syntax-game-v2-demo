@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bare Grammar Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday-scholarly: a worked example for linguists, exact and calm
+   IDEA a syntax handout you can play: the sentence and its trees, with the rules beside them
+   PICTURE the derivation (or the workspace) drawn as trees that grow as you apply rules; selected and new nodes marked
+   COLOUR white paper, ink, one deep Lean-blue for structure and the header band, vermilion for selection, change and failure
+   TYPE Source Serif 4 for prose and titles, IBM Plex Sans for controls, IBM Plex Mono for rules and the goal
+   LAYOUT blue band with title, a note that this is a demo, and five numbered round level buttons; left: one box with trees and the rules under them, goal strip with the automatic check; right: level text and messages */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#14161b);--ink:light-dark(#1a1c22,#e6e7eb);--muted:light-dark(#5b6070,#9ba1ae);
+--blue:light-dark(#1d3f8f,#93b2ff);--band:#1d3f8f;--panel:light-dark(#f2f4f9,#1c1f26);--line:light-dark(#d8dce6,#2e323c);
+--acc:light-dark(#cf3f22,#ff7b5e);--accbg:light-dark(#fdeee9,#3a211b);--okbg:light-dark(#eaf1ff,#1c2a45);--selbg:light-dark(#fff3d6,#3b3220);--sel:light-dark(#b07600,#f0b84a);--hover:light-dark(#e2e7f2,#272b34);
+--green:light-dark(#1b7a3c,#7ed69a);--greenbg:light-dark(#e5f5eb,#16301f);--gray:light-dark(#686d7a,#9aa0ad);--graybg:light-dark(#eef0f3,#22252c)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.6 "Source Serif 4",Georgia,serif;overflow-x:clip}
+a{color:var(--blue)}
+.band{padding-block:clamp(22px,3.2vw,48px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+header{background:var(--band);color:#fff}
+header h1{font-weight:600;font-size:clamp(32px,4.6vw,50px);line-height:1.05;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
+header p{max-width:66ch;margin:0 0 12px;color:#dfe6f7}
+header p.note{margin-bottom:20px;font-style:italic;color:#c9d4f0}
+.tabs{display:flex;flex-wrap:wrap;gap:12px}
+.tab{position:relative;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);background:transparent;color:#fff;font:600 19px/1 "IBM Plex Sans",system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;padding:0}
+.tab:hover{border-color:#fff}
+.tab[aria-selected=true]{background:#fff;color:#14234d;border-color:#fff}
+.tab .tick{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#2f9e5a;color:#fff;font:700 12px/20px "IBM Plex Sans",sans-serif;text-align:center;box-shadow:0 0 0 2px var(--band)}
+.tab .tick:empty{display:none}
+.tab.gray{color:#aab5d0;border-style:dashed;border-color:rgba(255,255,255,.4)}
+.tab.gray[aria-selected=true]{background:#d7dbe4;border-color:#d7dbe4;border-style:solid;color:#3d4250}
+button:focus-visible,svg [data-k]:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+/* the stage: board, goal, controls and messages on the left; level text on the right */
+.stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);grid-template-areas:"play lead";column-gap:28px;align-items:start}
+.play{grid-area:play}.lead{grid-area:lead}
+@media(max-width:1000px){.stage{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "play"}}
+.lead{max-width:72ch;margin:0 0 14px}
+.lead h2{font-size:clamp(26px,3vw,34px);line-height:1.1;margin:0 0 8px;font-weight:600}
+.lead p{margin:0 0 8px}
+.lead p.gloss{font-size:15.5px;line-height:1.45;padding-left:12px;border-left:2px solid var(--line);margin-bottom:12px}
+.board{border:1px solid var(--line);border-radius:8px 8px 0 0}
+.goal{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:10px 14px;font:15px/1.45 "IBM Plex Mono",monospace;overflow-wrap:anywhere}
+.goal b{font:600 14px "IBM Plex Sans",sans-serif;color:var(--muted)}
+.goal .st{font:500 14px "IBM Plex Sans",sans-serif;color:var(--muted);text-align:right}
+@media(max-width:560px){.goal{grid-template-columns:auto minmax(0,1fr)}.goal .st{grid-column:1/-1}}
+.goal.done{background:var(--greenbg);color:var(--green);border-color:var(--green);border-top:1px solid var(--green);margin-top:-1px}
+.goal.done b,.goal.done .st{color:var(--green);font-weight:600}
+.goal.gray{background:var(--graybg);color:var(--gray)}
+.goal.gray b,.goal.gray .st{color:var(--gray)}
+
+.cap{font:500 14px/1.35 "IBM Plex Sans",sans-serif;color:var(--muted);padding:10px 12px 0}
+.treebox{overflow-x:auto;padding:4px 8px 10px}
+.treebox svg{display:block;margin:0 auto}
+svg text{font-family:"IBM Plex Sans",sans-serif;font-size:14px;fill:var(--ink)}
+svg .cat{font-weight:600;fill:var(--blue)}
+svg .word{font-family:"Source Serif 4",serif;font-style:italic;font-size:15px}
+svg .str{font-size:12.5px;fill:var(--acc)}
+svg .lower{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-dasharray:5 3}
+svg .ahead{fill:var(--blue)}
+svg .lowlab{fill:var(--blue);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+svg .move{stroke:var(--acc);stroke-width:1.4;fill:none;stroke-dasharray:6 3}
+svg .mhead{fill:var(--acc)}
+svg .movelab{fill:var(--acc);font-style:italic;font-size:12.5px;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+svg .edge{stroke:var(--muted);stroke-width:1.2;fill:none}
+svg .q{fill:var(--acc);font-weight:600}
+svg .copy{fill:var(--muted)}
+svg .hit{fill:transparent;stroke:transparent}
+svg [data-k]{cursor:pointer}
+svg [data-k]:hover .hit{fill:var(--panel);stroke:var(--line)}
+svg .sel .hit,svg .sel:hover .hit{fill:var(--selbg);stroke:var(--sel);stroke-width:2}
+svg .badge{font:600 11px "IBM Plex Sans",sans-serif;fill:var(--sel)}
+svg .bracket{stroke:var(--ink);stroke-width:1.6;fill:none}
+.empty{padding:10px 12px 16px;color:var(--muted);font-style:italic}
+
+/* clickable items inside the board: rules, lexicon, Select, MERGE */
+.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px 4px}
+.tools .lab{font:500 13px "IBM Plex Sans",sans-serif;color:var(--muted);margin-right:2px}
+.tools .brk{flex-basis:100%;height:0}
+.item{display:inline-flex;align-items:baseline;gap:6px;min-height:36px;padding:7px 10px;border:1px solid transparent;border-radius:5px;background:var(--panel);color:var(--ink);font:14px/1.3 "IBM Plex Mono",monospace;cursor:pointer;text-align:left}
+.item:hover{background:var(--hover)}
+.item .rn{font:600 13px "IBM Plex Sans",sans-serif;color:var(--blue)}
+.item small{font:12.5px "IBM Plex Sans",sans-serif;color:var(--muted)}
+.item.lexeme{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.item .lex-main{display:inline-flex;gap:6px;align-items:baseline}
+.item .lex-gloss{font:12px/1.3 "IBM Plex Sans",sans-serif;color:var(--muted)}
+.item .c{color:var(--blue)}
+.item .n{font:600 12px "IBM Plex Sans",sans-serif;color:var(--sel)}
+.item[aria-pressed=true]{background:var(--selbg);border-color:var(--sel)}
+.item:disabled{opacity:.5;cursor:default}
+.item:disabled:hover{background:var(--panel)}
+
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.btn{font:500 15px/1 "IBM Plex Sans",sans-serif;min-height:44px;padding:0 14px;border-radius:6px;border:1px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer}
+.btn.solid{background:var(--blue);color:var(--bg)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn[hidden]{display:none}
+.msgs{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:14px}
+.msg{font:13.5px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:9px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.i{background:var(--okbg);border-left:3px solid var(--blue)}
+.msg.e{background:var(--accbg);border-left:3px solid var(--acc)}
+.msg.p{font-family:"Source Serif 4",serif;font-size:16px;white-space:normal;padding-left:0}
+
+footer.band{padding-block:18px 26px}
+footer{border-top:1px solid var(--line);font:13.5px/1.55 "IBM Plex Sans",sans-serif;color:var(--muted)}
+footer .cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;opacity:.85}
+footer h3{font:600 13.5px/1.3 "IBM Plex Sans",sans-serif;margin:0 0 6px;color:var(--muted)}
+footer p{margin:0 0 6px}
+footer a{color:inherit}
+code{font:.88em "IBM Plex Mono",monospace;overflow-wrap:anywhere}
+@media(max-width:900px){footer .cols{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="band"><div class="wrap">
+<h1>One language, many grammars</h1>
+<p>Bare Grammar (Keenan &amp; Stabler 2003) treats a grammar as data: categories, a lexicon and rules. In this Lean 4 implementation the same language states a linear grammar (English), X-bar theory with GB modules (Turkish), and the workspace-era Minimalist Program (Swahili). Each level below is playable: pick inputs, pick a rule, and the grammar accepts or rejects the step.</p>
+<p class="note">This is a five-level demo that shows the basic capabilities of the system. The full game has not been built yet. If you would rather not play every step yourself, click Solution to see the result.</p>
+<div class="tabs" role="tablist" id="tabs"></div>
+</div></header>
+
+<main class="band"><div class="wrap stage">
+<div class="play">
+  <div class="board" id="pic"></div>
+  <div class="goal" id="goal" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn solid" id="nextLevel" type="button" hidden>Next level</button>
+    <button class="btn" id="undo" type="button">Undo</button>
+    <button class="btn" id="reset" type="button">Start over</button>
+    <button class="btn" id="solve" type="button">Solution</button>
+  </div>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+</div>
+<div class="lead" id="lead"></div>
+</div></main>
+
+<footer class="band"><div class="wrap cols">
+<div>
+<h3>What is running</h3>
+<p>The language is <code>BareSyntax/Basic.lean</code> in <a href="https://github.com/scpsyche123/syntax-game-v2-demo">syntax-game-v2-demo</a>: an expression is a pair ⟨string, category⟩, a rule is a partial function on expressions, and an expression belongs to the language when a derivation of it exists. Rules come in two forms: with a domain given as a list of categories (the linear levels), and with a domain given by a pattern and a decidable condition (the X-bar schema, where X and Y are variables and the head direction is a parameter, and MERGE, where a category is a whole workspace).</p>
+<p>Your browser cannot run Lean, so this page runs a JavaScript simulation of it.</p>
+</div>
+<div>
+<h3>Sources</h3>
+<p>Bobaljik, J. D. (1995). <i>Morphosyntax: The Syntax of Verbal Inflection.</i> PhD thesis, MIT.</p>
+<p>Carstens, V. (2005). Agree and EPP in Bantu. <i>Natural Language &amp; Linguistic Theory</i> 23.</p>
+<p>Chomsky, N. (1957). <i>Syntactic Structures.</i> Mouton.</p>
+<p>Chomsky, N. (1993). A minimalist program for linguistic theory. In K. Hale &amp; S. J. Keyser (eds.), <i>The View from Building 20.</i> MIT Press.</p>
+<p>Chomsky, N. (2013). Problems of projection. <i>Lingua</i> 130.</p>
+<p>Chomsky, N. (2020). <i>The UCLA Lectures.</i> MERGE as quoted in V. J. Pan, <i>Lecture 10: The Minimalist Program</i>, §9.</p>
+<p>Embick, D. &amp; Noyer, R. (2001). Movement operations after syntax. <i>Linguistic Inquiry</i> 32.</p>
+<p>Emonds, J. (1978). The verbal complex V′–V in French. <i>Linguistic Inquiry</i> 9.</p>
+<p>Halle, M. &amp; Marantz, A. (1993). Distributed Morphology and the pieces of inflection. In <i>The View from Building 20.</i></p>
+<p>Keenan, E. &amp; Stabler, E. (2003). <i>Bare Grammar: Lectures on Linguistic Invariants.</i> CSLI.</p>
+<p>Koopman, H. &amp; Sportiche, D. (1991). The position of subjects. <i>Lingua</i> 85.</p>
+<p>Kramer, R. (2015). <i>The Morphosyntax of Gender.</i> Oxford University Press.</p>
+<p>Pollock, J.-Y. (1989). Verb movement, Universal Grammar, and the structure of IP. <i>Linguistic Inquiry</i> 20.</p>
+</div>
+</div></footer>
+
+<script id="engine">
+/* A transcription of BareSyntax (Linear.lean, XBarGB.lean, MP.lean, Tactics.lean messages). */
+const Engine = (() => {
+  const R = (name, posCat, result, build = 'flat') => ({ name, posCat, result, build });
+  const lin = [R('Adv A → A', ['Adv', 'A'], 'A'), R('A N → N', ['A', 'N'], 'N'), R('D N → D', ['D', 'N'], 'D')];
+  const grammars = {
+    'linear₁': { rules: lin },
+    'linear₂': { rules: [...lin, R('D N → N', ['D', 'N'], 'N')] }
+  };
+  /* X-bar schema (variables X, Y over head categories) plus Move α, as a function of parameters
+     (XBarGB.lean: GBParams, xbarSchema). A category may carry a waiting phrase: VP/NP. */
+  const has2 = (xs, x, y) => xs.some(([a, b]) => a === x && b === y);
+  const P = e => { const m = /^([A-Z])(⁰|′|P)/.exec(e.cat); return { x: m[1], b: m[2], m: e.mover || null }; };
+  const out = (str, x, b, mover) => mover ? { str, cat: x + b + '/' + mover.pos + 'P', mover } : { str, cat: x + b };
+  const same = (a, b) => a.length === b.length && a.every((w, i) => w === b[i]);
+  const S = (name, apply, arity) => ({ name, schema: true, apply, arity });
+  function xbarSchema(p) {
+    const caseOK = (as, x, y) => y !== p.nominal || as.includes(x);
+    const headOrder = (h, c) => p.headFinal ? [...c, ...h] : [...h, ...c];
+    const joinTV = (sT, sVP) => {
+      if (p.headFinal) return (sT.length === 1 && sVP.length) ? [...sVP.slice(0, -1), p.attach(sVP[sVP.length - 1], sT[0])] : [...sVP, ...sT];
+      return (sT.length === 1 && sVP.length) ? [p.attach(sVP[0], sT[0]), ...sVP.slice(1)] : [...sT, ...sVP];
+    };
+    const compApply = (h, c) => {
+      const x = P(h), y = P(c);
+      if (x.b !== '⁰' || x.m || y.b !== 'P' || !has2(p.cSel, x.x, y.x) || !caseOK(p.caseC, x.x, y.x)) return null;
+      const cs = (x.x === 'V' && y.x === p.nominal) ? p.acc(c.str) : c.str;
+      return out(x.x === 'T' ? joinTV(h.str, cs) : headOrder(h.str, cs), x.x, '′', y.m);
+    };
+    return [
+      S('X⁰ → X′  [X takes no complement]', ins => {
+        if (ins.length !== 1) return null; const a = P(ins[0]);
+        return a.b === '⁰' && !p.cSel.some(([h]) => h === a.x) ? out(ins[0].str, a.x, '′', a.m) : null; }, 1),
+      S('X′ → XP  [X needs no specifier (EPP: T needs one; θ: V needs its external argument)]', ins => {
+        if (ins.length !== 1) return null; const a = P(ins[0]);
+        return a.b === '′' && !p.epp.includes(a.x) && !p.extTheta.includes(a.x) ? out(ins[0].str, a.x, 'P', a.m) : null; }, 1),
+      S(`YP X′ → XP  [YP is the specifier of X; ${p.argText} that gets no Case there leaves a trace and waits to move]`, ins => {
+        if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
+        if (y.b !== 'P' || x.b !== '′' || y.m || x.m || !has2(p.specs, x.x, y.x)) return null;
+        return caseOK(p.caseS, x.x, y.x) ? out([...ins[0].str, ...ins[1].str], x.x, 'P', null)
+          : out(ins[1].str, x.x, 'P', { str: ins[0].str, pos: y.x }); }, 2),
+      S((p.headFinal ? 'YP X⁰ → X′' : 'X⁰ YP → X′') + `  [X c-selects Y; ${p.argText} needs Case from X; T's suffix joins V]`, ins => {
+        if (ins.length !== 2) return null;
+        return p.headFinal ? compApply(ins[1], ins[0]) : compApply(ins[0], ins[1]); }, 2),
+      S('X′ YP → X′  [YP is an adjunct of X]', ins => {
+        if (ins.length !== 2) return null; const x = P(ins[0]), y = P(ins[1]);
+        if (x.b !== '′' || y.b !== 'P' || x.m || y.m || !has2(p.adjuncts, x.x, y.x)) return null;
+        return out([...ins[0].str, ...ins[1].str], x.x, '′', null); }, 2),
+      S(`Move α: YP X′ → XP  [YP is the phrase waiting inside X′; it lands in the specifier of X, where ${p.argText} needs Case from X]`, ins => {
+        if (ins.length !== 2) return null; const y = P(ins[0]), x = P(ins[1]);
+        if (y.b !== 'P' || x.b !== '′' || y.m || !x.m) return null;
+        if (!same(x.m.str, ins[0].str) || x.m.pos !== y.x || !has2(p.landing, x.x, y.x) || !caseOK(p.caseS, x.x, y.x)) return null;
+        return out([...ins[0].str, ...ins[1].str], x.x, 'P', null); }, 2)
+    ];
+  }
+  const accWordTR = w => ({ 'köpek': 'köpeği', 'kedi': 'kediyi' })[w] || w + 'i';
+  const turkish = { headFinal: true, nominal: 'N', argText: 'an NP', cSel: [['C', 'T'], ['T', 'V'], ['V', 'N']],
+    specs: [['V', 'N']], landing: [['T', 'N']], epp: ['T'], extTheta: ['V'], caseC: ['V'], caseS: ['T'], adjuncts: [],
+    attach: (v, s) => (v === 'gör' && s === '-Iyor') ? 'görüyor' : v + s,
+    acc: ws => ws.length ? [...ws.slice(0, -1), accWordTR(ws[ws.length - 1])] : [] };
+  grammars.xbarTR = { rules: xbarSchema(turkish) };
+  const attachAffix = (v, a) => (v === 'see' && a === '-s') ? 'sees' : v + 's';
+  const builds = {
+    flat: xs => xs.flat(),
+    lower: xs => (xs.length === 2 && xs[0].length === 1 && xs[1].length >= 1)
+      ? [attachAffix(xs[1][0], xs[0][0]), ...xs[1].slice(1)] : xs.flat()
+  };
+  const exprText = e => `⟨${e.str.length ? e.str.join(' ') : '∅'}, ${e.cat}⟩`;
+  const normRuleName = s => s.split('[')[0].replace(/′/g, "'").replace(/⁰/g, '0').replace(/→/g, '->')
+    .split(' ').filter(x => x !== '').join(' ');
+  function findRule(g, typed) {
+    const rs = grammars[g].rules, i = rs.findIndex(r => normRuleName(r.name) === normRuleName(typed));
+    if (i < 0) return { ok: false, msg: `${g} has no rule "${typed}". Its rules are:\n` + rs.map(r => '  ' + r.name).join('\n') };
+    return { ok: true, rule: rs[i], index: i };
+  }
+  const ruleMain = n => n.split('  [')[0];
+  const ruleCond = n => n.includes('[') ? n.split('[')[1].split(']')[0] : '';
+  function applyRule(rule, inputs) {
+    const cats = inputs.map(e => e.cat);
+    if (rule.schema) {
+      const out = rule.apply(inputs);
+      if (!out) return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the pattern on its left-hand side and by its condition: ${ruleCond(rule.name)}.` };
+      return { ok: true, out };
+    }
+    if (cats.length !== rule.posCat.length || cats.some((c, i) => c !== rule.posCat[i]))
+      return { ok: false, msg: `The rule "${ruleMain(rule.name)}" is not defined on inputs of category ${cats.join(', ')}. Its domain is fixed by the categories on its left-hand side.` };
+    return { ok: true, out: { str: builds[rule.build](inputs.map(e => e.str)), cat: rule.result } };
+  }
+
+  /* ---- MP ---- */
+  /* Swahili: m-toto a-ta-lala. n = m- (noun class 1, φ), T = a-ta- (valued φ), v silent. */
+  const LI = {
+    m: { feat: 'n', phi: true, pron: true, prefix: true, text: 'm-' }, toto: { feat: 'root', phi: false, pron: true },
+    ata: { feat: 'T', phi: true, pron: true, prefix: true, text: 'a-ta-' },
+    v: { feat: 'v', phi: false, pron: false }, lala: { feat: 'root', phi: false, pron: true }
+  };
+  const li = x => ({ li: x }), set = (a, b) => ({ set: [a, b] });
+  const key = s => s.li !== undefined ? s.li : '{' + key(s.set[0]) + ',' + key(s.set[1]) + '}';
+  const eq = (a, b) => key(a) === key(b);
+  const terms = s => s.li !== undefined ? [s] : [s, ...terms(s.set[0]), ...terms(s.set[1])];
+  const occDepths = (X, R, d) => (eq(R, X) ? [d] : []).concat(R.set ? [...occDepths(X, R.set[0], d + 1), ...occDepths(X, R.set[1], d + 1)] : []);
+  const lowerCopy = (R, X, d) => occDepths(X, R, 0).some(x => x < d);
+  const feat = s => LI[s.li].feat;
+  function labelAt(R, s, d) {
+    if (s.li !== undefined) return { lab: feat(s), head: s.li };
+    const [a, b] = s.set, la = labelAt(R, a, d + 1), lb = labelAt(R, b, d + 1);
+    const ca = lowerCopy(R, a, d + 1), cb = lowerCopy(R, b, d + 1);
+    if (ca && !cb) return lb;
+    if (cb && !ca) return la;
+    if (a.li !== undefined && b.li !== undefined) {
+      if (feat(a) === 'root' && feat(b) !== 'root') return { lab: feat(b), head: b.li };
+      if (feat(b) === 'root' && feat(a) !== 'root') return { lab: feat(a), head: a.li };
+      return null;
+    }
+    if (a.li !== undefined) return feat(a) !== 'root' ? { lab: feat(a), head: a.li } : null;
+    if (b.li !== undefined) return feat(b) !== 'root' ? { lab: feat(b), head: b.li } : null;
+    const phi = l => !!(l && l.head && LI[l.head].phi);
+    return phi(la) && phi(lb) ? { lab: '⟨φ,φ⟩', head: null } : null;
+  }
+  function allLabeled(R, s, d) {
+    if (s.li !== undefined) return true;
+    const [a, b] = s.set;
+    return labelAt(R, s, d) !== null && (lowerCopy(R, a, d + 1) || allLabeled(R, a, d + 1)) && (lowerCopy(R, b, d + 1) || allLabeled(R, b, d + 1));
+  }
+  const isHead = s => s.li !== undefined && feat(s) !== 'root';
+  const isArg = (R, s, d) => { const l = labelAt(R, s, d); return !!l && l.lab === 'n'; };
+  function linearize(R, s, d) {
+    if (s.li !== undefined) return LI[s.li].pron ? [[s.li, !!LI[s.li].prefix]] : [];
+    const [a, b] = s.set;
+    if (lowerCopy(R, a, d + 1)) return linearize(R, b, d + 1);
+    if (lowerCopy(R, b, d + 1)) return linearize(R, a, d + 1);
+    if (isHead(b) && !isHead(a)) return [...linearize(R, b, d + 1), ...linearize(R, a, d + 1)];
+    if (isArg(R, b, d + 1) && !isArg(R, a, d + 1)) return [...linearize(R, b, d + 1), ...linearize(R, a, d + 1)];
+    return [...linearize(R, a, d + 1), ...linearize(R, b, d + 1)];
+  }
+  /* a prefix joins the next item into one word */
+  function joinPrefixes(xs) {
+    if (!xs.length) return [];
+    const [[w, pre], ...rest] = xs, tail = joinPrefixes(rest);
+    return pre ? (tail.length ? [w + tail[0], ...tail.slice(1)] : [w]) : [w, ...tail];
+  }
+  const ext = (R, s, d) => joinPrefixes(linearize(R, s, d));
+  /* ---- interface conditions at CI (MP.lean: selectionOK, thetaOK, chainsOK) ---- */
+  function occs(s, d) {
+    if (s.li !== undefined) return [];
+    const [a, b] = s.set;
+    return [[a, b, d + 1, s], [b, a, d + 1, s], ...occs(a, d + 1), ...occs(b, d + 1)];
+  }
+  const labelIs = (R, s, d, f) => { const l = labelAt(R, s, d); return !!l && l.lab === f; };
+  const isRoot = s => s.li !== undefined && feat(s) === 'root';
+  const isSet = s => s.set !== undefined;
+  const selects = (R, h, X, d) => ({ T: () => isSet(X) && labelIs(R, X, d, 'v'),
+    n: () => isRoot(X), v: () => isRoot(X), root: () => true })[LI[h].feat]();
+  const selectionOK = R => occs(R, 0).every(([x, y, d]) => x.li === undefined ? true
+    : LI[x.li].feat === 'root' ? (y.li !== undefined && (feat(y) === 'n' || feat(y) === 'v')) : selects(R, x.li, y, d));
+  const minVP = s => isSet(s) && ((eq(s.set[0], li('v')) && isRoot(s.set[1])) || (eq(s.set[1], li('v')) && isRoot(s.set[0])));
+  const pick = (low, xs) => xs.reduce((m, o) => m === null ? o : ((low ? o[2] > m[2] : o[2] < m[2]) ? o : m), null);
+  const thetaOK = R => terms(R).every(X => {
+    const mine = occs(R, 0).filter(o => eq(o[0], X));
+    const first = !mine.length ? true : (isSet(X) && labelIs(R, X, mine[0][2], 'n')) ? (() => { const lo = pick(true, mine); return lo ? minVP(lo[1]) : false; })() : true;
+    return first && (!minVP(X) || mine.some(([, sis, d]) => isSet(sis) && labelIs(R, sis, d, 'n')));
+  });
+  const chainsOK = R => terms(R).every(X => {
+    const mine = occs(R, 0).filter(o => eq(o[0], X));
+    if (new Set(mine.map(o => key(o[3]))).size < 2) return true;
+    const hi = pick(false, mine);
+    return !hi || (isSet(X) && labelIs(R, X, hi[2], 'n') && mine.length === 2 && isSet(hi[1]) && labelIs(R, hi[1], hi[2], 'T'));
+  });
+  const ciMsgs = {
+    selection: 'Narrow syntax is done, but a selection requirement fails: T takes a vP, n and v take a root, and every root needs n or v.',
+    theta: 'Narrow syntax is done, but the θ-criterion fails: the nP must first merge with vP, where v assigns its θ-role.',
+    chain: 'Narrow syntax is done, but a chain is ill-formed: only the nP moves, once, from its θ-position to the specifier of T (Last Resort).' };
+  const ciFail = R => !selectionOK(R) ? 'selection' : !thetaOK(R) ? 'theta' : !chainsOK(R) ? 'chain' : null;
+  const labText = l => l === null ? '?' : (l.lab === 'root' ? '√' : l.lab);
+  const liText = x => LI[x].text || (LI[x].feat === 'root' ? '√' + x : x);
+  function render(R, s, d) {
+    if (s.li !== undefined) return liText(s.li);
+    if (lowerCopy(R, s, d)) return `copy(${labText(labelAt(R, s, d))})`;
+    return `${labText(labelAt(R, s, d))}:{${render(R, s.set[0], d + 1)}, ${render(R, s.set[1], d + 1)}}`;
+  }
+  const renderWS = ws => '[' + ws.map(R => render(R, R, 0)).join(', ') + ']';
+  const erase = (xs, x) => { const i = xs.findIndex(y => eq(y, x)); return i < 0 ? xs : [...xs.slice(0, i), ...xs.slice(i + 1)]; };
+  const has = (xs, x) => xs.some(y => eq(y, x));
+  function mergeWS(P, Q, ws) {
+    if (has(ws, P) && has(erase(ws, P), Q)) return [set(P, Q), ...erase(erase(ws, P), Q)];
+    if (has(ws, Q) && has(terms(Q), P) && !eq(P, Q)) return [set(P, Q), ...erase(ws, Q)];
+    if (has(ws, P) && has(terms(P), Q) && !eq(P, Q)) return [set(P, Q), ...erase(ws, P)];
+    return null;
+  }
+  const undefinedMsg = (p, q) => `MERGE(${p}, ${q}, WS) is undefined: the two objects must both be members of WS (External MERGE), or one must be a term of the other (Internal MERGE).`;
+  function afterMerge(ws, target) {
+    if (ws.length !== 1) return { closed: false, msgs: [] };
+    const R = ws[0];
+    if (!allLabeled(R, R, 0)) return { closed: false, msgs: ['The workspace holds one object, but some node is still unlabeled (shown as ?).'] };
+    const ci = ciFail(R);
+    if (ci) return { closed: false, msgs: [ciMsgs[ci]] };
+    const out = ext(R, R, 0);
+    if (out.join(' ') !== target.join(' ')) return { closed: false, msgs: [`Narrow syntax is done, but externalization gives “${out.join(' ')}”, not “${target.join(' ')}”.`] };
+    return { closed: true, msgs: [`Converged. Externalization: “${out.join(' ')}”.`] };
+  }
+  /* references, as typed in Lean: `the`, `DP`, `{DP, vP}` */
+  function occurrences(ws) {
+    const out = [];
+    ws.forEach(R => { const go = (s, d) => { out.push([R, s, d]); if (s.set) { go(s.set[0], d + 1); go(s.set[1], d + 1); } }; go(R, 0); });
+    return out;
+  }
+  const dedup = xs => xs.reduce((acc, x) => has(acc, x) ? acc : [...acc, x], []);
+  function parseRef(t) {
+    t = t.trim();
+    if (t.startsWith('{')) { const inner = t.slice(1, -1); let depth = 0, cut = -1;
+      for (let i = 0; i < inner.length; i++) { if (inner[i] === '{') depth++; if (inner[i] === '}') depth--; if (inner[i] === ',' && depth === 0) { cut = i; break; } }
+      return { pair: [parseRef(inner.slice(0, cut)), parseRef(inner.slice(cut + 1))] }; }
+    return { name: t };
+  }
+  const refText = r => r.name !== undefined ? r.name : `{${refText(r.pair[0])}, ${refText(r.pair[1])}}`;
+  function resolve(ws, r) {
+    if (r.name !== undefined) {
+      const s = r.name;
+      if (LI[s]) return occurrences(ws).some(([, o]) => eq(o, li(s))) ? { ok: true, so: li(s) } : { ok: false, msg: `There is no \`${s}\` in the workspace.` };
+      const hits = dedup(occurrences(ws).filter(([R, o, d]) => o.set && (() => { const l = labelAt(R, o, d); return l && l.lab !== '⟨φ,φ⟩' && labText(l) + 'P' === s; })()).map(x => x[1]));
+      if (hits.length === 1) return { ok: true, so: hits[0] };
+      if (!hits.length) return { ok: false, msg: `There is no \`${s}\` in the workspace (no object labeled ${s.slice(0, -1)}).` };
+      return { ok: false, msg: `\`${s}\` is ambiguous: more than one object in the workspace has that label.` };
+    }
+    const A = resolve(ws, r.pair[0]); if (!A.ok) return A;
+    const B = resolve(ws, r.pair[1]); if (!B.ok) return B;
+    const hits = dedup(occurrences(ws).map(x => x[1]).filter(o => eq(o, set(A.so, B.so)) || eq(o, set(B.so, A.so))));
+    return hits.length === 1 ? { ok: true, so: hits[0] } : { ok: false, msg: `There is no object {${refText(r.pair[0])}, ${refText(r.pair[1])}} in the workspace.` };
+  }
+  /* run a Lean-style MP command on a workspace */
+  function mpCommand(ws, cmd, target) {
+    const m = /^select (.*)$/.exec(cmd);
+    if (m) return { ok: true, ws: [...ws, ...m[1].split(/\s+/).map(li)], msgs: [] };
+    const rest = cmd.replace(/^merge /, '');
+    let depth = 0, cut = -1;
+    for (let i = 0; i < rest.length; i++) { if (rest[i] === '{') depth++; if (rest[i] === '}') depth--; if (rest[i] === ' ' && depth === 0) { cut = i; break; } }
+    const rp = parseRef(rest.slice(0, cut)), rq = parseRef(rest.slice(cut + 1));
+    const P = resolve(ws, rp); if (!P.ok) return { ok: false, msg: P.msg };
+    const Q = resolve(ws, rq); if (!Q.ok) return { ok: false, msg: Q.msg };
+    const ws2 = mergeWS(P.so, Q.so, ws);
+    if (!ws2) return { ok: false, msg: undefinedMsg(refText(rp), refText(rq)) };
+    const a = afterMerge(ws2, target);
+    return { ok: true, ws: ws2, msgs: a.msgs, closed: a.closed };
+  }
+  return { grammars, findRule, applyRule, exprText, normRuleName, LI, li, set, eq, key, terms, labelAt, lowerCopy,
+    labText, liText, render, renderWS, mergeWS, undefinedMsg, afterMerge, resolve, parseRef, mpCommand, ext, allLabeled, isHead, isArg, ciFail };
+})();
+if (typeof module !== 'undefined') module.exports = Engine;
+</script>
+
+<script>
+{
+const E = Engine;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const LEVELS = [
+ { id: 'linear', kind: 'sentence', g: 'linear₁', name: 'A linear grammar', era: 'Build it',
+   words: [['a', 'D'], ['very', 'Adv'], ['good', 'A'], ['day', 'N']], goal: 'D',
+   lead: '<h2>A linear grammar</h2><p>Build <i>a very good day</i> as a D. Click neighbouring pieces of the sentence, then click a rule. The rule decides whether it applies and computes the result.</p>',
+   solution: [[0, ['very', 'good']], [1, ['very good', 'day']], [2, ['a', 'very good day']]],
+   done: 'Three rule applications. Nothing about linear grammar is built into the language: the next levels change only the data.' },
+ { id: 'not-in-language', kind: 'sentence', g: 'linear₁', name: 'Not in the language', era: 'Cannot be cleared', impossible: true,
+   words: [['a', 'D'], ['very', 'Adv'], ['day', 'N']], goal: 'D',
+   lead: '<h2>Not in the language</h2><p>Same grammar. Try to build <i>a very day</i> as a D. This level cannot be cleared: every grouping of neighbours, with every rule, is rejected.</p>',
+   why: '*very* is an Adv. The only rule that takes an Adv is Rule 1, Adv A → A, and it needs an A right after it; here *very* is followed by *day*, an N. No rule takes D and Adv either. So *very* can never join anything, and *a very day* is not in L(linear₁). (This page does not prove that; it lets you check every move.)',
+   done: '' },
+ { id: 'overgeneration', kind: 'sentence', g: 'linear₂', name: 'Too strong', era: 'Overgeneration', rules: [3],
+   words: [['a', 'D'], ['a', 'D'], ['the', 'D'], ['this', 'D'], ['dog', 'N']], goal: 'N',
+   lead: '<h2>A grammar that says too much</h2><p><code>linear₂</code> adds three words and one rule, Rule 4: D N → N. It looks harmless, but its output is an N and it also takes an N. Build <i>a a the this dog</i> as an N, using only Rule 4.</p>',
+   solution: [[3, ['this', 'dog']], [3, ['the', 'this dog']], [3, ['a', 'the this dog']], [3, ['a', 'a the this dog']]],
+   done: ['Derived, and that is the problem. *a a the this dog* is not an expression of English, yet linear₂ derives it, so the rule is too strong. Rule 4 takes an N and returns an N, so it can apply again and again.',
+     'Suppose instead we keep only Rule 3, D N → D, and set the goal to D. Then *this dog* becomes a D, no rule applies after that, and *a a the this dog* cannot be derived. That is the result we want. Failing to derive is also a good result: a good model should not allow more than the natural language does.'] },
+ { id: 'xbar-gb', kind: 'free', g: 'xbarTR', name: 'X-bar theory with GB', era: 'Principles and parameters',
+   lexicon: [['kedi', 'N⁰', 'cat'], ['köpek', 'N⁰', 'dog'], ['gör', 'V⁰', 'see'], ['-Iyor', 'T⁰', 'PROG'], ['', 'C⁰', 'silent complementizer']], goal: { str: ['kedi', 'köpeği', 'görüyor'], cat: 'CP' },
+   arrow: { from: 'T⁰', to: 'V⁰', label: 'suffix lowering' },
+   lead: '<h2>X-bar theory with GB: Turkish</h2><p class="gloss"><i>Kedi köpeği görüyor.</i><br>kedi köpeğ-i gör-üyor<br>cat dog-ACC see-PROG<br>‘The cat sees the dog.’</p><p>Categories are pairs of head and bar level. The rules are the X-bar schema, five rules with variables X and Y over head categories, and Move α. They are a function of parameters: English and Turkish are two settings of it. Turkish is head-final, so Rule 4 is YP X⁰ → X′: the complement comes before its head (English: X⁰ YP → X′).</p><p>GB enters as conditions on the rules’ domains: c-selection (C selects TP, T selects VP, V selects NP; Turkish has no articles, so the nominal arguments here are NPs); Case (V assigns accusative to its complement, spelled -I: köpek → köpeği; finite T assigns nominative to its specifier); EPP (T needs a specifier); θ (V assigns an external θ-role, so VP needs its subject). C is empty. This fragment has no adjuncts, so Rule 5 never applies here.</p><p>The subject is merged in the specifier of VP (Koopman &amp; Sportiche 1991). V gives it no Case, so it leaves a trace and waits. Move α puts it in the specifier of TP: click the subject inside the tree, then T′, then Rule 6.</p><p>Click the inputs (words in the lexicon or nodes in the trees), then a rule.</p>',
+   solution: [[0, ['kedi|N⁰']], [1, ['kedi|N′']], [0, ['köpek|N⁰']], [1, ['köpek|N′']],
+     [3, ['köpek|NP', 'gör|V⁰']], [2, ['kedi|NP', 'köpeği gör|V′']], [3, ['köpeği gör|VP/NP|kedi', '-Iyor|T⁰']],
+     [5, ['kedi|NP', 'köpeği görüyor|T′/NP|kedi']], [3, ['kedi köpeği görüyor|TP', '|C⁰']], [1, ['kedi köpeği görüyor|C′']]],
+   done: ['Ten rule applications, one of them Move α: the subject was merged in the specifier of VP, where V gives it no Case, and moved to the specifier of TP, where finite T assigns nominative. It left the trace tᵢ. In a head-final language this movement does not change the word order — the subject comes first either way — but the grammar still requires it.',
+     'The arrow shows suffix lowering: the suffix *-Iyor* in T⁰ joins the verb in V⁰ (gör + -Iyor = görüyor, by vowel harmony). This is not the only analysis. In a head-final language V and T are adjacent, so lowering the suffix and raising the verb to T give the same string. For English, Chomsky (1957) has Affix Hopping, a transformation; Emonds (1978) and Pollock (1989) have the finite verb raise to T in French; in Chomsky (1993) the verb comes from the lexicon already inflected and checks its features against T; Bobaljik (1995) joins tense and verb under adjacency at PF; in Distributed Morphology lowering is an operation after syntax (Halle & Marantz 1993; Embick & Noyer 2001). Here joining is a property of one rule: a different analysis changes that rule, not the language.'] },
+ { id: 'mp', kind: 'mp', name: 'Minimalist Program', era: 'Workspace era', target: ['mtoto', 'atalala'],
+   glosses: { m: 'CL1 (noun class 1)', toto: 'child', ata: '1SM-FUT', v: 'silent light verb', lala: 'sleep' },
+   lead: '<h2>The Minimalist Program: Swahili</h2><p class="gloss"><i>Mtoto atalala.</i><br>m-toto a-ta-lala<br>1-child 1SM-FUT-sleep<br>‘The child will sleep.’</p><p>The class-1 prefix m- is n: noun class is a φ-feature on n. T is a-ta-: the future -ta- with the class-1 subject marker a- (Agree is not modeled, so T’s φ counts as valued). v is silent.</p><p>Here an expression is a workspace, and MERGE(P, Q, WS) = [{P, Q}, …] replaces P and Q by the set {P, Q} (Chomsky 2020). External MERGE takes two members of WS; Internal MERGE takes an object inside another: click a node inside a tree and the object that contains it. Labels come from a labeling algorithm after Chomsky 2013; <b>?</b> marks a node with no label. MERGE is free, but the finished object must meet conditions at the interface: selection (T takes vP, n and v take a root), the θ-criterion (the subject nP first merges with vP), and chains (only the subject moves, once, to the specifier of T). Draw the items into WS, click two objects, then MERGE. Word order, which copy is pronounced, and the joining of prefixes are checked automatically.</p>',
+   solution: ['select m toto ata v lala', 'merge m toto', 'merge v lala', 'merge nP vP', 'merge ata {nP, vP}', 'merge nP TP'],
+   done: 'The subject has to start in vP (θ-criterion), but there {nP, vP} has no label: n carries φ (noun class 1), v does not. Internal MERGE to the specifier of T solves it: the lower nP is a copy, invisible to labeling, so that node is labeled v, and the new root {nP, TP} is labeled ⟨φ,φ⟩ — the class-1 φ of m- and of the subject marker a-. Only the higher copy is pronounced, and the prefixes join their words: mtoto atalala.' }
+];
+
+let cur = 0, st = null, playing = false;
+const solved = new Set();
+const L = () => LEVELS[cur];
+const off = () => st.closed || playing;
+
+function initState(lv) {
+  if (lv.kind === 'sentence') return { pieces: lv.words.map(([w, c]) => ({ str: [w], cat: c, tree: { cat: c, kids: [{ word: w, kids: [] }] } })), sel: [], hist: [], msgs: [], closed: false, tries: 0 };
+  if (lv.kind === 'free') return { derived: [], sel: [], hist: [], msgs: [], fresh: null, closed: false };
+  return { ws: [], sel: [], hist: [], msgs: [], fresh: null, closed: false };
+}
+const snapshot = () => JSON.stringify({ ...st, hist: [], msgs: [] });
+function push() { st.hist.push(snapshot()); }
+function finish() { st.closed = true; solved.add(cur); [].concat(L().done || []).forEach(t => st.msgs.push({ t, k: 'p' })); }
+
+/* ---------- actions ---------- */
+function applySentence(ri) {
+  const lv = L(), rule = E.grammars[lv.g].rules[ri];
+  const idx = [...st.sel].sort((a, b) => a - b);
+  if (!idx.length) return say('Select the pieces to combine first: click them in the tree.', 'p');
+  if (idx.some((x, i) => i && x !== idx[i - 1] + 1)) {
+    st.tries++;
+    return say(`“${idx.map(i => st.pieces[i].str.join(' ')).join('” and “')}” are not next to each other in the sentence, so a rule that joins them cannot help build it.`, 'p');
+  }
+  const r = E.applyRule(rule, idx.map(i => st.pieces[i]));
+  if (!r.ok) { st.tries++; return say(r.msg, 'e'); }
+  push();
+  const node = { str: r.out.str, cat: r.out.cat, tree: { cat: r.out.cat, kids: idx.map(i => st.pieces[i].tree) } };
+  st.pieces.splice(idx[0], idx.length, node);
+  st.sel = []; st.msgs = [];
+  if (st.pieces.length === 1 && node.cat === lv.goal) finish();
+  draw();
+}
+const keyOf = e => e.str.join(' ') + '|' + e.cat + (e.mover ? '|' + e.mover.str.join(' ') : '');
+const allExprs = () => [...L().lexicon.map(([w, c]) => ({ str: w ? [w] : [], cat: c, lex: true })), ...st.derived];
+const keyOfId = id => id.slice(id.indexOf('#') + 1);
+const rootsOf = () => { const used = new Set(st.derived.flatMap(d => d.ins)); return st.derived.filter(d => !used.has(keyOf(d))); };
+function applyFree(ri) {
+  const lv = L(), rule = E.grammars[lv.g].rules[ri];
+  if (!st.sel.length) return say('Select the inputs first: click words in the lexicon or nodes in the trees.', 'p');
+  const pool = allExprs();
+  /* a one-input rule with two selected: use the one clicked last */
+  const ids = (rule.arity === 1 && st.sel.length === 2) ? [st.sel[1]] : st.sel;
+  let ins = ids.map(id => pool.find(e => keyOf(e) === keyOfId(id)));
+  let r = E.applyRule(rule, ins);
+  if (!r.ok && ins.length === 2) {
+    /* the rule's left-hand side fixes the order of its two inputs */
+    const r2 = E.applyRule(rule, [ins[1], ins[0]]);
+    if (r2.ok) { r = r2; ins = [ins[1], ins[0]]; }
+  }
+  if (!r.ok) return say(r.msg, 'e');
+  if (pool.some(e => keyOf(e) === keyOf(r.out))) { st.sel = []; draw(); return say(`You already have ${r.out.str.join(' ')} : ${r.out.cat}.`, 'p'); }
+  push();
+  st.derived.push({ ...r.out, ins: ins.map(keyOf), ri });
+  st.sel = []; st.msgs = [];
+  if (keyOf(r.out) === keyOf(lv.goal)) finish();
+  draw();
+}
+function selectLI(x) { push(); st.ws = [...st.ws, E.li(x)]; st.sel = []; st.msgs = []; draw(); }
+function soAt(path) { let s = st.ws[path[0]]; for (const i of path.slice(1)) s = s.set[i]; return s; }
+function nameOf(path) {
+  const R = st.ws[path[0]], s = soAt(path);
+  if (s.li !== undefined) return s.li;
+  const l = E.labelAt(R, s, path.length - 1);
+  if (l && l.lab !== '⟨φ,φ⟩') return E.labText(l) + 'P';
+  return `{${nameOf([...path, 0])}, ${nameOf([...path, 1])}}`;
+}
+function setWS(ws2, msgs, closed) {
+  st.ws = ws2; st.sel = [];
+  st.msgs = msgs.map(t => ({ t, k: 'i' }));
+  if (closed) finish();
+}
+function doMerge() {
+  if (st.sel.length !== 2) return say('Click two objects in the workspace first.', 'p');
+  const [p, q] = st.sel.map(k => k.split('.').map(Number));
+  const ws2 = E.mergeWS(soAt(p), soAt(q), st.ws);
+  if (!ws2) return say(E.undefinedMsg(nameOf(p), nameOf(q)), 'e');
+  push();
+  const a = E.afterMerge(ws2, L().target);
+  setWS(ws2, a.msgs, a.closed);
+  draw();
+}
+function say(t, k) { st.msgs = [{ t, k }]; drawMsgs(); }
+
+/* ---------- solution replay ---------- */
+function solve() {
+  const lv = L(); if (!lv.solution || playing) return;
+  st = initState(lv); playing = true; draw();
+  let i = 0;
+  const tick = () => {
+    if (i >= lv.solution.length) { playing = false; draw(); return; }
+    const s = lv.solution[i++];
+    if (lv.kind === 'sentence') {
+      const [ri, strs] = s, start = st.pieces.findIndex((p, j) => strs.every((w, k) => st.pieces[j + k] && st.pieces[j + k].str.join(' ') === w));
+      st.sel = strs.map((_, k) => start + k); applySentence(ri);
+    } else if (lv.kind === 'free') {
+      const [ri, keys] = s; st.sel = keys.map(k => 'S#' + k); applyFree(ri);
+    } else {
+      const r = E.mpCommand(st.ws, s, lv.target);
+      push(); setWS(r.ws, r.msgs || [], r.closed); draw();
+    }
+    setTimeout(tick, 750);
+  };
+  setTimeout(tick, 400);
+}
+
+/* ---------- trees ---------- */
+const ROW = 54; let GAP = 80;
+const leaves = t => t.kids.length ? t.kids.reduce((a, c) => a + leaves(c), 0) : 1;
+function layout(t, x0, depth, out) {
+  if (!t.kids.length) { t.x = x0 + GAP / 2; t.y = depth; out.d = Math.max(out.d, depth); return x0 + GAP; }
+  let x = x0; t.kids.forEach(c => x = layout(c, x, depth + 1, out));
+  t.x = (t.kids[0].x + t.kids[t.kids.length - 1].x) / 2; t.y = depth; out.d = Math.max(out.d, depth); return x;
+}
+function sink(t, max) { if (!t.kids.length) { t.y = max; return; } t.kids.forEach(c => sink(c, max)); }
+function drawForest(trees, o) {
+  const out = { d: 0 }; let x = o.pad;
+  const nl = trees.reduce((a, t) => a + leaves(t), 0), room = o.avail - 2 * o.pad - (trees.length - 1) * o.sep;
+  GAP = Math.max(52, Math.min(80, room / Math.max(nl, 1)));
+  trees.forEach(t => { x = layout(t, x, 0, out) + o.sep; });
+  if (o.baseline) trees.forEach(t => sink(t, out.d));
+  const W = Math.max(x - o.sep + o.pad, 160), H = out.d * ROW + 36;
+  let g = '';
+  const edges = t => t.kids.forEach(c => { g += `<path class="edge" d="M${t.x} ${t.y * ROW + 28} L${c.x} ${c.y * ROW + 10}"/>`; edges(c); });
+  trees.forEach(edges);
+  const node = t => {
+    const y = t.y * ROW + 22, txt = t.word !== undefined ? t.word : t.cat;
+    const bw = Math.max(40, txt.length * 9 + 18), bh = 26;
+    let inner = '';
+    if (t.k !== undefined) inner += `<rect class="hit" x="${t.x - bw / 2}" y="${y - 18}" width="${bw}" height="${bh}" rx="5"/>`;
+    const cls = t.word !== undefined ? (t.copy ? 'copy' : 'word') : (t.cat === '?' ? 'q' : 'cat');
+    inner += `<text class="${cls}" x="${t.x}" y="${y}" text-anchor="middle">${esc(txt)}</text>`;
+    if (t.badge) inner += `<text class="badge" x="${t.x + bw / 2 + 4}" y="${y - 8}">${t.badge}</text>`;
+    g += t.k !== undefined ? `<g data-k="${esc(t.k)}" class="${t.sel ? 'sel' : ''}" role="button" tabindex="0" aria-pressed="${!!t.sel}" aria-label="${esc(t.aria || txt)}">${inner}</g>` : inner;
+    t.kids.forEach(node);
+  };
+  trees.forEach(node);
+  if (o.arrows && o.arrows.length) {
+    const all = [], walk = t => { all.push(t); t.kids.forEach(walk); }; trees.forEach(walk);
+    const pick = (spec, side) => all.find(t => {
+      if (spec[side + 'Cat'] !== undefined && t.cat === spec[side + 'Cat']) return true;
+      if (spec[side + 'Word'] !== undefined && t.word === spec[side + 'Word']) return true;
+      if (spec[side + 'CatSuffix'] !== undefined && t.cat && t.cat.endsWith(spec[side + 'CatSuffix'])) return true;
+      return false;
+    });
+    g += `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M0 0 L10 5 L0 10z"/></marker><marker id="mh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="mhead" d="M0 0 L10 5 L0 10z"/></marker></defs>`;
+    o.arrows.forEach(spec => {
+      const A = spec.fromNode || pick(spec, 'from'), B = spec.toNode || pick(spec, 'to');
+      if (!A || !B) return;
+      const dir = B.x >= A.x ? 1 : -1;
+      if (spec.kind === 'move') {
+        /* Connect the original trace to the landing NP, not just nearby category text.
+           Both endpoints sit beside their labels, within the same derivation tree. */
+        const x1 = A.x + 16 * dir, y1 = A.y * ROW + 16;
+        const x2 = B.x - 22 * dir, y2 = B.y * ROW + 16;
+        const cx1 = x1 + 20 * dir, cy1 = y1 - 28;
+        const cx2 = x2 - 20 * dir, cy2 = y2 + 28;
+        const lx = (x1 + x2) / 2 - 20 * dir, ly = (y1 + y2) / 2 - 16;
+        g += `<path class="move" d="M${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}" marker-end="url(#mh)"/>` +
+          `<text class="movelab" x="${lx}" y="${ly}" text-anchor="middle">${esc(spec.label)}</text>`;
+      } else {
+        const x1 = A.x + 12 * dir, y1 = A.y * ROW + 22, x2 = B.x - 16 * dir, y2 = B.y * ROW + 16;
+        g += `<path class="lower" d="M${x1} ${y1} C ${A.x + 30 * dir} ${(A.y + 1) * ROW + 14}, ${x2 - 30 * dir} ${y2 - 4}, ${x2} ${y2}" marker-end="url(#ah)"/>` +
+          `<text class="lowlab" x="${B.x - 20 * dir}" y="${y2 + 22}" text-anchor="${dir > 0 ? 'end' : 'start'}">${esc(spec.label)}</text>`;
+      }
+    });
+  }
+  if (o.ws) g += `<path class="bracket" d="M10 4 h-6 v${H - 8} h6 M${W - 10} 4 h6 v${H - 8} h-6"/>`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(o.aria)}">${g}</svg>`;
+}
+const clone = t => ({ ...t, kids: t.kids.map(clone) });
+function markPiece(t, k, aria) { t.k = k; t.aria = aria; t.kids.forEach(c => markPiece(c, k, aria)); }
+function mpTree(R, s, d, path) {
+  const k = path.join('.'), n = st.sel.indexOf(k);
+  const base = { k, sel: n >= 0, badge: n >= 0 ? (n ? 'Q' : 'P') : '' };
+  if (s.li !== undefined) return { ...base, word: E.liText(s.li), kids: [] };
+  if (E.lowerCopy(R, s, d)) return { word: `copy(${E.labText(E.labelAt(R, s, d))})`, copy: true, kids: [] };
+  const [a, b] = s.set, ka = mpTree(R, a, d + 1, [...path, 0]), kb = mpTree(R, b, d + 1, [...path, 1]);
+  const swap = (E.isHead(b) && !E.isHead(a)) || (E.isArg(R, b, d + 1) && !E.isArg(R, a, d + 1));
+  return { ...base, cat: E.labText(E.labelAt(R, s, d)), kids: swap ? [kb, ka] : [ka, kb] };
+}
+
+/* ---------- the board: trees, then the clickable rules in the same box ---------- */
+function rulesRow(lv, dis) {
+  const rs = E.grammars[lv.g].rules, show = lv.rules || rs.map((_, i) => i);
+  return '<div class="tools"><span class="lab">Rules</span>' + show.map(i => {
+    const main = rs[i].name.split('  [')[0];
+    return `<button class="item" type="button" data-r="${i}"${dis}><span class="rn">Rule ${i + 1}</span>${esc(main)}</button>`; }).join('') + '</div>';
+}
+function drawPic() {
+  const lv = L(), box = document.getElementById('pic'), avail = Math.max(260, box.clientWidth - 20), dis = off() ? ' disabled' : '';
+  let h = '';
+  if (lv.kind === 'sentence') {
+    const trees = st.pieces.map((p, i) => {
+      const t = clone(p.tree); markPiece(t, 'p' + i, `${p.str.join(' ')}, ${p.cat}`); t.sel = st.sel.includes(i); return t;
+    });
+    h = `<div class="cap">The sentence. Click neighbouring pieces to select them, then a rule.</div>` + rulesRow(lv, dis) + `<div class="treebox">${drawForest(trees, { pad: 6, sep: 18, avail, baseline: true, aria: 'Sentence pieces' })}</div>`;
+  } else if (lv.kind === 'free') {
+    const pool = allExprs(), find = x => pool.find(y => keyOf(y) === x);
+    const shown = c => c.replace(/\/.*$/, '');
+    /* moved: key of the phrase that Move α took out of this subtree; it is drawn there as tᵢ */
+    const build = (e, id, moved, mark) => {
+      const k = keyOf(e), base = { k: id + '#' + k, sel: st.sel.includes(id + '#' + k), aria: `${e.str.join(' ') || '∅'}, ${shown(e.cat)}` };
+      if (e.lex) return { ...base, cat: e.cat + (mark || ''), moveTo: !!mark, kids: [{ word: e.str[0] || '∅', kids: [] }] };
+      if (e.ri === 5) return { ...base, cat: shown(e.cat), kids: [build(find(e.ins[0]), id + '.0', null, 'ᵢ'), build(find(e.ins[1]), id + '.1', e.ins[0])] };
+      return { ...base, cat: shown(e.cat) + (mark || ''), moveTo: !!mark, kids: e.ins.map((x, j) =>
+        (moved && x === moved && e.mover && j === 0 && e.ri === 2) ? { word: 'tᵢ', moveFrom: true, kids: [] } : build(find(x), id + '.' + j, moved)) };
+    };
+    const roots = rootsOf().map((d, i) => build(d, 'T' + i));
+    const treeHas = (t, pred) => pred(t) || t.kids.some(c => treeHas(c, pred));
+    const arrows = [];
+    if (roots.some(t => treeHas(t, n => n.cat === 'T⁰') && treeHas(t, n => n.cat === 'V⁰'))) arrows.push({ kind: 'lower', fromCat: 'T⁰', toCat: 'V⁰', label: 'suffix lowering' });
+    const findNode = (t, pred) => pred(t) ? t : t.kids.map(c => findNode(c, pred)).find(Boolean);
+    roots.forEach(t => {
+      const fromNode = findNode(t, n => n.moveFrom), toNode = findNode(t, n => n.moveTo);
+      if (fromNode && toNode) arrows.push({ kind: 'move', fromNode, toNode, label: 'Move α' });
+    });
+    h = `<div class="tools" style="padding-top:12px"><span class="lab">Lexicon</span>` +
+      lv.lexicon.map(([w, c, gloss]) => { const id = 'L#' + w + '|' + c, on = st.sel.includes(id);
+        return `<button class="item lexeme" type="button" data-e="${esc(id)}" aria-pressed="${on}"${dis}><span class="lex-main">${esc(w || '∅')} <span class="c">${esc(c)}</span></span><span class="lex-gloss">${esc(gloss)}</span></button>`; }).join('') +
+      `</div>` + rulesRow(lv, dis) +
+      (roots.length ? `<div class="treebox">${drawForest(roots, { pad: 4, sep: 18, avail, aria: 'Derivation trees', arrows })}</div>`
+        : `<div class="empty">Nothing built yet. Click an item in the lexicon, then a rule.</div>`);
+  } else {
+    const items = st.ws.map((R, i) => mpTree(R, R, 0, [i]));
+    const pq = st.sel.map(k => nameOf(k.split('.').map(Number)));
+    h = `<div class="cap">The workspace WS. Click two objects, then MERGE.</div>` +
+      '<div class="tools"><span class="lab">Select</span>' +
+      ['m', 'toto', 'ata', 'v', 'lala'].map(x => `<button class="item lexeme" type="button" data-li="${x}"${dis}><span class="lex-main">${esc(E.liText(x))}</span><span class="lex-gloss">${esc(lv.glosses[x])}</span></button>`).join('') +
+      `<span class="brk"></span><span class="lab">Rule</span><button class="item" type="button" id="mergeBtn"${dis}><span class="rn">MERGE</span>(${esc(pq[0] || 'P')}, ${esc(pq[1] || 'Q')}, WS)</button></div>` +
+      (items.length ? `<div class="treebox">${drawForest(items, { pad: 18, sep: 28, avail, ws: true, aria: 'Workspace' })}</div>` : `<div class="empty">WS = [ ]. Draw lexical items into it with Select.</div>`);
+  }
+  box.innerHTML = h;
+}
+
+/* ---------- goal strip with the automatic check ---------- */
+function check() {
+  const lv = L();
+  if (lv.impossible) return { cls: 'gray', st: 'Cannot be cleared' };
+  if (st.closed) return { cls: 'done', st: '✓ Cleared' };
+  if (lv.kind === 'sentence') {
+    const n = st.pieces.length, p = st.pieces[0];
+    return { st: n > 1 ? `Not yet: ${n} pieces` : `Not yet: this is ${p.str.join(' ')} : ${p.cat}` };
+  }
+  if (lv.kind === 'free') return { st: 'Not yet' };
+  const n = st.ws.length;
+  if (!n) return { st: 'Not yet: WS is empty' };
+  if (n > 1) return { st: `Not yet: ${n} objects in WS` };
+  const R = st.ws[0];
+  if (!E.allLabeled(R, R, 0)) return { st: 'Not yet: a node has no label' };
+  const ci = E.ciFail(R);
+  return { st: ci ? 'Not yet: ' + { selection: 'selection fails', theta: 'θ-criterion fails', chain: 'a chain is ill-formed' }[ci] : 'Not yet: wrong word order' };
+}
+function drawGoal() {
+  const lv = L(), el = document.getElementById('goal'), c = check();
+  const text = lv.kind === 'sentence' ? `${lv.words.map(w => w[0]).join(' ')} : ${lv.goal}`
+    : lv.kind === 'free' ? `${lv.goal.str.join(' ')} : ${lv.goal.cat}`
+    : `one object in WS, every node labeled, the interface conditions met, pronounced “${lv.target.join(' ')}”`;
+  el.className = 'goal' + (c.cls ? ' ' + c.cls : '');
+  el.innerHTML = `<b>Goal</b><span>${esc(text)}</span><span class="st">${esc(c.st)}</span>`;
+}
+function drawMsgs() {
+  const lv = L();
+  const prose = t => esc(t).replace(/\*([^*]+)\*/g, '<i>$1</i>');
+  let m = st.msgs.map(x => `<div class="msg ${x.k}">${x.k === 'p' ? prose(x.t) : esc(x.t)}</div>`).join('');
+  if (lv.why && !st.closed) m += st.showWhy ? `<div class="msg p">${prose(lv.why)}</div>` : `<button class="btn" type="button" id="whyBtn">${st.tries >= 3 ? 'Why does nothing work?' : 'Why can’t it be built?'}</button>`;
+  document.getElementById('msgs').innerHTML = m;
+  document.getElementById('nextLevel').hidden = !((st.closed || lv.impossible) && !playing && cur < LEVELS.length - 1);
+  document.getElementById('undo').disabled = !st.hist.length || playing;
+  document.getElementById('reset').disabled = playing;
+  const sb = document.getElementById('solve'); sb.hidden = !lv.solution; sb.disabled = playing;
+  document.querySelectorAll('.tab').forEach((b, i) => { b.setAttribute('aria-selected', i === cur); b.querySelector('.tick').textContent = solved.has(i) ? '✓' : ''; });
+}
+function draw() { drawPic(); drawGoal(); drawMsgs(); }
+function showLevel(i) {
+  cur = i; st = initState(L());
+  document.getElementById('lead').innerHTML = L().lead;
+  try { history.replaceState(null, '', '#' + L().id); } catch (e) {}
+  draw();
+}
+
+/* ---------- events ---------- */
+document.getElementById('tabs').innerHTML = LEVELS.map((lv, i) => `<button class="tab${lv.impossible ? ' gray' : ''}" role="tab" type="button" data-i="${i}" aria-label="Level ${i + 1}${lv.impossible ? ', cannot be cleared' : ''}">${i + 1}<span class="tick" aria-hidden="true"></span></button>`).join('');
+document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b && !playing) showLevel(+b.dataset.i); });
+function toggleSel(k, max) {
+  if (off()) return;
+  const i = st.sel.indexOf(k);
+  if (i >= 0) st.sel.splice(i, 1); else { st.sel.push(k); if (max && st.sel.length > max) st.sel.shift(); }
+  st.msgs = []; draw();
+}
+document.getElementById('pic').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (b) {
+    if (off()) return;
+    if (b.dataset.e !== undefined) toggleSel(b.dataset.e, 2);
+    else if (b.dataset.r !== undefined) (L().kind === 'sentence' ? applySentence : applyFree)(+b.dataset.r);
+    else if (b.dataset.li !== undefined) selectLI(b.dataset.li);
+    else if (b.id === 'mergeBtn') doMerge();
+    return;
+  }
+  const g = e.target.closest('[data-k]'); if (!g) return;
+  const k = g.dataset.k, kind = L().kind;
+  if (kind === 'sentence') toggleSel(+k.slice(1)); else toggleSel(k, 2);
+});
+document.getElementById('pic').addEventListener('keydown', e => {
+  const g = e.target.closest && e.target.closest('[data-k]');
+  if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); g.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+});
+document.getElementById('msgs').addEventListener('click', e => {
+  if (e.target.id === 'whyBtn') { st.showWhy = true; drawMsgs(); }
+});
+document.getElementById('undo').addEventListener('click', () => { if (!st.hist.length) return; const h = st.hist.slice(0, -1), prev = JSON.parse(st.hist[st.hist.length - 1]); st = { ...prev, hist: h, msgs: [] }; draw(); });
+document.getElementById('reset').addEventListener('click', () => { st = initState(L()); draw(); });
+document.getElementById('solve').addEventListener('click', solve);
+document.getElementById('nextLevel').addEventListener('click', () => { if (cur < LEVELS.length - 1) { showLevel(cur + 1); document.getElementById('tabs').scrollIntoView({ block: 'nearest' }); } });
+let lastW = 0;
+new ResizeObserver(() => { const w = document.getElementById('pic').clientWidth; if (Math.abs(w - lastW) > 8) { lastW = w; drawPic(); } }).observe(document.getElementById('pic'));
+const start = LEVELS.findIndex(lv => '#' + lv.id === location.hash);
+showLevel(start >= 0 ? start : 0);
+window.addEventListener('hashchange', () => { const i = LEVELS.findIndex(lv => '#' + lv.id === location.hash); if (i >= 0 && i !== cur && !playing) showLevel(i); });
+}
+</script>
+</body>
+</html>
